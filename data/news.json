@@ -1,0 +1,722 @@
+[
+  {
+    "id": "nba-12",
+    "league": "NBA",
+    "type": "contract",
+    "title": "Celtics avalia renovação/contrato importante",
+    "summary": "Contexto de negociações e efeitos no elenco (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T13:50:00-03:00",
+    "image": "",
+    "source_name": "NFL.com",
+    "source_url": "https://www.nfl.com/",
+    "tags": [
+      "celtics",
+      "nba",
+      "contract"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "mlb-28",
+    "league": "MLB",
+    "type": "opinion",
+    "title": "Opinião: por que Braves pode estar subestimado",
+    "summary": "Argumento curto, direto e debatível (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T16:29:00-03:00",
+    "image": "",
+    "source_name": "ESPN",
+    "source_url": "https://www.espn.com/",
+    "tags": [
+      "braves",
+      "mlb",
+      "opinion"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "mls-36",
+    "league": "MLS",
+    "type": "game",
+    "title": "Seattle Sounders vs Inter Miami: o que esperar do confronto",
+    "summary": "Prévia com pontos-chave, estilo de jogo e fatores decisivos (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T22:56:00-03:00",
+    "image": "",
+    "source_name": "ESPN",
+    "source_url": "https://www.espn.com/",
+    "tags": [
+      "seattle-sounders",
+      "mls",
+      "game"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nhl-20",
+    "league": "NHL",
+    "type": "stats",
+    "title": "Stat do dia: números que colocam Golden Knights em destaque",
+    "summary": "Leitura simples dos números e do momento do time (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T22:52:00-03:00",
+    "image": "",
+    "source_name": "MLB.com",
+    "source_url": "https://www.mlb.com/",
+    "tags": [
+      "golden-knights",
+      "nhl",
+      "stats"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nhl-17",
+    "league": "NHL",
+    "type": "calendar",
+    "title": "Agenda: datas-chave para acompanhar Rangers",
+    "summary": "Checklist do calendário e por que olhar essas datas (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T23:19:00-03:00",
+    "image": "",
+    "source_name": "MLB.com",
+    "source_url": "https://www.mlb.com/",
+    "tags": [
+      "rangers",
+      "nhl",
+      "calendar"
+    ],
+    "is_highlight": true
+  },
+  {
+    "id": "mlb-25",
+    "league": "MLB",
+    "type": "injury",
+    "title": "Atualização de lesão: estrela do Phillies vira dúvida",
+    "summary": "Situação atual, impacto e próximos passos (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-14T12:14:00-03:00",
+    "image": "",
+    "source_name": "NFL.com",
+    "source_url": "https://www.nfl.com/",
+    "tags": [
+      "phillies",
+      "mlb",
+      "injury"
+    ],
+    "is_highlight": true
+  },
+  {
+    "id": "nba-11",
+    "league": "NBA",
+    "type": "contract",
+    "title": "Nuggets avalia renovação/contrato importante",
+    "summary": "Contexto de negociações e efeitos no elenco (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T22:05:00-03:00",
+    "image": "",
+    "source_name": "The Athletic",
+    "source_url": "https://theathletic.com/",
+    "tags": [
+      "nuggets",
+      "nba",
+      "contract"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "mlb-27",
+    "league": "MLB",
+    "type": "opinion",
+    "title": "Opinião: por que Phillies pode estar subestimado",
+    "summary": "Argumento curto, direto e debatível (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-14T03:37:00-03:00",
+    "image": "",
+    "source_name": "Fox Sports",
+    "source_url": "https://www.foxsports.com/",
+    "tags": [
+      "phillies",
+      "mlb",
+      "opinion"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nba-10",
+    "league": "NBA",
+    "type": "trade",
+    "title": "Rumores de troca: Heat monitora movimentações",
+    "summary": "Cenários possíveis e o que faria sentido para a franquia (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-14T10:18:00-03:00",
+    "image": "",
+    "source_name": "The Athletic",
+    "source_url": "https://theathletic.com/",
+    "tags": [
+      "heat",
+      "nba",
+      "trade"
+    ],
+    "is_highlight": true
+  },
+  {
+    "id": "nhl-23",
+    "league": "NHL",
+    "type": "contract",
+    "title": "Canucks avalia renovação/contrato importante",
+    "summary": "Contexto de negociações e efeitos no elenco (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-14T12:17:00-03:00",
+    "image": "",
+    "source_name": "MLSsoccer.com",
+    "source_url": "https://www.mlssoccer.com/",
+    "tags": [
+      "canucks",
+      "nhl",
+      "contract"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "mlb-31",
+    "league": "MLB",
+    "type": "opinion",
+    "title": "Opinião: por que Yankees pode estar subestimado",
+    "summary": "Argumento curto, direto e debatível (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-14T04:18:00-03:00",
+    "image": "",
+    "source_name": "CBS Sports",
+    "source_url": "https://www.cbssports.com/",
+    "tags": [
+      "yankees",
+      "mlb",
+      "opinion"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "mls-33",
+    "league": "MLS",
+    "type": "opinion",
+    "title": "Opinião: por que Austin FC pode estar subestimado",
+    "summary": "Argumento curto, direto e debatível (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T17:35:00-03:00",
+    "image": "",
+    "source_name": "Fox Sports",
+    "source_url": "https://www.foxsports.com/",
+    "tags": [
+      "austin-fc",
+      "mls",
+      "opinion"
+    ],
+    "is_highlight": true
+  },
+  {
+    "id": "nhl-19",
+    "league": "NHL",
+    "type": "opinion",
+    "title": "Opinião: por que Avalanche pode estar subestimado",
+    "summary": "Argumento curto, direto e debatível (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T20:13:00-03:00",
+    "image": "",
+    "source_name": "MLSsoccer.com",
+    "source_url": "https://www.mlssoccer.com/",
+    "tags": [
+      "avalanche",
+      "nhl",
+      "opinion"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "mlb-32",
+    "league": "MLB",
+    "type": "injury",
+    "title": "Atualização de lesão: estrela do Red Sox vira dúvida",
+    "summary": "Situação atual, impacto e próximos passos (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T03:05:00-03:00",
+    "image": "",
+    "source_name": "NHL.com",
+    "source_url": "https://www.nhl.com/",
+    "tags": [
+      "red-sox",
+      "mlb",
+      "injury"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nhl-21",
+    "league": "NHL",
+    "type": "breaking",
+    "title": "Canucks surpreende em anúncio de última hora",
+    "summary": "Resumo rápido do que mudou e por que isso importa (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-14T03:20:00-03:00",
+    "image": "",
+    "source_name": "The Athletic",
+    "source_url": "https://theathletic.com/",
+    "tags": [
+      "canucks",
+      "nhl",
+      "breaking"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "mls-35",
+    "league": "MLS",
+    "type": "rumor",
+    "title": "Nos bastidores: conversa quente envolvendo Seattle Sounders",
+    "summary": "O que está sendo discutido e o que é especulação (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T01:46:00-03:00",
+    "image": "",
+    "source_name": "ESPN",
+    "source_url": "https://www.espn.com/",
+    "tags": [
+      "seattle-sounders",
+      "mls",
+      "rumor"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nfl-1",
+    "league": "NFL",
+    "type": "contract",
+    "title": "49ers avalia renovação/contrato importante",
+    "summary": "Contexto de negociações e efeitos no elenco (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T22:52:00-03:00",
+    "image": "",
+    "source_name": "Fox Sports",
+    "source_url": "https://www.foxsports.com/",
+    "tags": [
+      "49ers",
+      "nfl",
+      "contract"
+    ],
+    "is_highlight": true
+  },
+  {
+    "id": "nfl-2",
+    "league": "NFL",
+    "type": "opinion",
+    "title": "Opinião: por que 49ers pode estar subestimado",
+    "summary": "Argumento curto, direto e debatível (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T09:58:00-03:00",
+    "image": "",
+    "source_name": "The Athletic",
+    "source_url": "https://theathletic.com/",
+    "tags": [
+      "49ers",
+      "nfl",
+      "opinion"
+    ],
+    "is_highlight": true
+  },
+  {
+    "id": "mls-37",
+    "league": "MLS",
+    "type": "rumor",
+    "title": "Nos bastidores: conversa quente envolvendo Inter Miami",
+    "summary": "O que está sendo discutido e o que é especulação (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T04:45:00-03:00",
+    "image": "",
+    "source_name": "The Athletic",
+    "source_url": "https://theathletic.com/",
+    "tags": [
+      "inter-miami",
+      "mls",
+      "rumor"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "mls-40",
+    "league": "MLS",
+    "type": "stats",
+    "title": "Stat do dia: números que colocam LAFC em destaque",
+    "summary": "Leitura simples dos números e do momento do time (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T09:34:00-03:00",
+    "image": "",
+    "source_name": "MLB.com",
+    "source_url": "https://www.mlb.com/",
+    "tags": [
+      "lafc",
+      "mls",
+      "stats"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nhl-24",
+    "league": "NHL",
+    "type": "opinion",
+    "title": "Opinião: por que Rangers pode estar subestimado",
+    "summary": "Argumento curto, direto e debatível (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T15:53:00-03:00",
+    "image": "",
+    "source_name": "NHL.com",
+    "source_url": "https://www.nhl.com/",
+    "tags": [
+      "rangers",
+      "nhl",
+      "opinion"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nfl-3",
+    "league": "NFL",
+    "type": "trade",
+    "title": "Rumores de troca: Chiefs monitora movimentações",
+    "summary": "Cenários possíveis e o que faria sentido para a franquia (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T04:22:00-03:00",
+    "image": "",
+    "source_name": "Fox Sports",
+    "source_url": "https://www.foxsports.com/",
+    "tags": [
+      "chiefs",
+      "nfl",
+      "trade"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nfl-8",
+    "league": "NFL",
+    "type": "contract",
+    "title": "Ravens avalia renovação/contrato importante",
+    "summary": "Contexto de negociações e efeitos no elenco (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T07:26:00-03:00",
+    "image": "",
+    "source_name": "ESPN",
+    "source_url": "https://www.espn.com/",
+    "tags": [
+      "ravens",
+      "nfl",
+      "contract"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "mlb-29",
+    "league": "MLB",
+    "type": "rumor",
+    "title": "Nos bastidores: conversa quente envolvendo Dodgers",
+    "summary": "O que está sendo discutido e o que é especulação (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T21:57:00-03:00",
+    "image": "",
+    "source_name": "NHL.com",
+    "source_url": "https://www.nhl.com/",
+    "tags": [
+      "dodgers",
+      "mlb",
+      "rumor"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nba-9",
+    "league": "NBA",
+    "type": "game",
+    "title": "Celtics vs Bucks: o que esperar do confronto",
+    "summary": "Prévia com pontos-chave, estilo de jogo e fatores decisivos (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T18:07:00-03:00",
+    "image": "",
+    "source_name": "MLSsoccer.com",
+    "source_url": "https://www.mlssoccer.com/",
+    "tags": [
+      "celtics",
+      "nba",
+      "game"
+    ],
+    "is_highlight": true
+  },
+  {
+    "id": "nfl-6",
+    "league": "NFL",
+    "type": "contract",
+    "title": "Dolphins avalia renovação/contrato importante",
+    "summary": "Contexto de negociações e efeitos no elenco (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T23:12:00-03:00",
+    "image": "",
+    "source_name": "CBS Sports",
+    "source_url": "https://www.cbssports.com/",
+    "tags": [
+      "dolphins",
+      "nfl",
+      "contract"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nba-14",
+    "league": "NBA",
+    "type": "trade",
+    "title": "Rumores de troca: Warriors monitora movimentações",
+    "summary": "Cenários possíveis e o que faria sentido para a franquia (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T07:36:00-03:00",
+    "image": "",
+    "source_name": "CBS Sports",
+    "source_url": "https://www.cbssports.com/",
+    "tags": [
+      "warriors",
+      "nba",
+      "trade"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nfl-5",
+    "league": "NFL",
+    "type": "contract",
+    "title": "Bengals avalia renovação/contrato importante",
+    "summary": "Contexto de negociações e efeitos no elenco (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-14T02:16:00-03:00",
+    "image": "",
+    "source_name": "ESPN",
+    "source_url": "https://www.espn.com/",
+    "tags": [
+      "bengals",
+      "nfl",
+      "contract"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nba-15",
+    "league": "NBA",
+    "type": "opinion",
+    "title": "Opinião: por que Bucks pode estar subestimado",
+    "summary": "Argumento curto, direto e debatível (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T16:07:00-03:00",
+    "image": "",
+    "source_name": "Fox Sports",
+    "source_url": "https://www.foxsports.com/",
+    "tags": [
+      "bucks",
+      "nba",
+      "opinion"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nhl-18",
+    "league": "NHL",
+    "type": "power",
+    "title": "Power Ranking: quem sobe e quem desce na NHL",
+    "summary": "Resumo do ranking e tendências da liga (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T20:52:00-03:00",
+    "image": "",
+    "source_name": "CBS Sports",
+    "source_url": "https://www.cbssports.com/",
+    "tags": [
+      "canucks",
+      "nhl",
+      "power"
+    ],
+    "is_highlight": true
+  },
+  {
+    "id": "mls-34",
+    "league": "MLS",
+    "type": "opinion",
+    "title": "Opinião: por que NYCFC pode estar subestimado",
+    "summary": "Argumento curto, direto e debatível (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-14T05:45:00-03:00",
+    "image": "",
+    "source_name": "NFL.com",
+    "source_url": "https://www.nfl.com/",
+    "tags": [
+      "nycfc",
+      "mls",
+      "opinion"
+    ],
+    "is_highlight": true
+  },
+  {
+    "id": "nba-13",
+    "league": "NBA",
+    "type": "trade",
+    "title": "Rumores de troca: Heat monitora movimentações",
+    "summary": "Cenários possíveis e o que faria sentido para a franquia (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-14T08:22:00-03:00",
+    "image": "",
+    "source_name": "NHL.com",
+    "source_url": "https://www.nhl.com/",
+    "tags": [
+      "heat",
+      "nba",
+      "trade"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nba-16",
+    "league": "NBA",
+    "type": "breaking",
+    "title": "Lakers surpreende em anúncio de última hora",
+    "summary": "Resumo rápido do que mudou e por que isso importa (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T11:43:00-03:00",
+    "image": "",
+    "source_name": "MLB.com",
+    "source_url": "https://www.mlb.com/",
+    "tags": [
+      "lakers",
+      "nba",
+      "breaking"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "mls-38",
+    "league": "MLS",
+    "type": "power",
+    "title": "Power Ranking: quem sobe e quem desce na MLS",
+    "summary": "Resumo do ranking e tendências da liga (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T02:52:00-03:00",
+    "image": "",
+    "source_name": "Fox Sports",
+    "source_url": "https://www.foxsports.com/",
+    "tags": [
+      "atlanta-united",
+      "mls",
+      "power"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nhl-22",
+    "league": "NHL",
+    "type": "stats",
+    "title": "Stat do dia: números que colocam Oilers em destaque",
+    "summary": "Leitura simples dos números e do momento do time (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T12:36:00-03:00",
+    "image": "",
+    "source_name": "The Athletic",
+    "source_url": "https://theathletic.com/",
+    "tags": [
+      "oilers",
+      "nhl",
+      "stats"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "mlb-26",
+    "league": "MLB",
+    "type": "injury",
+    "title": "Atualização de lesão: estrela do Phillies vira dúvida",
+    "summary": "Situação atual, impacto e próximos passos (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-14T06:05:00-03:00",
+    "image": "",
+    "source_name": "MLSsoccer.com",
+    "source_url": "https://www.mlssoccer.com/",
+    "tags": [
+      "phillies",
+      "mlb",
+      "injury"
+    ],
+    "is_highlight": true
+  },
+  {
+    "id": "mls-39",
+    "league": "MLS",
+    "type": "power",
+    "title": "Power Ranking: quem sobe e quem desce na MLS",
+    "summary": "Resumo do ranking e tendências da liga (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-14T00:54:00-03:00",
+    "image": "",
+    "source_name": "NBA.com",
+    "source_url": "https://www.nba.com/",
+    "tags": [
+      "toronto-fc",
+      "mls",
+      "power"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nfl-7",
+    "league": "NFL",
+    "type": "game",
+    "title": "Ravens vs Chiefs: o que esperar do confronto",
+    "summary": "Prévia com pontos-chave, estilo de jogo e fatores decisivos (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-14T06:38:00-03:00",
+    "image": "",
+    "source_name": "NBA.com",
+    "source_url": "https://www.nba.com/",
+    "tags": [
+      "ravens",
+      "nfl",
+      "game"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "nfl-4",
+    "league": "NFL",
+    "type": "trade",
+    "title": "Rumores de troca: Chiefs monitora movimentações",
+    "summary": "Cenários possíveis e o que faria sentido para a franquia (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T10:46:00-03:00",
+    "image": "",
+    "source_name": "MLSsoccer.com",
+    "source_url": "https://www.mlssoccer.com/",
+    "tags": [
+      "chiefs",
+      "nfl",
+      "trade"
+    ],
+    "is_highlight": false
+  },
+  {
+    "id": "mlb-30",
+    "league": "MLB",
+    "type": "game",
+    "title": "Astros vs Padres: o que esperar do confronto",
+    "summary": "Prévia com pontos-chave, estilo de jogo e fatores decisivos (protótipo).",
+    "content": "",
+    "dateISO": "2026-02-13T05:08:00-03:00",
+    "image": "",
+    "source_name": "The Athletic",
+    "source_url": "https://theathletic.com/",
+    "tags": [
+      "astros",
+      "mlb",
+      "game"
+    ],
+    "is_highlight": false
+  }
+]

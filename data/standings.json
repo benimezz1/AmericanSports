@@ -1,0 +1,292 @@
+{
+  "NFL": [
+    {
+      "team": "Cowboys",
+      "w": 20,
+      "l": 11,
+      "pct": "0.645",
+      "streak": "W3"
+    },
+    {
+      "team": "49ers",
+      "w": 40,
+      "l": 31,
+      "pct": "0.563",
+      "streak": "L2"
+    },
+    {
+      "team": "Eagles",
+      "w": 20,
+      "l": 22,
+      "pct": "0.476",
+      "streak": "W2"
+    },
+    {
+      "team": "Bengals",
+      "w": 14,
+      "l": 20,
+      "pct": "0.412",
+      "streak": "W2"
+    },
+    {
+      "team": "Bills",
+      "w": 16,
+      "l": 26,
+      "pct": "0.381",
+      "streak": "L1"
+    },
+    {
+      "team": "Chiefs",
+      "w": 16,
+      "l": 31,
+      "pct": "0.340",
+      "streak": "W1"
+    },
+    {
+      "team": "Dolphins",
+      "w": 7,
+      "l": 24,
+      "pct": "0.226",
+      "streak": "W3"
+    },
+    {
+      "team": "Ravens",
+      "w": 7,
+      "l": 27,
+      "pct": "0.206",
+      "streak": "W2"
+    }
+  ],
+  "NBA": [
+    {
+      "team": "Bucks",
+      "w": 19,
+      "l": 6,
+      "pct": "0.760",
+      "streak": "L3"
+    },
+    {
+      "team": "Celtics",
+      "w": 21,
+      "l": 7,
+      "pct": "0.750",
+      "streak": "W1"
+    },
+    {
+      "team": "Knicks",
+      "w": 22,
+      "l": 9,
+      "pct": "0.710",
+      "streak": "W3"
+    },
+    {
+      "team": "Lakers",
+      "w": 39,
+      "l": 26,
+      "pct": "0.600",
+      "streak": "W1"
+    },
+    {
+      "team": "Warriors",
+      "w": 27,
+      "l": 24,
+      "pct": "0.529",
+      "streak": "W2"
+    },
+    {
+      "team": "Suns",
+      "w": 27,
+      "l": 37,
+      "pct": "0.422",
+      "streak": "L1"
+    },
+    {
+      "team": "Nuggets",
+      "w": 12,
+      "l": 21,
+      "pct": "0.364",
+      "streak": "W2"
+    },
+    {
+      "team": "Heat",
+      "w": 17,
+      "l": 30,
+      "pct": "0.362",
+      "streak": "W3"
+    }
+  ],
+  "NHL": [
+    {
+      "team": "Bruins",
+      "w": 25,
+      "l": 12,
+      "pct": "0.676",
+      "streak": "L3"
+    },
+    {
+      "team": "Rangers",
+      "w": 29,
+      "l": 17,
+      "pct": "0.630",
+      "streak": "W3"
+    },
+    {
+      "team": "Golden Knights",
+      "w": 31,
+      "l": 25,
+      "pct": "0.554",
+      "streak": "L1"
+    },
+    {
+      "team": "Lightning",
+      "w": 38,
+      "l": 39,
+      "pct": "0.494",
+      "streak": "L3"
+    },
+    {
+      "team": "Oilers",
+      "w": 24,
+      "l": 37,
+      "pct": "0.393",
+      "streak": "W3"
+    },
+    {
+      "team": "Avalanche",
+      "w": 17,
+      "l": 28,
+      "pct": "0.378",
+      "streak": "L1"
+    },
+    {
+      "team": "Canucks",
+      "w": 9,
+      "l": 26,
+      "pct": "0.257",
+      "streak": "L2"
+    },
+    {
+      "team": "Maple Leafs",
+      "w": 7,
+      "l": 32,
+      "pct": "0.179",
+      "streak": "W1"
+    }
+  ],
+  "MLB": [
+    {
+      "team": "Cubs",
+      "w": 40,
+      "l": 5,
+      "pct": "0.889",
+      "streak": "W3"
+    },
+    {
+      "team": "Phillies",
+      "w": 26,
+      "l": 10,
+      "pct": "0.722",
+      "streak": "W2"
+    },
+    {
+      "team": "Yankees",
+      "w": 35,
+      "l": 15,
+      "pct": "0.700",
+      "streak": "L3"
+    },
+    {
+      "team": "Padres",
+      "w": 33,
+      "l": 18,
+      "pct": "0.647",
+      "streak": "L2"
+    },
+    {
+      "team": "Braves",
+      "w": 23,
+      "l": 18,
+      "pct": "0.561",
+      "streak": "L1"
+    },
+    {
+      "team": "Astros",
+      "w": 25,
+      "l": 34,
+      "pct": "0.424",
+      "streak": "L1"
+    },
+    {
+      "team": "Dodgers",
+      "w": 16,
+      "l": 24,
+      "pct": "0.400",
+      "streak": "L1"
+    },
+    {
+      "team": "Red Sox",
+      "w": 10,
+      "l": 23,
+      "pct": "0.303",
+      "streak": "L2"
+    }
+  ],
+  "MLS": [
+    {
+      "team": "Toronto FC",
+      "w": 35,
+      "l": 9,
+      "pct": "0.795",
+      "streak": "L1"
+    },
+    {
+      "team": "Atlanta United",
+      "w": 40,
+      "l": 20,
+      "pct": "0.667",
+      "streak": "W1"
+    },
+    {
+      "team": "LA Galaxy",
+      "w": 31,
+      "l": 17,
+      "pct": "0.646",
+      "streak": "L3"
+    },
+    {
+      "team": "Inter Miami",
+      "w": 20,
+      "l": 14,
+      "pct": "0.588",
+      "streak": "L3"
+    },
+    {
+      "team": "Austin FC",
+      "w": 19,
+      "l": 16,
+      "pct": "0.543",
+      "streak": "L3"
+    },
+    {
+      "team": "LAFC",
+      "w": 38,
+      "l": 34,
+      "pct": "0.528",
+      "streak": "W1"
+    },
+    {
+      "team": "Seattle Sounders",
+      "w": 29,
+      "l": 36,
+      "pct": "0.446",
+      "streak": "L1"
+    },
+    {
+      "team": "NYCFC",
+      "w": 5,
+      "l": 11,
+      "pct": "0.312",
+      "streak": "L1"
+    }
+  ]
+}

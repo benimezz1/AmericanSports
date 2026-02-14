@@ -1,0 +1,182 @@
+[
+  {
+    "league": "NFL",
+    "home": "Dolphins",
+    "away": "Eagles",
+    "dateISO": "2026-02-21T03:00:00-03:00",
+    "status": "live",
+    "home_score": 23,
+    "away_score": 32
+  },
+  {
+    "league": "NFL",
+    "home": "Bengals",
+    "away": "49ers",
+    "dateISO": "2026-02-15T22:00:00-03:00",
+    "status": "scheduled",
+    "home_score": null,
+    "away_score": null
+  },
+  {
+    "league": "NFL",
+    "home": "Chiefs",
+    "away": "Ravens",
+    "dateISO": "2026-02-20T06:00:00-03:00",
+    "status": "scheduled",
+    "home_score": null,
+    "away_score": null
+  },
+  {
+    "league": "NFL",
+    "home": "Ravens",
+    "away": "Chiefs",
+    "dateISO": "2026-02-15T07:00:00-03:00",
+    "status": "final",
+    "home_score": 26,
+    "away_score": 39
+  },
+  {
+    "league": "NBA",
+    "home": "Warriors",
+    "away": "Lakers",
+    "dateISO": "2026-02-18T15:00:00-03:00",
+    "status": "scheduled",
+    "home_score": null,
+    "away_score": null
+  },
+  {
+    "league": "NBA",
+    "home": "Celtics",
+    "away": "Heat",
+    "dateISO": "2026-02-14T20:00:00-03:00",
+    "status": "final",
+    "home_score": 87,
+    "away_score": 116
+  },
+  {
+    "league": "NBA",
+    "home": "Nuggets",
+    "away": "Heat",
+    "dateISO": "2026-02-18T14:00:00-03:00",
+    "status": "scheduled",
+    "home_score": null,
+    "away_score": null
+  },
+  {
+    "league": "NBA",
+    "home": "Suns",
+    "away": "Heat",
+    "dateISO": "2026-02-19T07:00:00-03:00",
+    "status": "live",
+    "home_score": 96,
+    "away_score": 93
+  },
+  {
+    "league": "NHL",
+    "home": "Bruins",
+    "away": "Rangers",
+    "dateISO": "2026-02-17T01:00:00-03:00",
+    "status": "scheduled",
+    "home_score": null,
+    "away_score": null
+  },
+  {
+    "league": "NHL",
+    "home": "Lightning",
+    "away": "Avalanche",
+    "dateISO": "2026-02-16T15:00:00-03:00",
+    "status": "scheduled",
+    "home_score": null,
+    "away_score": null
+  },
+  {
+    "league": "NHL",
+    "home": "Canucks",
+    "away": "Lightning",
+    "dateISO": "2026-02-18T16:00:00-03:00",
+    "status": "scheduled",
+    "home_score": null,
+    "away_score": null
+  },
+  {
+    "league": "NHL",
+    "home": "Avalanche",
+    "away": "Bruins",
+    "dateISO": "2026-02-16T17:00:00-03:00",
+    "status": "live",
+    "home_score": 0,
+    "away_score": 1
+  },
+  {
+    "league": "MLB",
+    "home": "Padres",
+    "away": "Braves",
+    "dateISO": "2026-02-16T03:00:00-03:00",
+    "status": "live",
+    "home_score": 4,
+    "away_score": 6
+  },
+  {
+    "league": "MLB",
+    "home": "Dodgers",
+    "away": "Cubs",
+    "dateISO": "2026-02-21T06:00:00-03:00",
+    "status": "live",
+    "home_score": 5,
+    "away_score": 0
+  },
+  {
+    "league": "MLB",
+    "home": "Braves",
+    "away": "Astros",
+    "dateISO": "2026-02-14T16:00:00-03:00",
+    "status": "scheduled",
+    "home_score": null,
+    "away_score": null
+  },
+  {
+    "league": "MLB",
+    "home": "Phillies",
+    "away": "Braves",
+    "dateISO": "2026-02-18T19:00:00-03:00",
+    "status": "live",
+    "home_score": 1,
+    "away_score": 5
+  },
+  {
+    "league": "MLS",
+    "home": "Atlanta United",
+    "away": "NYCFC",
+    "dateISO": "2026-02-17T21:00:00-03:00",
+    "status": "scheduled",
+    "home_score": null,
+    "away_score": null
+  },
+  {
+    "league": "MLS",
+    "home": "LAFC",
+    "away": "Austin FC",
+    "dateISO": "2026-02-17T21:00:00-03:00",
+    "status": "scheduled",
+    "home_score": null,
+    "away_score": null
+  },
+  {
+    "league": "MLS",
+    "home": "Inter Miami",
+    "away": "Seattle Sounders",
+    "dateISO": "2026-02-20T17:00:00-03:00",
+    "status": "live",
+    "home_score": 1,
+    "away_score": 3
+  },
+  {
+    "league": "MLS",
+    "home": "Austin FC",
+    "away": "Atlanta United",
+    "dateISO": "2026-02-14T16:00:00-03:00",
+    "status": "scheduled",
+    "home_score": null,
+    "away_score": null
+  }
+]
