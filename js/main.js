@@ -18,6 +18,37 @@ function qs(sel, root=document){ return root.querySelector(sel); }
 function qsa(sel, root=document){ return [...root.querySelectorAll(sel)]; }
 function byId(id){ return document.getElementById(id); }
 
+const THEME_KEY = "playnorth-theme";
+
+function updateThemeToggleText(theme){
+  const btn = byId("themeToggle");
+  if(!btn) return;
+  btn.textContent = theme === "theme-dark" ? "Modo Claro" : "Modo Escuro";
+}
+
+function applyTheme(theme){
+  const body = document.body;
+  if(!body) return;
+  const finalTheme = theme === "theme-light" ? "theme-light" : "theme-dark";
+  body.classList.remove("theme-dark", "theme-light");
+  body.classList.add(finalTheme);
+  updateThemeToggleText(finalTheme);
+  localStorage.setItem(THEME_KEY, finalTheme);
+}
+
+function setupThemeToggle(){
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  applyTheme(savedTheme || "theme-dark");
+
+  const btn = byId("themeToggle");
+  if(!btn) return;
+
+  btn.addEventListener("click", () => {
+    const isDark = document.body.classList.contains("theme-dark");
+    applyTheme(isDark ? "theme-light" : "theme-dark");
+  });
+}
+
 function formatDate(iso){
   try{
     const d = new Date(iso);
@@ -297,6 +328,7 @@ function standingsBlock(league, rows){
 }
 
 async function boot(){
+  setupThemeToggle();
   setActiveNav();
 
   const page = (location.pathname.split("/").pop() || "index.html").toLowerCase();
