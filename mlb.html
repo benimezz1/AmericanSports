@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PlayNorth • MLB</title>
+  <link rel="stylesheet" href="css/style.css" />
+  
+</head>
+<body>
+  <header>
+    <div class="container navbar">
+      <a class="brand" href="index.html" aria-label="Ir para Home">
+        <div class="brand-badge"></div>
+        <span>PlayNorth (protótipo)</span>
+      </a>
+      <nav>
+        <a class="navlink" href="index.html">Home</a>
+<a class="navlink" href="nfl.html">NFL</a>
+<a class="navlink" href="nba.html">NBA</a>
+<a class="navlink" href="nhl.html">NHL</a>
+<a class="navlink" href="mlb.html">MLB</a>
+<a class="navlink" href="mls.html">MLS</a>
+<a class="navlink" href="games.html">Jogos da Semana</a>
+<a class="navlink" href="standings.html">Ranking / Standings</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    
+  <div class="section">
+    <div class="section-head">
+      <div>
+        <h2 id="leagueTitle">MLB — Destaques</h2>
+        <p>Protótipo com filtros por tipo de notícia (para suportar “todos os tipos”).</p>
+      </div>
+      <a href="index.html">Voltar</a>
+    </div>
+    <div class="pills" id="typePills"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div>
+        <h2>Top destaques</h2>
+        <p>Cards maiores para assuntos importantes</p>
+      </div>
+    </div>
+    <div id="topGrid" class="grid"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div>
+        <h2>Últimas notícias</h2>
+        <p>Lista (filtrável) — pronto para receber sua triagem</p>
+      </div>
+    </div>
+    <div id="leagueGrid" class="grid"></div>
+  </div>
+
+    <div id="appError" class="notice" style="display:none"></div>
+
+    <div class="footer">
+      <div>Protótipo estático no GitHub Pages • Dados fake em <code>data/*.json</code></div>
+      <div>Próximo passo: conectar sua triagem para gerar os JSON automaticamente</div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
