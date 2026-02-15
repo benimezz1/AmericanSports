@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PlayNorth • Ao Vivo</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="assets/css/nav.css" />
+</head>
+<body>
+  <header>
+    <div class="container navbar">
+      <a class="brand" href="index.html" aria-label="Ir para Home">
+        <div class="brand-badge"></div>
+        <span>PlayNorth (protótipo)</span>
+      </a>
+      <nav>
+        <a class="navlink" href="index.html">Home</a>
+        <a class="navlink" href="live.html">Ao vivo</a>
+      </nav>
+      <button id="themeToggle" class="theme-btn">Modo Claro</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <div class="section-head"><div><h2>Placar ao vivo (fake)</h2><p>Atualização visual simulada para layout</p></div></div>
+      <article class="card">
+        <div class="card-body">
+          <div class="kicker"><span class="chip">NBA</span><span class="chip">AO VIVO</span></div>
+          <h3 class="title">Boston Celtics 102 x 99 Miami Heat</h3>
+          <p class="desc">4º Quarto • Tempo corrido: <strong id="liveTimer">00:00</strong></p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <script>
+    (function(){
+      const el = document.getElementById('liveTimer');
+      if (!el) return;
+      let seconds = 0;
+      setInterval(function(){
+        seconds += 1;
+        const mm = String(Math.floor(seconds / 60)).padStart(2, '0');
+        const ss = String(seconds % 60).padStart(2, '0');
+        el.textContent = mm + ':' + ss;
+      }, 1000);
+    })();
+  </script>
+</body>
+</html>
