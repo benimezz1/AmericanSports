@@ -193,3 +193,21 @@ tfoot td{border-bottom:none; color: var(--muted)}
   color: var(--muted);
   font-size: 13px;
 }
+
+.setting-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.setting-row select{
+  margin-left:auto;
+  background:var(--surface-1);
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:7px 8px;
+}
