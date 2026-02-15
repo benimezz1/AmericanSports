@@ -6,6 +6,7 @@
   <title>PlayNorth • Configurações</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="assets/css/nav.css" />
+  <link rel="stylesheet" href="assets/css/theme.css" />
   <style>
     .toggle-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
     .switch{display:inline-flex;align-items:center;gap:10px}
@@ -22,7 +23,7 @@
         <a class="navlink" href="index.html">Home</a>
         <a class="navlink" href="settings.html">Configurações</a>
       </nav>
-      <button id="themeToggle" class="theme-btn">Modo Claro</button>
+      <button id="themeBtn" class="theme-toggle">☀</button>
     </div>
   </header>
 
@@ -59,26 +60,31 @@
 
   <script src="js/main.js"></script>
   <script src="assets/js/nav.js"></script>
+  <script src="assets/js/theme.js"></script>
   <script>
     (function(){
-      const THEME_KEY = 'playnorth-theme';
+      const THEME_KEY = 'theme';
       const LANG_KEY = 'playnorth-lang';
       const themeInput = document.getElementById('themeSetting');
       const langInput = document.getElementById('langSetting');
       const langLabel = document.getElementById('langLabel');
 
-      const currentTheme = localStorage.getItem(THEME_KEY) || 'theme-dark';
-      themeInput.checked = currentTheme === 'theme-light';
+      const currentTheme = localStorage.getItem(THEME_KEY) || 'light';
+      themeInput.checked = currentTheme === 'light';
 
       const currentLang = localStorage.getItem(LANG_KEY) || 'pt-BR';
       langInput.checked = currentLang === 'en-US';
       langLabel.textContent = currentLang === 'en-US' ? 'English' : 'Português';
 
       themeInput.addEventListener('change', function(){
-        const nextTheme = themeInput.checked ? 'theme-light' : 'theme-dark';
+        const nextTheme = themeInput.checked ? 'light' : 'dark';
         localStorage.setItem(THEME_KEY, nextTheme);
-        document.body.classList.remove('theme-dark', 'theme-light');
-        document.body.classList.add(nextTheme);
+        document.body.classList.remove('dark-mode', 'light-mode');
+        if(nextTheme === 'dark'){
+          document.body.classList.add('dark-mode');
+        } else {
+          document.body.classList.add('light-mode');
+        }
       });
 
       langInput.addEventListener('change', function(){
