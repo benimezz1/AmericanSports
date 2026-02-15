@@ -6,7 +6,6 @@
     followedLeagues: [],
     alertSimulationEnabled: true,
     theme: 'dark',
-    sidebarModePreference: 'global',
     dataSource: 'static'
   };
 
@@ -49,15 +48,11 @@
         followedLeagues: read('followedLeagues', DEFAULTS.followedLeagues),
         alertSimulationEnabled: read('alertSimulationEnabled', DEFAULTS.alertSimulationEnabled),
         theme: read('theme', DEFAULTS.theme),
-        sidebarModePreference: read('sidebarModePreference', DEFAULTS.sidebarModePreference),
         dataSource: read('dataSource', DEFAULTS.dataSource)
       };
     },
     setTheme(theme) {
       return write('theme', theme === 'light' ? 'light' : 'dark');
-    },
-    setSidebarMode(mode) {
-      return write('sidebarModePreference', mode === 'context' ? 'context' : 'global');
     },
     setDataSource(source) {
       const safe = source || DEFAULTS.dataSource;
