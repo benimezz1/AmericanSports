@@ -11,6 +11,11 @@
 <body>
   <header>
     <div class="container navbar">
+      <button id="menuBtn" class="hamburger" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
       <a class="brand" href="index.html" aria-label="Ir para Home">
         <div class="brand-badge"></div>
         <span>PlayNorth (protótipo)</span>
@@ -22,6 +27,18 @@
       <button id="themeBtn" class="theme-toggle">☀</button>
     </div>
   </header>
+  <div id="sidebarOverlay" hidden></div>
+  <aside id="sidebar" aria-label="Menu lateral" hidden>
+    <a href="index.html">Home</a>
+    <a href="nfl.html">NFL</a>
+    <a href="nba.html">NBA</a>
+    <a href="nhl.html">NHL</a>
+    <a href="mlb.html">MLB</a>
+    <a href="mls.html">MLS</a>
+    <a href="games.html">Jogos da Semana</a>
+    <a href="standings.html">Ranking / Standings</a>
+  </aside>
+
   <main class="container">
     <div class="section">
       <div class="section-head"><div><h2>Formulário principal</h2><p>Página placeholder para navegação.</p></div></div>

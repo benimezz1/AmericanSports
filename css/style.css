@@ -45,62 +45,13 @@ header{
   background: var(--header-bg);
   border-bottom:1px solid var(--line);
 }
-/* ===== NAVBAR LAYOUT FIX ===== */
-.navbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  flex-wrap:nowrap;
-}
-.navbar .brand,
-.navbar .logo-area,
-.navbar .logo-wrap{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.brand{font-weight:800; letter-spacing:.3px; flex:0 0 auto}
-.navbar nav,
-.navbar .nav,
-.navbar .menu{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex:1;
-  justify-content:center;
-  min-width:0;
-}
+.brand{font-weight:800; letter-spacing:.3px}
 .brand-badge{
   width:34px; height:34px; border-radius:12px;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   box-shadow: 0 10px 20px rgba(78,161,255,.25);
 }
 .brand span{font-size:16px}
-nav{display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end}
-.navlink{
-  padding:9px 11px;
-  border-radius:12px;
-  background: var(--surface-1);
-  border: 1px solid var(--nav-border);
-  color: var(--text);
-  font-size: 13px;
-}
-.navlink:hover{border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent)}
-.navlink.active{border-color: var(--accent2); background: color-mix(in srgb, var(--accent2) 12%, transparent)}
-
-.theme-btn{
-  padding:9px 12px;
-  border-radius:12px;
-  border:1px solid var(--accent);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-  color:var(--text);
-  font-size:13px;
-  font-weight:700;
-  cursor:pointer;
-}
-.theme-btn:hover{background: color-mix(in srgb, var(--accent2) 12%, transparent); border-color: var(--accent2)}
-
 .hero{
   display:grid;
   grid-template-columns: 1.35fr .65fr;
