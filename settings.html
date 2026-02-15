@@ -97,17 +97,11 @@
       langInput.checked = currentLang === 'en-US';
       langLabel.textContent = currentLang === 'en-US' ? 'English' : 'Português';
 
+      document.addEventListener('playnorth:theme-applied', syncThemeToggle);
+
       themeInput.addEventListener('change', function(){
         const nextTheme = themeInput.checked ? 'light' : 'dark';
-        localStorage.setItem(THEME_KEY, nextTheme);
-        document.body.classList.toggle('dark-mode', nextTheme === 'dark');
-
-        const themeBtn = document.getElementById('themeBtn');
-        if (themeBtn) {
-          themeBtn.textContent = nextTheme === 'dark' ? '☾' : '☀';
-          themeBtn.setAttribute('aria-label', nextTheme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro');
-          themeBtn.setAttribute('title', nextTheme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro');
-        }
+        document.dispatchEvent(new CustomEvent('playnorth:set-theme', { detail: { theme: nextTheme } }));
       });
 
       langInput.addEventListener('change', function(){
