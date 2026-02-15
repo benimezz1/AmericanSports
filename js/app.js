@@ -30,13 +30,6 @@
     const resolved = mode === 'context' ? 'context' : 'global';
     StorageService.setSidebarMode(resolved);
     UI.renderSidebar({ mode: resolved, league, currentPage: page });
-    const quickToggle = document.getElementById('sidebarModeQuickToggle');
-    if (quickToggle) {
-      const isContext = resolved === 'context';
-      quickToggle.textContent = isContext ? '≪≪≪' : '≫≫≫';
-      quickToggle.setAttribute('aria-pressed', String(isContext));
-      quickToggle.setAttribute('aria-label', isContext ? 'Alternar para modo global da sidebar' : 'Alternar para modo contextual da sidebar');
-    }
   }
 
   async function renderPage() {
@@ -74,12 +67,6 @@
       const next = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
       StorageService.setTheme(next);
       applyTheme(next);
-    });
-
-    document.getElementById('sidebarModeQuickToggle')?.addEventListener('click', () => {
-      const currentState = StorageService.getState();
-      const nextMode = currentState.sidebarModePreference === 'context' ? 'global' : 'context';
-      setSidebarMode(nextMode, page, currentLeague);
     });
 
     document.getElementById('sidebar')?.addEventListener('click', (event) => {

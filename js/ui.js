@@ -38,8 +38,6 @@
       const active = item.href === currentPage ? 'active' : '';
       return `<a class="navlink ${active}" href="${item.href}">${item.label}</a>`;
     }).join('');
-    const contextMode = sidebarMode === 'context';
-
     return `
       <header>
         <div class="container navbar">
@@ -48,7 +46,6 @@
           </button>
           <a class="brand" href="index.html"><div class="brand-badge"></div><span>PlayNorth</span></a>
           <nav>${links}</nav>
-          <button id="sidebarModeQuickToggle" class="sidebar-mode-quick" type="button" aria-pressed="${contextMode}" aria-label="${contextMode ? 'Alternar para modo global da sidebar' : 'Alternar para modo contextual da sidebar'}">${contextMode ? '≪≪≪' : '≫≫≫'}</button>
           <button id="themeBtn" class="theme-toggle" type="button" aria-label="Alternar tema"></button>
         </div>
       </header>
