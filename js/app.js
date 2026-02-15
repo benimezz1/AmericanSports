@@ -1,45 +1,59 @@
 (function () {
-  function getData() {
-    return {
-      teams: window.TEAMS_DATA || [],
-      games: window.GAMES_DATA || [],
-      news: window.NEWS_DATA || []
-    };
-  }
-
   function applyTheme(theme) {
-    document.body.classList.toggle('dark-mode', theme !== 'light');
+    const resolved = theme === 'light' ? 'light' : 'dark';
+    document.body.classList.toggle('dark-mode', resolved === 'dark');
     const themeBtn = document.getElementById('themeBtn');
-    if (themeBtn) themeBtn.textContent = theme === 'light' ? '☀' : '☾';
+    if (themeBtn) themeBtn.textContent = resolved === 'light' ? '☀' : '☾';
   }
 
   function bindMenu() {
     const menuBtn = document.getElementById('menuBtn');
     const overlay = document.getElementById('sidebarOverlay');
-    if (!menuBtn || !overlay) return;
+    const sidebar = document.getElementById('sidebar');
+    if (!menuBtn || !overlay || !sidebar) return;
 
     function setOpen(open) {
       document.body.classList.toggle('sidebar-open', open);
       overlay.hidden = !open;
-      document.getElementById('sidebar').hidden = !open;
+      sidebar.hidden = !open;
       menuBtn.setAttribute('aria-expanded', String(open));
     }
 
     menuBtn.addEventListener('click', () => setOpen(!document.body.classList.contains('sidebar-open')));
     overlay.addEventListener('click', () => setOpen(false));
-    document.getElementById('sidebar').addEventListener('click', (event) => {
+    sidebar.addEventListener('click', (event) => {
       if (event.target.closest('a')) setOpen(false);
     });
   }
 
-  function renderPage() {
+  function setSidebarMode(mode, page, league) {
+    const resolved = mode === 'context' ? 'context' : 'global';
+    StorageService.setSidebarMode(resolved);
+    UI.renderSidebar({ mode: resolved, league, currentPage: page });
+    const quickToggle = document.getElementById('sidebarModeQuickToggle');
+    if (quickToggle) {
+      const isContext = resolved === 'context';
+      quickToggle.textContent = isContext ? '≪≪≪' : '≫≫≫';
+      quickToggle.setAttribute('aria-pressed', String(isContext));
+      quickToggle.setAttribute('aria-label', isContext ? 'Alternar para modo global da sidebar' : 'Alternar para modo contextual da sidebar');
+    }
+  }
+
+  async function renderPage() {
     const page = Router.getPageName();
     const currentLeague = Router.detectLeagueFromPage();
     const query = Router.getQueryParams();
     const state = StorageService.getState();
-    const data = getData();
+    const provider = DataSources.getProvider(state.dataSource);
+    const data = {
+      teams: await provider.getTeams(),
+      games: await provider.getGames(),
+      news: await provider.getNews(),
+      standings: await provider.getStandings(),
+      watchGuide: window.WATCH_GUIDE_DATA || {}
+    };
 
-    document.body.insertAdjacentHTML('afterbegin', UI.renderHub(page));
+    document.body.insertAdjacentHTML('afterbegin', UI.renderHub(page, state.sidebarModePreference));
     UI.renderSidebar({ mode: state.sidebarModePreference, league: currentLeague, currentPage: page });
 
     const root = document.getElementById('page-root');
@@ -62,18 +76,22 @@
       applyTheme(next);
     });
 
+    document.getElementById('sidebarModeQuickToggle')?.addEventListener('click', () => {
+      const currentState = StorageService.getState();
+      const nextMode = currentState.sidebarModePreference === 'context' ? 'global' : 'context';
+      setSidebarMode(nextMode, page, currentLeague);
+    });
+
     document.getElementById('sidebar')?.addEventListener('click', (event) => {
       const modeBtn = event.target.closest('[data-sidebar-mode]');
-      if (modeBtn) {
-        StorageService.setSidebarMode(modeBtn.dataset.sidebarMode);
-        UI.renderSidebar({ mode: modeBtn.dataset.sidebarMode, league: currentLeague, currentPage: page });
-      }
+      if (modeBtn) setSidebarMode(modeBtn.dataset.sidebarMode, page, currentLeague);
     });
 
     root.addEventListener('click', (event) => {
       const favTeamBtn = event.target.closest('#favoriteTeamBtn');
       const followTeamBtn = event.target.closest('#followTeamBtn');
       const followPill = event.target.closest('[data-follow-team]');
+      const followLeaguePill = event.target.closest('[data-follow-league]');
 
       if (favTeamBtn && query.league && query.team) {
         StorageService.setFavoriteTeam(query.league.toUpperCase(), query.team);
@@ -86,6 +104,10 @@
       if (followPill) {
         const [league, team] = followPill.dataset.followTeam.split(':');
         StorageService.toggleFollowTeam(league, team);
+        location.reload();
+      }
+      if (followLeaguePill) {
+        StorageService.toggleFollowLeague(followLeaguePill.dataset.followLeague);
         location.reload();
       }
       if (event.target.id === 'resetPreferences') {
@@ -103,8 +125,22 @@
         const team = event.target.value;
         if (team) StorageService.setFavoriteTeam(league, team);
       }
+      if (event.target.matches('#dataSourceSelect')) {
+        const source = DataSources.setSelectedSource(event.target.value);
+        StorageService.setDataSource(source);
+        location.reload();
+      }
+      if (event.target.matches('#alertsSimulationToggle')) {
+        StorageService.setAlertSimulation(event.target.checked);
+      }
     });
   }
 
-  document.addEventListener('DOMContentLoaded', renderPage);
+  document.addEventListener('DOMContentLoaded', () => {
+    renderPage().catch((error) => {
+      console.error(error);
+      const root = document.getElementById('page-root');
+      if (root) root.innerHTML = '<div class="notice">Erro ao carregar dados da página.</div>';
+    });
+  });
 })();

@@ -3,8 +3,11 @@
     favoritesLeagues: [],
     favoriteTeamByLeague: {},
     followedTeamsByLeague: {},
+    followedLeagues: [],
+    alertSimulationEnabled: true,
     theme: 'dark',
-    sidebarModePreference: 'global'
+    sidebarModePreference: 'global',
+    dataSource: 'static'
   };
 
   function read(key, fallback) {
@@ -19,6 +22,12 @@
   function write(key, value) {
     localStorage.setItem(key, JSON.stringify(value));
     return value;
+  }
+
+  function toggleList(key, value) {
+    const current = read(key, DEFAULTS[key]);
+    const next = current.includes(value) ? current.filter((item) => item !== value) : [...current, value];
+    return write(key, next);
   }
 
   function ensureFollowed(league, teamId) {
@@ -37,8 +46,11 @@
         favoritesLeagues: read('favoritesLeagues', DEFAULTS.favoritesLeagues),
         favoriteTeamByLeague: read('favoriteTeamByLeague', DEFAULTS.favoriteTeamByLeague),
         followedTeamsByLeague: read('followedTeamsByLeague', DEFAULTS.followedTeamsByLeague),
+        followedLeagues: read('followedLeagues', DEFAULTS.followedLeagues),
+        alertSimulationEnabled: read('alertSimulationEnabled', DEFAULTS.alertSimulationEnabled),
         theme: read('theme', DEFAULTS.theme),
-        sidebarModePreference: read('sidebarModePreference', DEFAULTS.sidebarModePreference)
+        sidebarModePreference: read('sidebarModePreference', DEFAULTS.sidebarModePreference),
+        dataSource: read('dataSource', DEFAULTS.dataSource)
       };
     },
     setTheme(theme) {
@@ -47,10 +59,15 @@
     setSidebarMode(mode) {
       return write('sidebarModePreference', mode === 'context' ? 'context' : 'global');
     },
+    setDataSource(source) {
+      const safe = source || DEFAULTS.dataSource;
+      return write('dataSource', safe);
+    },
     toggleFavoriteLeague(league) {
-      const current = read('favoritesLeagues', DEFAULTS.favoritesLeagues);
-      const next = current.includes(league) ? current.filter((item) => item !== league) : [...current, league];
-      return write('favoritesLeagues', next);
+      return toggleList('favoritesLeagues', league);
+    },
+    toggleFollowLeague(league) {
+      return toggleList('followedLeagues', league);
     },
     setFavoriteTeam(league, teamId) {
       const current = read('favoriteTeamByLeague', DEFAULTS.favoriteTeamByLeague);
@@ -66,6 +83,9 @@
         ? leagueTeams.filter((item) => item !== teamId)
         : [...leagueTeams, teamId];
       return write('followedTeamsByLeague', current);
+    },
+    setAlertSimulation(enabled) {
+      return write('alertSimulationEnabled', Boolean(enabled));
     },
     resetPreferences() {
       Object.keys(DEFAULTS).forEach((key) => write(key, DEFAULTS[key]));
