@@ -26,12 +26,6 @@
     });
   }
 
-  function setSidebarMode(mode, page, league) {
-    const resolved = mode === 'context' ? 'context' : 'global';
-    StorageService.setSidebarMode(resolved);
-    UI.renderSidebar({ mode: resolved, league, currentPage: page });
-  }
-
   async function renderPage() {
     const page = Router.getPageName();
     const currentLeague = Router.detectLeagueFromPage();
@@ -46,8 +40,8 @@
       watchGuide: window.WATCH_GUIDE_DATA || {}
     };
 
-    document.body.insertAdjacentHTML('afterbegin', UI.renderHub(page, state.sidebarModePreference));
-    UI.renderSidebar({ mode: state.sidebarModePreference, league: currentLeague, currentPage: page });
+    document.body.insertAdjacentHTML('afterbegin', UI.renderHub(page));
+    UI.renderSidebar({ league: currentLeague, currentPage: page });
 
     const root = document.getElementById('page-root');
     if (!root) return;
@@ -58,6 +52,7 @@
     else if (page === 'standings.html') UI.renderStandings(root, data, state);
     else if (page === 'live.html') UI.renderLive(root);
     else if (page === 'team.html') UI.renderTeam(root, data, state, query);
+    else if (page === 'favorites.html') UI.renderFavorites(root, data, state);
     else if (page === 'settings.html') UI.renderSettings(root, data, state);
 
     bindMenu();
@@ -69,10 +64,6 @@
       applyTheme(next);
     });
 
-    document.getElementById('sidebar')?.addEventListener('click', (event) => {
-      const modeBtn = event.target.closest('[data-sidebar-mode]');
-      if (modeBtn) setSidebarMode(modeBtn.dataset.sidebarMode, page, currentLeague);
-    });
 
     root.addEventListener('click', (event) => {
       const favTeamBtn = event.target.closest('#favoriteTeamBtn');

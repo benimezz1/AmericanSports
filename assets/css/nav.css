@@ -100,8 +100,8 @@ body.sidebar-open { overflow: hidden; }
 body.sidebar-open #sidebarOverlay { opacity:1; pointer-events:auto; }
 body.sidebar-open #sidebar { transform: translateX(0); }
 
-.sidebar-toggle { display:grid; grid-template-columns:1fr 1fr; gap:8px; position:sticky; top:0; background:var(--panel); padding-bottom:8px; }
 .sidebar-links { display:flex; flex-direction:column; gap:8px; }
+.sidebar-divider { height:1px; background:var(--line); margin:8px 0; }
 
 @media (max-width: 780px) {
   .navbar { padding: 9px 10px; }

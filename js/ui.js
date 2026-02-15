@@ -33,7 +33,7 @@
     return `<p class="watch-guide ${compact ? 'compact' : ''}">📺 Onde assistir (Brasil): ${escapeHtml(text)}</p>`;
   }
 
-  function renderHub(currentPage, sidebarMode) {
+  function renderHub(currentPage) {
     const links = HUB_LINKS.map((item) => {
       const active = item.href === currentPage ? 'active' : '';
       return `<a class="navlink ${active}" href="${item.href}">${item.label}</a>`;
@@ -66,23 +66,64 @@
     ];
   }
 
-  function renderSidebar({ mode, league, currentPage }) {
+  function renderSidebar({ league, currentPage }) {
     const sidebar = document.getElementById('sidebar');
-    const modeTitle = league || 'Esta Liga';
+    if (!sidebar) return;
     const contextual = getContextualItems(league);
-    const items = mode === 'context' && contextual.length ? contextual : GLOBAL_SIDEBAR_ITEMS;
+    const sections = [];
 
-    sidebar.innerHTML = `
-      <div class="sidebar-toggle">
-        <button class="pill ${mode === 'global' ? 'active' : ''}" data-sidebar-mode="global" aria-pressed="${mode === 'global'}">Global</button>
-        <button class="pill ${mode === 'context' ? 'active' : ''}" data-sidebar-mode="context" aria-pressed="${mode === 'context'}">${modeTitle}</button>
-      </div>
-      <div class="sidebar-links">
-        ${items.map((item) => {
-          const active = item.href.split('?')[0] === currentPage ? 'aria-current="page"' : '';
-          return `<a href="${item.href}" ${active}>${item.label}</a>`;
-        }).join('')}
-      </div>
+    if (contextual.length) {
+      sections.push(`<div class="sidebar-links">${contextual.map((item) => {
+        const active = item.href.split('?')[0] === currentPage ? 'aria-current="page"' : '';
+        return `<a href="${item.href}" ${active}>${item.label}</a>`;
+      }).join('')}</div>`);
+      sections.push('<div class="sidebar-divider" aria-hidden="true"></div>');
+    }
+
+    sections.push(`<div class="sidebar-links">${GLOBAL_SIDEBAR_ITEMS.map((item) => {
+      const active = item.href.split('?')[0] === currentPage ? 'aria-current="page"' : '';
+      return `<a href="${item.href}" ${active}>${item.label}</a>`;
+    }).join('')}</div>`);
+
+    sidebar.innerHTML = sections.join('');
+  }
+
+  function renderFavorites(root, data, state) {
+    const favoriteLeagues = state.favoritesLeagues;
+    const favoriteTeams = Object.entries(state.favoriteTeamByLeague)
+      .filter(([, teamId]) => Boolean(teamId));
+    const followedTeams = Object.entries(state.followedTeamsByLeague)
+      .flatMap(([league, teams]) => (teams || []).map((teamId) => ({ league, teamId })));
+
+    if (!favoriteLeagues.length && !favoriteTeams.length && !followedTeams.length) {
+      root.innerHTML = `
+        <section class="section">
+          <div class="section-head"><div><h2>Favoritos</h2></div></div>
+          <div class="notice">Você ainda não tem favoritos. Use os botões de favoritar e acompanhar nos hubs de liga, times ou em Configurações.</div>
+        </section>
+      `;
+      return;
+    }
+
+    const favoriteLeagueItems = favoriteLeagues
+      .map((league) => `<li><a href="${league.toLowerCase()}.html">${league}</a></li>`)
+      .join('');
+    const favoriteTeamItems = favoriteTeams
+      .map(([league, teamId]) => `<li>${teamLink(league, teamId, getTeamName(data.teams, teamId))}</li>`)
+      .join('');
+    const followedTeamItems = followedTeams
+      .map(({ league, teamId }) => `<li>${teamLink(league, teamId, `${getTeamName(data.teams, teamId)} (${league})`)}</li>`)
+      .join('');
+
+    root.innerHTML = `
+      <section class="section">
+        <div class="section-head"><div><h2>Favoritos</h2><p>Conteúdo que você marcou para acompanhar.</p></div></div>
+        <div class="grid">
+          ${favoriteLeagueItems ? `<article class="card"><div class="card-body"><h3 class="title small">Ligas favoritas</h3><ul>${favoriteLeagueItems}</ul></div></article>` : ''}
+          ${favoriteTeamItems ? `<article class="card"><div class="card-body"><h3 class="title small">Times favoritos</h3><ul>${favoriteTeamItems}</ul></div></article>` : ''}
+          ${followedTeamItems ? `<article class="card"><div class="card-body"><h3 class="title small">Times seguidos</h3><ul>${followedTeamItems}</ul></div></article>` : ''}
+        </div>
+      </section>
     `;
   }
 
@@ -220,5 +261,5 @@
     `;
   }
 
-  window.UI = { renderHub, renderSidebar, renderHome, renderLeaguePage, renderGames, renderStandings, renderLive, renderTeam, renderSettings };
+  window.UI = { renderHub, renderSidebar, renderHome, renderLeaguePage, renderGames, renderStandings, renderLive, renderTeam, renderFavorites, renderSettings };
 })();
