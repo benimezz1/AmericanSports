@@ -27,6 +27,10 @@
     return teams.find((team) => team.id === id)?.name || id;
   }
 
+  function newsLink(index) {
+    return `noticia.html?id=${index}`;
+  }
+
   function watchGuideMarkup(league, watchGuide, compact = false) {
     const entry = watchGuide[league];
     if (!entry) return '';
@@ -39,6 +43,7 @@
       const active = item.href === currentPage ? 'active' : '';
       return `<a class="navlink ${active}" href="${item.href}">${item.label}</a>`;
     }).join('');
+
     return `
       <header>
         <div class="container navbar">
@@ -58,12 +63,11 @@
   function getContextualItems(league) {
     if (!league) return [];
     return [
-      { label: `${league === 'NBA' ? '🏀' : '🏈'} Visão Geral`, href: `${league.toLowerCase()}.html` },
+      { label: `🏟️ ${league} Hub`, href: `${league.toLowerCase()}.html` },
       { label: '📅 Jogos', href: `games.html?league=${league}` },
       { label: '🏆 Standings', href: `standings.html#${league}` },
       { label: '📊 Estatísticas', href: `stats.html?league=${league}` },
-      { label: '👥 Times', href: `teams.html?league=${league}` },
-      { label: `📰 Notícias ${league}`, href: `${league.toLowerCase()}.html` }
+      { label: '👥 Times', href: `teams.html?league=${league}` }
     ];
   }
 
@@ -71,7 +75,7 @@
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
 
-    const hasLeagueContext = league === 'NFL';
+    const hasLeagueContext = Boolean(league);
     const contextual = hasLeagueContext ? getContextualItems(league) : [];
     const activeScope = hasLeagueContext && sidebarScope === 'league' ? 'league' : 'global';
 
@@ -87,50 +91,11 @@
 
     const scopeToggle = hasLeagueContext ? `<div class="sidebar-scope-toggle" role="group" aria-label="Escopo do menu lateral">
       <button type="button" class="sidebar-scope-btn ${activeScope === 'global' ? 'active' : ''}" data-sidebar-scope="global" aria-pressed="${activeScope === 'global'}">Geral</button>
-      <button type="button" class="sidebar-scope-btn ${activeScope === 'league' ? 'active' : ''}" data-sidebar-scope="league" aria-pressed="${activeScope === 'league'}">NFL</button>
+      <button type="button" class="sidebar-scope-btn ${activeScope === 'league' ? 'active' : ''}" data-sidebar-scope="league" aria-pressed="${activeScope === 'league'}">${league}</button>
     </div>` : '';
 
     const linksMarkup = activeScope === 'league' && leagueItemsHtml ? leagueItemsHtml : globalItemsHtml;
     sidebar.innerHTML = `${scopeToggle}${scopeToggle ? '<div class="sidebar-divider" aria-hidden="true"></div>' : ''}${linksMarkup}`;
-  }
-
-  function renderFavorites(root, data, state) {
-    const favoriteLeagues = state.favoritesLeagues;
-    const favoriteTeams = Object.entries(state.favoriteTeamByLeague)
-      .filter(([, teamId]) => Boolean(teamId));
-    const followedTeams = Object.entries(state.followedTeamsByLeague)
-      .flatMap(([league, teams]) => (teams || []).map((teamId) => ({ league, teamId })));
-
-    if (!favoriteLeagues.length && !favoriteTeams.length && !followedTeams.length) {
-      root.innerHTML = `
-        <section class="section">
-          <div class="section-head"><div><h2>Favoritos</h2></div></div>
-          <div class="notice">Você ainda não tem favoritos. Use os botões de favoritar e acompanhar nos hubs de liga, times ou em Configurações.</div>
-        </section>
-      `;
-      return;
-    }
-
-    const favoriteLeagueItems = favoriteLeagues
-      .map((league) => `<li><a href="${league.toLowerCase()}.html">${league}</a></li>`)
-      .join('');
-    const favoriteTeamItems = favoriteTeams
-      .map(([league, teamId]) => `<li>${teamLink(league, teamId, getTeamName(data.teams, teamId))}</li>`)
-      .join('');
-    const followedTeamItems = followedTeams
-      .map(({ league, teamId }) => `<li>${teamLink(league, teamId, `${getTeamName(data.teams, teamId)} (${league})`)}</li>`)
-      .join('');
-
-    root.innerHTML = `
-      <section class="section">
-        <div class="section-head"><div><h2>Favoritos</h2><p>Conteúdo que você marcou para acompanhar.</p></div></div>
-        <div class="grid">
-          ${favoriteLeagueItems ? `<article class="card"><div class="card-body"><h3 class="title small">Ligas favoritas</h3><ul>${favoriteLeagueItems}</ul></div></article>` : ''}
-          ${favoriteTeamItems ? `<article class="card"><div class="card-body"><h3 class="title small">Times favoritos</h3><ul>${favoriteTeamItems}</ul></div></article>` : ''}
-          ${followedTeamItems ? `<article class="card"><div class="card-body"><h3 class="title small">Times seguidos</h3><ul>${followedTeamItems}</ul></div></article>` : ''}
-        </div>
-      </section>
-    `;
   }
 
   function card(title, subtitle, extra = '') {
@@ -169,7 +134,7 @@
   function renderLeaguePage(root, league, data, state) {
     const teams = data.teams.filter((team) => team.league === league);
     const news = Sorter.sortByUserPriority(data.news.filter((item) => item.league === league), state)
-      .map((item) => card(item.title, item.summary, `<div class="meta">${new Date(item.date).toLocaleDateString('pt-BR')}</div>`)).join('');
+      .map((item) => card(item.title, item.summary, `<div class="meta"><a href="${newsLink(data.news.indexOf(item))}">Ler notícia</a></div>`)).join('');
 
     const teamCards = Sorter.sortByUserPriority(teams.map((team) => ({ ...team, teams: [team.id] })), state)
       .map((team) => {
@@ -177,11 +142,7 @@
         const followed = (state.followedTeamsByLeague[league] || []).includes(team.id);
         const followDisabled = favorite ? 'disabled aria-disabled="true" title="Times favoritos são sempre seguidos"' : '';
         const statusLabel = favorite ? '<span class="team-status-favorite">⭐ Favorito</span>' : (followed ? '<span class="team-status-following">✓ Acompanhando</span>' : '');
-        return card(
-          team.name,
-          `Sigla: ${team.abbreviation}`,
-          `<div class="meta">${teamLink(league, team.id, 'Abrir time')}</div><div class="team-status-row">${statusLabel}</div><div class="pills"><button class="pill ${favorite ? 'active' : ''}" data-favorite-team="${league}:${team.id}" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button><button class="pill ${followed ? 'active' : ''}" data-follow-team="${league}:${team.id}" ${followDisabled}>${favorite ? '✓ Seguindo' : (followed ? '✓ Acompanhando' : 'Acompanhar')}</button></div>`
-        );
+        return card(team.name, `Sigla: ${team.abbreviation}`, `<div class="meta">${teamLink(league, team.id, 'Abrir time')}</div><div class="team-status-row">${statusLabel}</div><div class="pills"><button class="pill ${favorite ? 'active' : ''}" data-favorite-team="${league}:${team.id}" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button><button class="pill ${followed ? 'active' : ''}" data-follow-team="${league}:${team.id}" ${followDisabled}>${favorite ? '✓ Seguindo' : (followed ? '✓ Acompanhando' : 'Acompanhar')}</button></div>`);
       }).join('');
 
     root.innerHTML = `
@@ -210,7 +171,26 @@
   }
 
   function renderLive(root) {
-    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Ao Vivo</h2></div></div><div class="notice">No momento, ainda não conseguimos acessar os placares ao vivo.<br>Estamos trabalhando para trazer essa funcionalidade em breve.</div></section>`;
+    root.innerHTML = '<section class="section"><div class="section-head"><div><h2>Ao Vivo</h2></div></div><div class="notice">No momento, ainda não conseguimos acessar os placares ao vivo.<br>Estamos trabalhando para trazer essa funcionalidade em breve.</div></section>';
+  }
+
+  function renderTeams(root, data, query) {
+    const filter = (query.league || '').toUpperCase();
+    const teams = data.teams.filter((team) => !filter || team.league === filter);
+    const cards = teams.map((team) => card(team.name, `${team.league} • ${team.abbreviation}`, `<div class="meta">${teamLink(team.league, team.id, 'Abrir time')}</div>`)).join('');
+    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Times</h2><p>${filter ? `Liga ${filter}` : 'Todas as ligas'}</p></div></div><div class="grid">${cards}</div></section>`;
+  }
+
+  function renderStats(root, data, query) {
+    const filter = (query.league || '').toUpperCase();
+    const leagues = filter ? [filter] : Router.LEAGUES;
+    const cards = leagues.map((league) => {
+      const games = data.games.filter((game) => game.league === league);
+      const upcoming = games.filter((game) => game.status === 'upcoming').length;
+      const live = games.filter((game) => game.status === 'live').length;
+      return card(`Estatísticas ${league}`, `Jogos cadastrados: ${games.length}`, `<div class="meta"><span>Ao vivo: ${live}</span><span>Próximos: ${upcoming}</span></div>`);
+    }).join('');
+    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Estatísticas</h2></div></div><div class="grid">${cards}</div></section>`;
   }
 
   function renderTeam(root, data, state, query) {
@@ -231,8 +211,55 @@
     root.innerHTML = `
       <section class="section"><div class="section-head"><div><h2>${team.name}</h2><p>${league}</p></div></div><div class="pills"><button class="pill ${favorite ? 'active' : ''}" id="favoriteTeamBtn" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button><button class="pill ${followed ? 'active' : ''}" id="followTeamBtn" aria-pressed="${followed}" ${followDisabled}>${favorite ? '✓ Seguindo' : (followed ? '✓ Acompanhando' : 'Acompanhar')}</button></div>${watchGuideMarkup(league, data.watchGuide, true)}</section>
       <section class="section"><div class="section-head"><div><h2>Próximos Jogos</h2></div></div><div class="grid">${nextGames.map((game) => card(`${getTeamName(data.teams, game.teamAway)} @ ${getTeamName(data.teams, game.teamHome)}`, new Date(game.datetime).toLocaleString('pt-BR'))).join('')}</div></section>
-      <section class="section"><div class="section-head"><div><h2>Notícias do Time</h2></div></div><div class="grid">${teamNews.map((item) => card(item.title, item.summary)).join('')}</div></section>
+      <section class="section"><div class="section-head"><div><h2>Notícias do Time</h2></div></div><div class="grid">${teamNews.map((item) => card(item.title, item.summary, `<div class="meta"><a href="${newsLink(data.news.indexOf(item))}">Ler notícia</a></div>`)).join('')}</div></section>
     `;
+  }
+
+  function renderNewsList(root, data, state, query) {
+    const filter = (query.league || '').toUpperCase();
+    const items = data.news
+      .map((item, index) => ({ ...item, __index: index }))
+      .filter((item) => !filter || item.league === filter);
+
+    const cards = Sorter.sortByUserPriority(items, state)
+      .map((item) => card(item.title, item.summary, `<div class="meta"><span>${item.league}</span><span>${new Date(item.date).toLocaleDateString('pt-BR')}</span><a href="${newsLink(item.__index)}">Ler notícia</a></div>`))
+      .join('');
+
+    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Notícias</h2><p>${filter ? `Cobertura ${filter}` : 'Todas as ligas'}</p></div></div><div class="grid">${cards}</div></section>`;
+  }
+
+  function renderNewsArticle(root, data, query) {
+    const articleId = Number(query.id);
+    const article = Number.isInteger(articleId) ? data.news[articleId] : null;
+    if (!article) {
+      root.innerHTML = '<div class="notice">Notícia não encontrada.</div>';
+      return;
+    }
+
+    const teams = article.teams.map((teamId) => getTeamName(data.teams, teamId)).join(' • ');
+    root.innerHTML = `
+      <section class="section">
+        <div class="section-head"><div><h2>${escapeHtml(article.title)}</h2><p>${article.league} • ${new Date(article.date).toLocaleString('pt-BR')}</p></div><a href="news.html">Voltar</a></div>
+        <article class="card news-article"><div class="card-body"><p class="desc">${escapeHtml(article.summary)}</p><p class="news-article-text">${escapeHtml(article.summary)} Esta matéria acompanha os times ${escapeHtml(teams)} e será atualizada ao longo da semana com novos detalhes.</p></div></article>
+      </section>
+    `;
+  }
+
+  function renderFavorites(root, data, state) {
+    const favoriteLeagues = state.favoritesLeagues;
+    const favoriteTeams = Object.entries(state.favoriteTeamByLeague).filter(([, teamId]) => Boolean(teamId));
+    const followedTeams = Object.entries(state.followedTeamsByLeague).flatMap(([league, teams]) => (teams || []).map((teamId) => ({ league, teamId })));
+
+    if (!favoriteLeagues.length && !favoriteTeams.length && !followedTeams.length) {
+      root.innerHTML = '<section class="section"><div class="section-head"><div><h2>Favoritos</h2></div></div><div class="notice">Você ainda não tem favoritos. Use os botões de favoritar e acompanhar nos hubs de liga, times ou em Configurações.</div></section>';
+      return;
+    }
+
+    const favoriteLeagueItems = favoriteLeagues.map((league) => `<li><a href="${league.toLowerCase()}.html">${league}</a></li>`).join('');
+    const favoriteTeamItems = favoriteTeams.map(([league, teamId]) => `<li>${teamLink(league, teamId, getTeamName(data.teams, teamId))}</li>`).join('');
+    const followedTeamItems = followedTeams.map(({ league, teamId }) => `<li>${teamLink(league, teamId, `${getTeamName(data.teams, teamId)} (${league})`)}</li>`).join('');
+
+    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Favoritos</h2><p>Conteúdo que você marcou para acompanhar.</p></div></div><div class="grid">${favoriteLeagueItems ? `<article class="card"><div class="card-body"><h3 class="title small">Ligas favoritas</h3><ul>${favoriteLeagueItems}</ul></div></article>` : ''}${favoriteTeamItems ? `<article class="card"><div class="card-body"><h3 class="title small">Times favoritos</h3><ul>${favoriteTeamItems}</ul></div></article>` : ''}${followedTeamItems ? `<article class="card"><div class="card-body"><h3 class="title small">Times seguidos</h3><ul>${followedTeamItems}</ul></div></article>` : ''}</div></section>`;
   }
 
   function renderSettings(root, data, state) {
@@ -243,38 +270,14 @@
     }).join('');
 
     const leagueFollowPills = Router.LEAGUES.map((league) => `<button class="pill ${state.followedLeagues.includes(league) ? 'active' : ''}" data-follow-league="${league}">${state.followedLeagues.includes(league) ? '✓' : ''} Acompanhar ${league}</button>`).join('');
-
     const followedTeams = Router.LEAGUES.map((league) => {
       const selected = state.followedTeamsByLeague[league] || [];
       const pills = data.teams.filter((team) => team.league === league).map((team) => `<button class="pill ${selected.includes(team.id) ? 'active' : ''}" data-follow-team="${league}:${team.id}">${selected.includes(team.id) ? '✓ ' : ''}${team.name}</button>`).join('');
       return `<div class="section"><div class="section-head"><div><h2>Acompanhar times ${league}</h2></div></div><div class="pills">${pills}</div></div>`;
     }).join('');
 
-    const alertExamples = [
-      '🔔 Lakers x Celtics começa em 30 min (simulação).',
-      '🔔 Chiefs confirmaram lista de inativos (simulação).',
-      '🔔 Nova notícia da sua liga seguida foi publicada (simulação).'
-    ].map((text) => `<li>${text}</li>`).join('');
-
-    const sourceOptions = [
-      { value: 'static', label: 'Static (JSON)' },
-      { value: 'espn', label: 'ESPN (em breve)' },
-      { value: 'sportsdata', label: 'SportsData (em breve)' }
-    ].map((source) => `<option value="${source.value}" ${state.dataSource === source.value ? 'selected' : ''} ${source.value === 'static' ? '' : 'disabled'}>${source.label}</option>`).join('');
-
-    root.innerHTML = `
-      <section class="section"><div class="section-head"><div><h2>Configurações</h2></div></div>
-        <div class="card"><div class="card-body">${leagueOptions}${favoriteTeams}
-          <label class="setting-row">Fonte de dados<select id="dataSourceSelect">${sourceOptions}</select></label>
-          <label class="setting-row"><input id="alertsSimulationToggle" type="checkbox" ${state.alertSimulationEnabled ? 'checked' : ''}> Ativar alertas simulados</label>
-          <button class="pill" id="resetPreferences">Resetar preferências</button>
-        </div></div>
-      </section>
-      <section class="section"><div class="section-head"><div><h2>Ligas seguidas</h2></div></div><div class="pills">${leagueFollowPills}</div></section>
-      ${followedTeams}
-      <section class="section"><div class="section-head"><div><h2>Alertas (simulação)</h2></div></div><div class="card"><div class="card-body"><ul class="alerts-list">${alertExamples}</ul></div></div></section>
-    `;
+    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Configurações</h2></div></div><div class="card"><div class="card-body">${leagueOptions}${favoriteTeams}<button class="pill" id="resetPreferences">Resetar preferências</button></div></div></section><section class="section"><div class="section-head"><div><h2>Ligas seguidas</h2></div></div><div class="pills">${leagueFollowPills}</div></section>${followedTeams}`;
   }
 
-  window.UI = { renderHub, renderSidebar, renderHome, renderLeaguePage, renderGames, renderStandings, renderLive, renderTeam, renderFavorites, renderSettings };
+  window.UI = { renderHub, renderSidebar, renderHome, renderLeaguePage, renderGames, renderStandings, renderLive, renderTeam, renderTeams, renderStats, renderNewsList, renderNewsArticle, renderFavorites, renderSettings };
 })();
