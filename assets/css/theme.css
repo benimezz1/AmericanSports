@@ -37,35 +37,6 @@ body.dark-mode {
   color: var(--text);
 }
 
-body.dark-mode .navbar {
-  background: #0b0b0f;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 12px 20px;
-}
-
-body.dark-mode .brand,
-body.dark-mode .brand span,
-body.dark-mode .logo-text {
-  color: #f5f6fb;
-}
-
-body.dark-mode .navlink,
-body.dark-mode .nav-link {
-  background-color: rgba(255, 255, 255, 0.08);
-  color: #f1f2f8;
-  border: 1px solid var(--nav-border);
-}
-
-body.dark-mode .navlink:hover,
-body.dark-mode .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.12);
-}
-
-body.dark-mode .navlink.active,
-body.dark-mode .nav-link.active,
-body.dark-mode .navlink[aria-current='page'],
-body.dark-mode .nav-link[aria-current='page'],
 body.dark-mode .pill.active {
   border-color: #ff3b3b;
 }
