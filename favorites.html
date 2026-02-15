@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PlayNorth • Favoritos</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="assets/css/nav.css" />
+</head>
+<body>
+  <header>
+    <div class="container navbar">
+      <a class="brand" href="index.html" aria-label="Ir para Home">
+        <div class="brand-badge"></div>
+        <span>PlayNorth (protótipo)</span>
+      </a>
+      <nav>
+        <a class="navlink" href="index.html">Home</a>
+        <a class="navlink" href="favorites.html">Favoritos</a>
+      </nav>
+      <button id="themeToggle" class="theme-btn">Modo Claro</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="section">
+      <div class="section-head"><div><h2>Favoritos</h2><p>Placeholder para salvar times, jogos e notícias</p></div></div>
+      <div class="notice">
+        Futuramente, esta página pode listar favoritos salvos no <code>localStorage</code> usando uma chave como
+        <code>playnorth-favorites</code>. Cada item poderia armazenar <em>id</em>, tipo e data de inclusão para renderizar
+        cartões personalizados ao recarregar o site.
+      </div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script src="assets/js/nav.js"></script>
+</body>
+</html>

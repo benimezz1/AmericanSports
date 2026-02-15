@@ -1,17 +1,31 @@
 (function () {
   const headerBar = document.querySelector('header .navbar');
-  document.body.classList.add('nav-mounted');
   if (!headerBar || document.getElementById('siteSidebar')) return;
+
+  document.body.classList.add('nav-mounted');
+
+  const menuItems = [
+    { label: 'Home', href: 'index.html' },
+    { label: 'Notícias', href: 'news.html' },
+    { label: 'Jogos / Calendário', href: 'games.html' },
+    { label: 'Tabelas / Classificação', href: 'standings.html' },
+    { label: 'Times', href: 'teams.html' },
+    { label: 'Estatísticas', href: 'stats.html' },
+    { label: 'Ao vivo', href: 'live.html' },
+    { label: 'Favoritos', href: 'favorites.html' },
+    { label: 'Configurações', href: 'settings.html' }
+  ];
+
+  const currentPage = location.pathname.split('/').pop() || 'index.html';
 
   const toggle = document.createElement('button');
   toggle.type = 'button';
   toggle.className = 'site-nav-toggle';
   toggle.id = 'siteNavToggle';
-  toggle.setAttribute('aria-label', 'Abrir menu de navegação');
+  toggle.setAttribute('aria-label', 'Abrir menu lateral');
   toggle.setAttribute('aria-controls', 'siteSidebar');
   toggle.setAttribute('aria-expanded', 'false');
   toggle.innerHTML = '<span class="hamburger" aria-hidden="true"></span>';
-
   headerBar.insertBefore(toggle, headerBar.firstChild);
 
   const overlay = document.createElement('div');
@@ -21,76 +35,80 @@
   const sidebar = document.createElement('aside');
   sidebar.className = 'site-sidebar';
   sidebar.id = 'siteSidebar';
-  sidebar.setAttribute('aria-label', 'Menu lateral');
+  sidebar.setAttribute('aria-label', 'Menu principal de navegação');
   sidebar.hidden = true;
   sidebar.innerHTML = `
-    <h2 class="title">Menu</h2>
+    <h2 class="title">Menu de Esportes</h2>
     <nav>
-      <a class="menu-link" href="index.html">Início</a>
-      <a class="menu-link" href="form.html">Começar</a>
-      <a class="menu-link" href="final.html">Perguntas finais (beta)</a>
-      <a class="menu-link" href="result.html">Treino da semana</a>
-      <a class="menu-link" href="result.html#cinco-semanas">5 semanas</a>
-      <button class="menu-action" type="button" data-action="print">Baixar PDF</button>
+      ${menuItems.map(item => {
+        const active = item.href === currentPage ? 'aria-current="page"' : '';
+        return `<a class="menu-link" href="${item.href}" ${active}>${item.label}</a>`;
+      }).join('')}
     </nav>
   `;
 
   document.body.append(overlay, sidebar);
 
-  const firstFocusable = () => sidebar.querySelector('a,button');
-  let lastFocus = null;
+  let lastFocused = null;
+
+  function getFirstMenuItem() {
+    return sidebar.querySelector('a, button, [tabindex]:not([tabindex="-1"])');
+  }
+
+  function isMenuOpen() {
+    return document.body.classList.contains('sidebar-open');
+  }
 
   function openMenu() {
-    lastFocus = document.activeElement;
+    if (isMenuOpen()) return;
+    lastFocused = document.activeElement;
     sidebar.hidden = false;
     overlay.hidden = false;
     document.body.classList.add('sidebar-open');
     toggle.classList.add('is-open');
     toggle.setAttribute('aria-expanded', 'true');
-    toggle.setAttribute('aria-label', 'Fechar menu de navegação');
-    const first = firstFocusable();
+    toggle.setAttribute('aria-label', 'Fechar menu lateral');
+
+    const first = getFirstMenuItem();
     if (first) first.focus();
   }
 
   function closeMenu() {
+    if (!isMenuOpen()) return;
     document.body.classList.remove('sidebar-open');
     toggle.classList.remove('is-open');
     toggle.setAttribute('aria-expanded', 'false');
-    toggle.setAttribute('aria-label', 'Abrir menu de navegação');
-    setTimeout(() => {
+    toggle.setAttribute('aria-label', 'Abrir menu lateral');
+
+    window.setTimeout(() => {
       sidebar.hidden = true;
       overlay.hidden = true;
-    }, 250);
-    if (lastFocus && typeof lastFocus.focus === 'function') {
-      lastFocus.focus();
+    }, 260);
+
+    if (lastFocused && typeof lastFocused.focus === 'function') {
+      lastFocused.focus();
     } else {
       toggle.focus();
     }
   }
 
-  toggle.addEventListener('click', () => {
-    if (document.body.classList.contains('sidebar-open')) {
+  toggle.addEventListener('click', function () {
+    if (isMenuOpen()) {
       closeMenu();
-    } else {
-      openMenu();
+      return;
     }
+    openMenu();
   });
 
   overlay.addEventListener('click', closeMenu);
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && document.body.classList.contains('sidebar-open')) {
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && isMenuOpen()) {
       closeMenu();
     }
   });
 
-  sidebar.addEventListener('click', (event) => {
-    const printTrigger = event.target.closest('[data-action="print"]');
-    if (printTrigger) {
-      closeMenu();
-      window.print();
-      return;
-    }
-
+  sidebar.addEventListener('click', function (event) {
     if (event.target.closest('a')) {
       closeMenu();
     }

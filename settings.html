@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PlayNorth • Configurações</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="assets/css/nav.css" />
+  <style>
+    .toggle-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+    .switch{display:inline-flex;align-items:center;gap:10px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container navbar">
+      <a class="brand" href="index.html" aria-label="Ir para Home">
+        <div class="brand-badge"></div>
+        <span>PlayNorth (protótipo)</span>
+      </a>
+      <nav>
+        <a class="navlink" href="index.html">Home</a>
+        <a class="navlink" href="settings.html">Configurações</a>
+      </nav>
+      <button id="themeToggle" class="theme-btn">Modo Claro</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="section">
+      <div class="section-head"><div><h2>Configurações</h2><p>Preferências salvas em localStorage</p></div></div>
+      <div class="card">
+        <div class="card-body">
+          <div class="toggle-row">
+            <div>
+              <h3 class="title small">Tema</h3>
+              <p class="desc">Alternar entre modo escuro e claro</p>
+            </div>
+            <label class="switch">
+              <input id="themeSetting" type="checkbox" />
+              <span>Modo claro</span>
+            </label>
+          </div>
+
+          <div class="toggle-row">
+            <div>
+              <h3 class="title small">Idioma</h3>
+              <p class="desc">Defina o idioma preferido da interface</p>
+            </div>
+            <label class="switch">
+              <input id="langSetting" type="checkbox" />
+              <span id="langLabel">Português</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <script>
+    (function(){
+      const THEME_KEY = 'playnorth-theme';
+      const LANG_KEY = 'playnorth-lang';
+      const themeInput = document.getElementById('themeSetting');
+      const langInput = document.getElementById('langSetting');
+      const langLabel = document.getElementById('langLabel');
+
+      const currentTheme = localStorage.getItem(THEME_KEY) || 'theme-dark';
+      themeInput.checked = currentTheme === 'theme-light';
+
+      const currentLang = localStorage.getItem(LANG_KEY) || 'pt-BR';
+      langInput.checked = currentLang === 'en-US';
+      langLabel.textContent = currentLang === 'en-US' ? 'English' : 'Português';
+
+      themeInput.addEventListener('change', function(){
+        const nextTheme = themeInput.checked ? 'theme-light' : 'theme-dark';
+        localStorage.setItem(THEME_KEY, nextTheme);
+        document.body.classList.remove('theme-dark', 'theme-light');
+        document.body.classList.add(nextTheme);
+      });
+
+      langInput.addEventListener('change', function(){
+        const nextLang = langInput.checked ? 'en-US' : 'pt-BR';
+        localStorage.setItem(LANG_KEY, nextLang);
+        langLabel.textContent = nextLang === 'en-US' ? 'English' : 'Português';
+      });
+    })();
+  </script>
+</body>
+</html>
