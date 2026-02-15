@@ -1,4 +1,4 @@
-# PlayNorth (protótipo)
+# PlayNorth
 
 Portal de esportes americanos (NFL, NBA, NHL, MLB, MLS) em HTML/CSS/JS puro, com foco em UX mobile para público brasileiro.
 

@@ -32,26 +32,34 @@
     if (page === 'index.html') UI.renderHome(root, data, state);
     else if (Router.LEAGUES.map((league) => `${league.toLowerCase()}.html`).includes(page)) UI.renderLeaguePage(root, currentLeague, data, state);
     else if (page === 'games.html') UI.renderGames(root, data, state, query.league ? query.league.toUpperCase() : null);
-    else if (page === 'standings.html') UI.renderStandings(root, data, state);
+    else if (page === 'standings.html') UI.renderStandings(root, data);
     else if (page === 'live.html') UI.renderLive(root);
     else if (page === 'team.html') UI.renderTeam(root, data, state, query);
     else if (page === 'favorites.html') UI.renderFavorites(root, data, state);
     else if (page === 'settings.html') UI.renderSettings(root, data, state);
+    else if (page === 'news.html') UI.renderNewsList(root, data, state, query);
+    else if (page === 'noticia.html') UI.renderNewsArticle(root, data, query);
+    else if (page === 'teams.html') UI.renderTeams(root, data, query);
+    else if (page === 'stats.html') UI.renderStats(root, data, query);
+    else root.innerHTML = '<div class="notice">Página não encontrada.</div>';
   }
 
-  async function renderPage() {
+  function loadData() {
+    return {
+      teams: window.TEAMS_DATA || [],
+      games: window.GAMES_DATA || [],
+      news: window.NEWS_DATA || [],
+      standings: window.STANDINGS_DATA || {},
+      watchGuide: window.WATCH_GUIDE_DATA || {}
+    };
+  }
+
+  function renderPage() {
     const page = Router.getPageName();
     const currentLeague = Router.detectLeagueFromPage();
     const query = Router.getQueryParams();
     let state = StorageService.getState();
-    const provider = DataSources.getProvider(state.dataSource);
-    const data = {
-      teams: await provider.getTeams(),
-      games: await provider.getGames(),
-      news: await provider.getNews(),
-      standings: await provider.getStandings(),
-      watchGuide: window.WATCH_GUIDE_DATA || {}
-    };
+    const data = loadData();
 
     document.body.insertAdjacentHTML('afterbegin', UI.renderHub(page));
 
@@ -73,13 +81,13 @@
       applyTheme(next);
     });
 
-
     root.addEventListener('click', (event) => {
       const favTeamBtn = event.target.closest('#favoriteTeamBtn');
       const followTeamBtn = event.target.closest('#followTeamBtn');
       const favoritePill = event.target.closest('[data-favorite-team]');
       const followPill = event.target.closest('[data-follow-team]');
       const followLeaguePill = event.target.closest('[data-follow-league]');
+
       if (favTeamBtn && query.league && query.team) {
         StorageService.toggleFavoriteTeam(query.league.toUpperCase(), query.team);
         rerender();
@@ -108,7 +116,6 @@
       }
     });
 
-
     document.getElementById('sidebar')?.addEventListener('click', (event) => {
       const sidebarScopeBtn = event.target.closest('[data-sidebar-scope]');
       if (!sidebarScopeBtn) return;
@@ -127,22 +134,16 @@
         StorageService.setFavoriteTeam(league, team);
         rerender();
       }
-      if (event.target.matches('#dataSourceSelect')) {
-        const source = DataSources.setSelectedSource(event.target.value);
-        StorageService.setDataSource(source);
-        location.reload();
-      }
-      if (event.target.matches('#alertsSimulationToggle')) {
-        StorageService.setAlertSimulation(event.target.checked);
-      }
     });
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    renderPage().catch((error) => {
+    try {
+      renderPage();
+    } catch (error) {
       console.error(error);
       const root = document.getElementById('page-root');
       if (root) root.innerHTML = '<div class="notice">Erro ao carregar dados da página.</div>';
-    });
+    }
   });
 })();
