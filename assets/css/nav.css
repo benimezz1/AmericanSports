@@ -107,3 +107,25 @@ body.sidebar-open #sidebar { transform: translateX(0); }
   .navbar { padding: 9px 10px; }
   .navbar .brand span { display:none; }
 }
+
+
+.sidebar-scope-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.sidebar-scope-btn {
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--nav-border);
+  background: var(--surface-1);
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.sidebar-scope-btn.active {
+  border-color: var(--accent2);
+  background: color-mix(in srgb, var(--accent2) 14%, transparent);
+}
