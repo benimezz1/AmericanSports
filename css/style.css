@@ -99,22 +99,17 @@ nav{display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end}
 .navlink:hover{border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent)}
 .navlink.active{border-color: var(--accent2); background: color-mix(in srgb, var(--accent2) 12%, transparent)}
 
-.theme-toggle{
-  margin-left:auto;
-  width:36px;
-  height:36px;
-  border-radius:999px;
+.theme-btn{
+  padding:9px 12px;
+  border-radius:12px;
   border:1px solid var(--accent);
-  display:grid;
-  place-items:center;
   background: color-mix(in srgb, var(--accent) 10%, transparent);
   color:var(--text);
+  font-size:13px;
+  font-weight:700;
   cursor:pointer;
-  transition: background .15s ease, border-color .15s ease, transform .15s ease;
 }
-.theme-toggle svg{display:block}
-.theme-toggle:hover{background: color-mix(in srgb, var(--accent2) 12%, transparent); border-color: var(--accent2)}
-.theme-toggle:active{transform: translateY(1px)}
+.theme-btn:hover{background: color-mix(in srgb, var(--accent2) 12%, transparent); border-color: var(--accent2)}
 
 .hero{
   display:grid;
