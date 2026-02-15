@@ -10,136 +10,156 @@ body.nav-mounted main {
   padding-top: 84px;
 }
 
-.site-nav-toggle {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  border: 1px solid var(--nav-border, var(--line));
-  background: var(--surface-1, rgba(255, 255, 255, 0.06));
-  color: var(--text);
-  display: grid;
-  place-items: center;
+/* ===== Hamburger padrão (3 linhas) ===== */
+.hamburger,
+.site-nav-toggle,
+#menuBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.14);
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  flex-shrink: 0;
+  flex: 0 0 auto;
 }
 
+.hamburger:focus-visible,
 .site-nav-toggle:focus-visible,
-.site-sidebar .menu-link:focus-visible {
+#menuBtn:focus-visible,
+#sidebar .menu-link:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
-.site-nav-toggle .hamburger,
-.site-nav-toggle .hamburger::before,
-.site-nav-toggle .hamburger::after {
-  content: "";
+.hamburger .bars,
+.site-nav-toggle .bars,
+#menuBtn .bars {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.hamburger .bars span,
+.site-nav-toggle .bars span,
+#menuBtn .bars span {
   display: block;
-  width: 18px;
+  width: 20px;
   height: 2px;
   border-radius: 2px;
-  background: currentColor;
-  transition: transform 0.26s ease, opacity 0.26s ease;
+  background: #000;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.site-nav-toggle .hamburger {
-  position: relative;
+/* dark */
+body.dark-mode .hamburger,
+body.dark-mode .site-nav-toggle,
+body.dark-mode #menuBtn {
+  border-color: rgba(255,255,255,0.16);
 }
 
-.site-nav-toggle .hamburger::before {
-  position: absolute;
-  top: -6px;
-  left: 0;
+body.dark-mode .hamburger .bars span,
+body.dark-mode .site-nav-toggle .bars span,
+body.dark-mode #menuBtn .bars span {
+  background: #fff;
 }
 
-.site-nav-toggle .hamburger::after {
-  position: absolute;
-  top: 6px;
-  left: 0;
+#menuBtn[aria-expanded="true"] .bars span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
 }
 
-.site-nav-toggle.is-open .hamburger {
-  transform: rotate(45deg);
-}
-
-.site-nav-toggle.is-open .hamburger::before {
+#menuBtn[aria-expanded="true"] .bars span:nth-child(2) {
   opacity: 0;
 }
 
-.site-nav-toggle.is-open .hamburger::after {
-  top: 0;
-  transform: rotate(-90deg);
+#menuBtn[aria-expanded="true"] .bars span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 
-.sidebar-overlay {
+/* Overlay + sidebar */
+#sidebarOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.55);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.26s ease;
-  z-index: 60;
+  transition: 0.2s;
+  z-index: 999;
 }
 
-.site-sidebar {
+#sidebar {
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
-  width: min(320px, 86vw);
-  background: var(--panel, #111a33);
-  border-right: 1px solid var(--line);
+  width: min(280px, 86vw);
+  background: #fff;
+  color: #0b1020;
   transform: translateX(-100%);
-  transition: transform 0.26s ease;
-  z-index: 70;
-  padding: 20px;
+  transition: 0.2s;
+  z-index: 1000;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
-.site-sidebar .title {
+#sidebar .title {
   margin: 4px 0 8px;
   font-size: 18px;
 }
 
-.site-sidebar nav {
+#sidebar nav {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   gap: 8px;
 }
 
-.site-sidebar .menu-link {
+#sidebar .menu-link {
   display: block;
   width: 100%;
   text-align: left;
-  color: var(--text);
-  border: 1px solid var(--nav-border, var(--line));
-  background: var(--surface-1, rgba(255, 255, 255, 0.06));
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(11, 16, 32, 0.03);
+  color: inherit;
   border-radius: 10px;
   padding: 11px 12px;
   font-size: 14px;
 }
 
-.site-sidebar .menu-link[aria-current="page"] {
-  border-color: var(--accent2);
-  background: color-mix(in srgb, var(--accent2) 12%, transparent);
+#sidebar .menu-link[aria-current="page"] {
+  border: 2px solid #ff3b3b;
+}
+
+body.dark-mode #sidebar {
+  background: #0b0b0f;
+  color: #fff;
+}
+
+body.dark-mode #sidebar .menu-link {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 body.sidebar-open {
   overflow: hidden;
 }
 
-body.sidebar-open .sidebar-overlay {
+body.sidebar-open #sidebarOverlay {
   opacity: 1;
   pointer-events: auto;
 }
 
-body.sidebar-open .site-sidebar {
+body.sidebar-open #sidebar {
   transform: translateX(0);
 }
 
 @media (max-width: 980px) {
   .navbar nav {
-    display: none;
+    display: flex;
   }
 }

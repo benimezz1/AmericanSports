@@ -3,16 +3,27 @@
   --max: 1100px;
   --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
 
-  --bg:#0b1020;
-  --panel:#111a33;
-  --panel2:#0f1730;
-  --text:#ffffff;
-  --muted:#a9b2d6;
-  --line:rgba(255,255,255,.10);
-  --accent:#1e90ff;
-  --accent2:#ff0033;
-  --chip:#1a2550;
-  --shadow: 0 14px 40px rgba(0,0,0,.35);
+  /* Light mode defaults */
+  --bg:#f7f8fc;
+  --panel:#ffffff;
+  --panel2:#f2f4fb;
+  --text:#161a2d;
+  --muted:#58648c;
+  --line:rgba(22,26,45,.12);
+  --accent:#0057ff;
+  --accent2:#d4002a;
+  --chip:#e9eefc;
+  --shadow: 0 10px 30px rgba(11,16,32,.08);
+
+  --header-bg: linear-gradient(to bottom, rgba(255,255,255,.95), rgba(247,248,252,.82));
+  --surface-1: rgba(22,26,45,.04);
+  --surface-2: rgba(22,26,45,.02);
+  --surface-3: rgba(22,26,45,.06);
+  --chip-border: rgba(22,26,45,.14);
+  --nav-border: rgba(22,26,45,.15);
+  --notice-border: rgba(22,26,45,.22);
+  --glow-blue: rgba(0,87,255,.08);
+  --glow-red: rgba(212,0,42,.05);
 }
 
 *{box-sizing:border-box}
@@ -20,55 +31,30 @@ html,body{height:100%}
 body{
   margin:0;
   font-family:var(--font);
-  background: radial-gradient(1000px 600px at 20% 0%, var(--glow-blue), transparent 60%),
-              radial-gradient(900px 700px at 90% 10%, var(--glow-red), transparent 55%),
-              var(--bg);
+  background: var(--bg);
   color:var(--text);
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-body.theme-dark{
-  --bg:#0b1020;
-  --panel:#111a33;
-  --panel2:#0f1730;
-  --text:#ffffff;
-  --muted:#a9b2d6;
-  --line:rgba(255,255,255,.10);
+body.dark-mode{
+  --bg:#000000;
+  --panel:#15161f;
+  --panel2:#101219;
+  --text:#f7f7fa;
+  --muted:#c7c8d1;
+  --line:rgba(255,255,255,.14);
   --accent:#1e90ff;
-  --accent2:#ff0033;
-  --chip:#1a2550;
-  --shadow: 0 14px 40px rgba(0,0,0,.35);
-  --header-bg: linear-gradient(to bottom, rgba(11,16,32,.92), rgba(11,16,32,.62));
-  --surface-1: rgba(255,255,255,.06);
-  --surface-2: rgba(255,255,255,.03);
-  --surface-3: rgba(255,255,255,.04);
-  --chip-border: rgba(255,255,255,.10);
-  --nav-border: rgba(255,255,255,.08);
-  --notice-border: rgba(255,255,255,.22);
-  --glow-blue: rgba(30,144,255,.16);
-  --glow-red: rgba(255,0,51,.14);
-}
+  --accent2:#ff3b3b;
+  --chip:#1d1f28;
+  --shadow: 0 14px 40px rgba(0,0,0,.45);
 
-body.theme-light{
-  --bg:#ffffff;
-  --panel:#f4f6fb;
-  --panel2:#e9edf8;
-  --text:#0b1020;
-  --muted:#51608f;
-  --line:rgba(11,16,32,.12);
-  --accent:#0057ff;
-  --accent2:#d4002a;
-  --chip:#e9eefc;
-  --shadow: 0 10px 30px rgba(11,16,32,.10);
-  --header-bg: linear-gradient(to bottom, rgba(255,255,255,.95), rgba(244,246,251,.80));
-  --surface-1: rgba(11,16,32,.04);
-  --surface-2: rgba(11,16,32,.02);
-  --surface-3: rgba(11,16,32,.05);
-  --chip-border: rgba(11,16,32,.16);
-  --nav-border: rgba(11,16,32,.14);
-  --notice-border: rgba(11,16,32,.28);
-  --glow-blue: rgba(0,87,255,.10);
-  --glow-red: rgba(212,0,42,.08);
+  --header-bg: transparent;
+  --surface-1: rgba(255,255,255,.08);
+  --surface-2: rgba(255,255,255,.04);
+  --surface-3: rgba(255,255,255,.06);
+  --chip-border: rgba(255,255,255,.16);
+  --nav-border: rgba(255,255,255,.2);
+  --notice-border: rgba(255,255,255,.3);
 }
 
 a{color:inherit; text-decoration:none}
@@ -79,8 +65,59 @@ header{
   background: var(--header-bg);
   border-bottom:1px solid var(--line);
 }
-.navbar{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap}
-.brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px}
+/* ===== NAVBAR LAYOUT FIX ===== */
+.navbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:nowrap;
+}
+.navbar .brand,
+.navbar .logo-area,
+.navbar .logo-wrap{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.brand{font-weight:800; letter-spacing:.3px; flex:0 0 auto}
+.navbar nav,
+.navbar .menu,
+.navbar .nav {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex:1;
+  justify-content:center;
+  min-width:0;
+  white-space:nowrap;
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+
+.navbar nav::-webkit-scrollbar,
+.navbar .menu::-webkit-scrollbar,
+.navbar .nav::-webkit-scrollbar {
+  display:none;
+}
+
+.navbar nav a,
+.navbar .menu a,
+.navbar .nav a,
+.navbar .nav-link {
+  flex:0 0 auto;
+}
+
+#themeBtn,
+.theme-toggle{
+  flex:0 0 auto;
+  margin-left:12px;
+  position:static !important;
+  z-index:1;
+}
 .brand-badge{
   width:34px; height:34px; border-radius:12px;
   background: linear-gradient(135deg, var(--accent), var(--accent2));

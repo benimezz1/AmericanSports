@@ -4,85 +4,87 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--nav-border, rgba(255,255,255,.12));
+  border: 1px solid var(--nav-border, rgba(22,26,45,.15));
   border-radius: 50%;
   background: transparent;
   color: var(--text);
   cursor: pointer;
-  position: absolute;
-  top: 12px;
-  left: 12px;
+  position: static !important;
+  flex: 0 0 auto;
+  margin-left: 12px;
+  z-index: 1;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-.navbar {
-  position: relative;
+/* Light mode baseline (sem dark-mode no body) */
+body:not(.dark-mode) {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body:not(.dark-mode) .navbar {
+  background: transparent;
 }
 
 /* =========================
    PLAYNORTH DARK MODE
+   Único gatilho: body.dark-mode
 ========================= */
 
 body.dark-mode {
   background: #000000 !important;
-  color: #ffffff;
+  color: #f7f7fa;
 }
 
-/* Navbar */
-body.dark-mode .navbar {
-  background-color: #e9e9ec;
+/* ===== NAVBAR DARK FIX ===== */
+body.dark-mode .navbar,
+body.dark-mode header.navbar,
+body.dark-mode .top-hub,
+body.dark-mode .hub {
+  background: #0b0b0f !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,0.06);
   border-radius: 12px;
   padding: 12px 20px;
 }
 
-/* Logo */
-body.dark-mode .logo-text,
-body.dark-mode .brand span {
-  color: #111111;
+/* textos da navbar */
+body.dark-mode .navbar * {
+  color: inherit;
 }
 
-/* Links do menu */
+/* pills do menu no dark */
 body.dark-mode .nav-link,
 body.dark-mode .navlink {
-  background-color: #dcdce0;
-  color: #333333;
+  background: #15151b !important;
+  color: #eaeaea !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  border-radius: 999px;
   padding: 8px 16px;
-  border-radius: 20px;
-  border: 1px solid transparent;
-  transition: all 0.2s ease;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 body.dark-mode .nav-link:hover,
 body.dark-mode .navlink:hover {
-  background-color: #cfcfd4;
+  background: #1c1c24 !important;
 }
 
-/* Link ativo */
 body.dark-mode .nav-link.active,
-body.dark-mode .navlink.active {
-  background-color: #f2f2f4;
-  border: 2px solid #ff3b3b;
-  color: #000000;
+body.dark-mode .navlink.active,
+body.dark-mode .nav-link[aria-current="page"],
+body.dark-mode .navlink[aria-current="page"] {
+  background: #0f0f14 !important;
+  border: 2px solid #ff3b3b !important;
+  color: #ffffff !important;
 }
 
-/* Botão de tema */
+/* Botão de tema circular com borda vermelha */
 body.dark-mode .theme-toggle {
-  border: 2px solid #ff3b3b;
-  border-radius: 50%;
-  padding: 6px;
-  background-color: transparent;
-  color: #111111;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  border: 2px solid #ff3b3b !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
 }
 
 body.dark-mode .theme-toggle:hover {
-  background-color: #dddddd;
-}
-
-/* Suporte automático sistema */
-@media (prefers-color-scheme: dark) {
-  body:not(.light-mode) {
-    background-color: #000000;
-  }
+  background-color: #1c1c24 !important;
 }
