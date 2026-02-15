@@ -20,10 +20,27 @@ function byId(id){ return document.getElementById(id); }
 
 const THEME_KEY = "playnorth-theme";
 
-function updateThemeToggleText(theme){
+function themeIconSVG(theme){
+  if(theme === "theme-light"){
+    return `
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2.5v2.5M12 19v2.5M21.5 12H19M5 12H2.5M18.72 5.28l-1.77 1.77M7.05 16.95l-1.77 1.77M18.72 18.72l-1.77-1.77M7.05 7.05L5.28 5.28"></path>
+      </svg>
+    `;
+  }
+
+  return `
+    <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"></path>
+    </svg>
+  `;
+}
+
+function updateThemeToggleIcon(theme){
   const btn = byId("themeToggle");
   if(!btn) return;
-  btn.textContent = theme === "theme-dark" ? "Modo Claro" : "Modo Escuro";
+  btn.innerHTML = themeIconSVG(theme);
 }
 
 function applyTheme(theme){
@@ -32,7 +49,7 @@ function applyTheme(theme){
   const finalTheme = theme === "theme-light" ? "theme-light" : "theme-dark";
   body.classList.remove("theme-dark", "theme-light");
   body.classList.add(finalTheme);
-  updateThemeToggleText(finalTheme);
+  updateThemeToggleIcon(finalTheme);
   localStorage.setItem(THEME_KEY, finalTheme);
 }
 
