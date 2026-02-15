@@ -10,6 +10,36 @@ body.nav-mounted main {
   padding-top: 84px;
 }
 
+/* Menu principal sempre em uma linha com scroll horizontal quando necessário */
+.navbar nav,
+.navbar .nav,
+.navbar .menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.navbar nav::-webkit-scrollbar,
+.navbar .nav::-webkit-scrollbar,
+.navbar .menu::-webkit-scrollbar {
+  display: none;
+}
+
+.navbar nav > a,
+.navbar .nav > a,
+.navbar .menu > a {
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
 .site-nav-toggle {
   width: 40px;
   height: 40px;
@@ -29,10 +59,11 @@ body.nav-mounted main {
   outline-offset: 2px;
 }
 
+/* Ícone hambúrguer padrão (3 linhas) */
 .site-nav-toggle .hamburger,
 .site-nav-toggle .hamburger::before,
 .site-nav-toggle .hamburger::after {
-  content: "";
+  content: '';
   display: block;
   width: 18px;
   height: 2px;
@@ -120,7 +151,7 @@ body.nav-mounted main {
   font-size: 14px;
 }
 
-.site-sidebar .menu-link[aria-current="page"] {
+.site-sidebar .menu-link[aria-current='page'] {
   border-color: var(--accent2);
   background: color-mix(in srgb, var(--accent2) 12%, transparent);
 }
@@ -139,7 +170,11 @@ body.sidebar-open .site-sidebar {
 }
 
 @media (max-width: 980px) {
-  .navbar nav {
-    display: flex;
+  .site-nav-toggle {
+    display: grid;
+  }
+
+  .navbar > nav {
+    display: none;
   }
 }
