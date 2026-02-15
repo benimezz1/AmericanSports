@@ -11,6 +11,7 @@
   ];
 
   const GLOBAL_SIDEBAR_ITEMS = [
+    { label: '🏠 Home', href: 'index.html' },
     { label: '🔥 Ao Vivo', href: 'live.html' },
     { label: '📅 Próximos Jogos', href: 'games.html' },
     { label: '📰 Notícias', href: 'news.html' },
@@ -66,26 +67,31 @@
     ];
   }
 
-  function renderSidebar({ league, currentPage }) {
+  function renderSidebar({ league, currentPage, sidebarScope = 'global' }) {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
-    const contextual = getContextualItems(league);
-    const sections = [];
 
-    if (contextual.length) {
-      sections.push(`<div class="sidebar-links">${contextual.map((item) => {
-        const active = item.href.split('?')[0] === currentPage ? 'aria-current="page"' : '';
-        return `<a href="${item.href}" ${active}>${item.label}</a>`;
-      }).join('')}</div>`);
-      sections.push('<div class="sidebar-divider" aria-hidden="true"></div>');
-    }
+    const hasLeagueContext = league === 'NFL';
+    const contextual = hasLeagueContext ? getContextualItems(league) : [];
+    const activeScope = hasLeagueContext && sidebarScope === 'league' ? 'league' : 'global';
 
-    sections.push(`<div class="sidebar-links">${GLOBAL_SIDEBAR_ITEMS.map((item) => {
+    const globalItemsHtml = `<div class="sidebar-links">${GLOBAL_SIDEBAR_ITEMS.map((item) => {
       const active = item.href.split('?')[0] === currentPage ? 'aria-current="page"' : '';
       return `<a href="${item.href}" ${active}>${item.label}</a>`;
-    }).join('')}</div>`);
+    }).join('')}</div>`;
 
-    sidebar.innerHTML = sections.join('');
+    const leagueItemsHtml = contextual.length ? `<div class="sidebar-links">${contextual.map((item) => {
+      const active = item.href.split('?')[0] === currentPage ? 'aria-current="page"' : '';
+      return `<a href="${item.href}" ${active}>${item.label}</a>`;
+    }).join('')}</div>` : '';
+
+    const scopeToggle = hasLeagueContext ? `<div class="sidebar-scope-toggle" role="group" aria-label="Escopo do menu lateral">
+      <button type="button" class="sidebar-scope-btn ${activeScope === 'global' ? 'active' : ''}" data-sidebar-scope="global" aria-pressed="${activeScope === 'global'}">Geral</button>
+      <button type="button" class="sidebar-scope-btn ${activeScope === 'league' ? 'active' : ''}" data-sidebar-scope="league" aria-pressed="${activeScope === 'league'}">NFL</button>
+    </div>` : '';
+
+    const linksMarkup = activeScope === 'league' && leagueItemsHtml ? leagueItemsHtml : globalItemsHtml;
+    sidebar.innerHTML = `${scopeToggle}${scopeToggle ? '<div class="sidebar-divider" aria-hidden="true"></div>' : ''}${linksMarkup}`;
   }
 
   function renderFavorites(root, data, state) {
@@ -167,8 +173,15 @@
 
     const teamCards = Sorter.sortByUserPriority(teams.map((team) => ({ ...team, teams: [team.id] })), state)
       .map((team) => {
+        const favorite = state.favoriteTeamByLeague[league] === team.id;
         const followed = (state.followedTeamsByLeague[league] || []).includes(team.id);
-        return card(team.name, `Sigla: ${team.abbreviation}`, `<div class="meta">${teamLink(league, team.id, 'Abrir time')}</div><div class="pills"><button class="pill ${followed ? 'active' : ''}" data-follow-team="${league}:${team.id}">${followed ? '✓ Acompanhando' : 'Acompanhar'}</button></div>`);
+        const followDisabled = favorite ? 'disabled aria-disabled="true" title="Times favoritos são sempre seguidos"' : '';
+        const statusLabel = favorite ? '<span class="team-status-favorite">⭐ Favorito</span>' : (followed ? '<span class="team-status-following">✓ Acompanhando</span>' : '');
+        return card(
+          team.name,
+          `Sigla: ${team.abbreviation}`,
+          `<div class="meta">${teamLink(league, team.id, 'Abrir time')}</div><div class="team-status-row">${statusLabel}</div><div class="pills"><button class="pill ${favorite ? 'active' : ''}" data-favorite-team="${league}:${team.id}" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button><button class="pill ${followed ? 'active' : ''}" data-follow-team="${league}:${team.id}" ${followDisabled}>${favorite ? '✓ Seguindo' : (followed ? '✓ Acompanhando' : 'Acompanhar')}</button></div>`
+        );
       }).join('');
 
     root.innerHTML = `
@@ -213,8 +226,10 @@
     const favorite = state.favoriteTeamByLeague[league] === team.id;
     const followed = (state.followedTeamsByLeague[league] || []).includes(team.id);
 
+    const followDisabled = favorite ? 'disabled aria-disabled="true" title="Times favoritos são sempre seguidos"' : '';
+
     root.innerHTML = `
-      <section class="section"><div class="section-head"><div><h2>${team.name}</h2><p>${league}</p></div></div><div class="pills"><button class="pill ${favorite ? 'active' : ''}" id="favoriteTeamBtn" aria-pressed="${favorite}">⭐ Favoritar</button><button class="pill ${followed ? 'active' : ''}" id="followTeamBtn" aria-pressed="${followed}">${followed ? '✓ Acompanhando' : 'Acompanhar'}</button></div>${watchGuideMarkup(league, data.watchGuide, true)}</section>
+      <section class="section"><div class="section-head"><div><h2>${team.name}</h2><p>${league}</p></div></div><div class="pills"><button class="pill ${favorite ? 'active' : ''}" id="favoriteTeamBtn" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button><button class="pill ${followed ? 'active' : ''}" id="followTeamBtn" aria-pressed="${followed}" ${followDisabled}>${favorite ? '✓ Seguindo' : (followed ? '✓ Acompanhando' : 'Acompanhar')}</button></div>${watchGuideMarkup(league, data.watchGuide, true)}</section>
       <section class="section"><div class="section-head"><div><h2>Próximos Jogos</h2></div></div><div class="grid">${nextGames.map((game) => card(`${getTeamName(data.teams, game.teamAway)} @ ${getTeamName(data.teams, game.teamHome)}`, new Date(game.datetime).toLocaleString('pt-BR'))).join('')}</div></section>
       <section class="section"><div class="section-head"><div><h2>Notícias do Time</h2></div></div><div class="grid">${teamNews.map((item) => card(item.title, item.summary)).join('')}</div></section>
     `;
