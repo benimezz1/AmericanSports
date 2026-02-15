@@ -1,109 +1,93 @@
 (function () {
   const headerBar = document.querySelector('header .navbar');
-  if (!headerBar || document.getElementById('siteSidebar')) return;
+  if (!headerBar) return;
 
   document.body.classList.add('nav-mounted');
 
-  const menuItems = [
+  const links = [
     { label: 'Home', href: 'index.html' },
-    { label: 'Notícias', href: 'news.html' },
-    { label: 'Jogos / Calendário', href: 'games.html' },
-    { label: 'Tabelas / Classificação', href: 'standings.html' },
-    { label: 'Times', href: 'teams.html' },
-    { label: 'Estatísticas', href: 'stats.html' },
-    { label: 'Ao vivo', href: 'live.html' },
-    { label: 'Favoritos', href: 'favorites.html' },
-    { label: 'Configurações', href: 'settings.html' }
+    { label: 'NFL', href: 'nfl.html' },
+    { label: 'NBA', href: 'nba.html' },
+    { label: 'NHL', href: 'nhl.html' },
+    { label: 'MLB', href: 'mlb.html' },
+    { label: 'MLS', href: 'mls.html' },
+    { label: 'Jogos da Semana', href: 'games.html' },
+    { label: 'Ranking / Standings', href: 'standings.html' }
   ];
 
   const currentPage = location.pathname.split('/').pop() || 'index.html';
 
-  const toggle = document.createElement('button');
-  toggle.type = 'button';
-  toggle.className = 'site-nav-toggle';
-  toggle.id = 'siteNavToggle';
-  toggle.setAttribute('aria-label', 'Abrir menu lateral');
-  toggle.setAttribute('aria-controls', 'siteSidebar');
-  toggle.setAttribute('aria-expanded', 'false');
-  toggle.innerHTML = '<span class="hamburger" aria-hidden="true"></span>';
-  headerBar.insertBefore(toggle, headerBar.firstChild);
-
-  const overlay = document.createElement('div');
-  overlay.className = 'sidebar-overlay';
-  overlay.hidden = true;
-
-  const sidebar = document.createElement('aside');
-  sidebar.className = 'site-sidebar';
-  sidebar.id = 'siteSidebar';
-  sidebar.setAttribute('aria-label', 'Menu principal de navegação');
-  sidebar.hidden = true;
-  sidebar.innerHTML = `
-    <h2 class="title">Menu de Esportes</h2>
-    <nav>
-      ${menuItems.map(item => {
-        const active = item.href === currentPage ? 'aria-current="page"' : '';
-        return `<a class="menu-link" href="${item.href}" ${active}>${item.label}</a>`;
-      }).join('')}
-    </nav>
-  `;
-
-  document.body.append(overlay, sidebar);
-
-  let lastFocused = null;
-
-  function getFirstMenuItem() {
-    return sidebar.querySelector('a, button, [tabindex]:not([tabindex="-1"])');
+  let menuBtn = document.getElementById('menuBtn');
+  if (!menuBtn) {
+    menuBtn = document.createElement('button');
+    menuBtn.id = 'menuBtn';
+    menuBtn.className = 'hamburger';
+    menuBtn.type = 'button';
+    menuBtn.setAttribute('aria-label', 'Abrir menu');
+    menuBtn.setAttribute('aria-controls', 'sidebar');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtn.innerHTML = '<span></span><span></span><span></span>';
+    headerBar.insertBefore(menuBtn, headerBar.firstChild);
   }
 
-  function isMenuOpen() {
-    return document.body.classList.contains('sidebar-open');
+  let overlay = document.getElementById('sidebarOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'sidebarOverlay';
+    overlay.hidden = true;
+    document.body.appendChild(overlay);
+  }
+
+  let sidebar = document.getElementById('sidebar');
+  if (!sidebar) {
+    sidebar = document.createElement('aside');
+    sidebar.id = 'sidebar';
+    sidebar.setAttribute('aria-label', 'Menu lateral');
+    sidebar.hidden = true;
+    sidebar.innerHTML = links
+      .map(function (item) {
+        const active = item.href === currentPage ? ' aria-current="page"' : '';
+        return '<a href="' + item.href + '"' + active + '>' + item.label + '</a>';
+      })
+      .join('');
+    document.body.appendChild(sidebar);
+  }
+
+  if (!sidebar.querySelector('a')) {
+    sidebar.innerHTML = links
+      .map(function (item) {
+        const active = item.href === currentPage ? ' aria-current="page"' : '';
+        return '<a href="' + item.href + '"' + active + '>' + item.label + '</a>';
+      })
+      .join('');
+  }
+
+  function setOpenState(isOpen) {
+    document.body.classList.toggle('sidebar-open', isOpen);
+    overlay.hidden = !isOpen;
+    sidebar.hidden = !isOpen;
+    menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    menuBtn.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
   }
 
   function openMenu() {
-    if (isMenuOpen()) return;
-    lastFocused = document.activeElement;
-    sidebar.hidden = false;
-    overlay.hidden = false;
-    document.body.classList.add('sidebar-open');
-    toggle.classList.add('is-open');
-    toggle.setAttribute('aria-expanded', 'true');
-    toggle.setAttribute('aria-label', 'Fechar menu lateral');
-
-    const first = getFirstMenuItem();
-    if (first) first.focus();
+    setOpenState(true);
   }
 
   function closeMenu() {
-    if (!isMenuOpen()) return;
-    document.body.classList.remove('sidebar-open');
-    toggle.classList.remove('is-open');
-    toggle.setAttribute('aria-expanded', 'false');
-    toggle.setAttribute('aria-label', 'Abrir menu lateral');
-
-    window.setTimeout(() => {
-      sidebar.hidden = true;
-      overlay.hidden = true;
-    }, 260);
-
-    if (lastFocused && typeof lastFocused.focus === 'function') {
-      lastFocused.focus();
-    } else {
-      toggle.focus();
-    }
+    setOpenState(false);
   }
 
-  toggle.addEventListener('click', function () {
-    if (isMenuOpen()) {
-      closeMenu();
-      return;
-    }
-    openMenu();
+  menuBtn.addEventListener('click', function () {
+    const isOpen = document.body.classList.contains('sidebar-open');
+    if (isOpen) closeMenu();
+    else openMenu();
   });
 
   overlay.addEventListener('click', closeMenu);
 
   document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape' && isMenuOpen()) {
+    if (event.key === 'Escape' && document.body.classList.contains('sidebar-open')) {
       closeMenu();
     }
   });
