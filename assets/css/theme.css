@@ -1,0 +1,88 @@
+.theme-toggle {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--nav-border, rgba(255,255,255,.12));
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.navbar {
+  position: relative;
+}
+
+/* =========================
+   PLAYNORTH DARK MODE
+========================= */
+
+body.dark-mode {
+  background: #000000 !important;
+  color: #ffffff;
+}
+
+/* Navbar */
+body.dark-mode .navbar {
+  background-color: #e9e9ec;
+  border-radius: 12px;
+  padding: 12px 20px;
+}
+
+/* Logo */
+body.dark-mode .logo-text,
+body.dark-mode .brand span {
+  color: #111111;
+}
+
+/* Links do menu */
+body.dark-mode .nav-link,
+body.dark-mode .navlink {
+  background-color: #dcdce0;
+  color: #333333;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+body.dark-mode .nav-link:hover,
+body.dark-mode .navlink:hover {
+  background-color: #cfcfd4;
+}
+
+/* Link ativo */
+body.dark-mode .nav-link.active,
+body.dark-mode .navlink.active {
+  background-color: #f2f2f4;
+  border: 2px solid #ff3b3b;
+  color: #000000;
+}
+
+/* Botão de tema */
+body.dark-mode .theme-toggle {
+  border: 2px solid #ff3b3b;
+  border-radius: 50%;
+  padding: 6px;
+  background-color: transparent;
+  color: #111111;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+body.dark-mode .theme-toggle:hover {
+  background-color: #dddddd;
+}
+
+/* Suporte automático sistema */
+@media (prefers-color-scheme: dark) {
+  body:not(.light-mode) {
+    background-color: #000000;
+  }
+}
