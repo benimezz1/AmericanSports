@@ -268,7 +268,6 @@
         <article class="league-card">
           <header class="league-card-head">
             <span class="league-card-badge">${league}</span>
-            <a class="league-card-link" href="preferencias.html">Preferências</a>
           </header>
           <div class="league-card-block">
             <p class="league-card-label">Favorito</p>
