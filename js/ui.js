@@ -298,19 +298,22 @@
     }).join('');
 
     const favoriteSelectors = Router.LEAGUES.map((league) => {
-      const followedTeams = (state.followedTeams[league] || []).map((teamId) => {
+      const followedTeamIds = state.followedTeams[league] || [];
+      const followedTeams = followedTeamIds.map((teamId) => {
         const team = data.teams.find((item) => item.id === teamId && item.league === league);
         return team ? { id: team.id, name: team.name } : null;
       }).filter(Boolean);
       const canSetFavorite = followedTeams.length > 0;
-      const options = followedTeams
-        .map((team) => `<option value="${team.id}" ${state.favoriteTeam[league] === team.id ? 'selected' : ''}>${escapeHtml(team.name)}</option>`)
-        .join('');
+      const options = [
+        `<option value="none" ${!state.favoriteTeam[league] ? 'selected' : ''}>Nenhum</option>`,
+        ...followedTeams.map((team) => `<option value="${team.id}" ${state.favoriteTeam[league] === team.id ? 'selected' : ''}>${escapeHtml(team.name)}</option>`)
+      ].join('');
+      const emptyStateOption = '<option value="none" selected disabled>Siga pelo menos um time para definir favorito</option>';
 
-      return `<label class="setting-row">Time favorito ${league}<select id="favorite-${league}" data-pref-favorite-team="${league}" ${canSetFavorite ? '' : 'disabled'}><option value="">${canSetFavorite ? 'Nenhum' : 'Siga pelo menos um time para definir favorito'}</option>${options}</select></label>`;
+      return `<label class="setting-row">Time favorito ${league}<select id="favorite-${league}" data-pref-favorite-team="${league}" ${canSetFavorite ? '' : 'disabled'}>${canSetFavorite ? options : emptyStateOption}</select></label>`;
     }).join('');
 
-    root.innerHTML = `<section class="section"><div class="section-head"><div><h1 class="title">Preferências</h1><p>Personalize suas ligas e times para priorizar seu conteúdo</p></div></div></section><section class="section"><div class="section-head"><div><h2>Ligas seguidas</h2></div></div><div class="pills">${leagueToggles}</div></section><section class="section"><div class="section-head"><div><h2>Times seguidos por liga</h2></div></div><div class="grid">${followedTeamsByLeague}</div></section><section class="section"><div class="section-head"><div><h2>Time favorito por liga</h2></div></div><div class="card"><div class="card-body">${favoriteSelectors}</div></div></section>`;
+    root.innerHTML = `<section class="section"><div class="section-head"><div><h1 class="title">Preferências</h1><p>Personalize suas ligas e times para priorizar seu conteúdo</p></div></div></section><section class="section"><div class="section-head"><div><h2>Ligas seguidas</h2></div></div><div class="pills">${leagueToggles}</div></section><section class="section"><div class="section-head"><div><h2>Times seguidos por liga</h2></div></div><div class="grid">${followedTeamsByLeague}</div></section><section class="section"><div class="section-head"><div><h2>Time favorito por liga</h2></div></div><div class="card"><div class="card-body"><p class="favorites-helper-text">Para favoritar um time aqui, você deve segui-lo antes.</p>${favoriteSelectors}</div></div></section>`;
   }
 
   function renderSettings(root, data, state) {
