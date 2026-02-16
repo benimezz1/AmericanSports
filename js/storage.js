@@ -163,21 +163,23 @@
       const followedTeams = normalizeFollowedTeams(read('followedTeams', DEFAULTS.followedTeams));
       const favoriteTeam = normalizeFavoriteTeam(read('favoriteTeam', DEFAULTS.favoriteTeam));
 
-      if (favoriteTeam[league] === teamId) {
-        return { followedTeams, blocked: true };
-      }
-
       const teams = followedTeams[league] || [];
-      followedTeams[league] = teams.includes(teamId)
+      const isFollowing = teams.includes(teamId);
+      followedTeams[league] = isFollowing
         ? teams.filter((item) => item !== teamId)
         : uniq([...teams, teamId]);
+
+      if (isFollowing && favoriteTeam[league] === teamId) {
+        favoriteTeam[league] = null;
+        write('favoriteTeam', favoriteTeam);
+      }
 
       ensureLeagueIsFollowed(league);
       return { followedTeams: write('followedTeams', followedTeams), blocked: false };
     },
     setFavoriteTeam(league, teamId) {
       const favoriteTeam = normalizeFavoriteTeam(read('favoriteTeam', DEFAULTS.favoriteTeam));
-      if (!teamId) {
+      if (!teamId || teamId === 'none') {
         favoriteTeam[league] = null;
         return write('favoriteTeam', favoriteTeam);
       }
