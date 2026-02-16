@@ -1,17 +1,23 @@
 (function () {
+  const LEAGUES = ['NFL', 'NBA', 'NHL', 'MLB', 'MLS'];
+
+  function createLeagueRecord(initialValue) {
+    return Object.fromEntries(LEAGUES.map((league) => [league, initialValue]));
+  }
+
   const DEFAULTS = {
-    favoritesLeagues: [],
-    favoriteTeamByLeague: {},
-    followedTeamsByLeague: {},
     followedLeagues: [],
-    alertSimulationEnabled: true,
+    followedTeams: createLeagueRecord([]),
+    favoriteTeam: createLeagueRecord(null),
+    language: 'pt',
     theme: 'dark',
     dataSource: 'static',
-    sidebarScope: 'global'
+    sidebarScope: 'global',
+    alertSimulationEnabled: true
   };
 
   function uniq(values) {
-    return [...new Set(values)];
+    return [...new Set(values.filter(Boolean))];
   }
 
   function read(key, fallback) {
@@ -28,98 +34,169 @@
     return value;
   }
 
-  function toggleList(key, value) {
-    const current = read(key, DEFAULTS[key]);
-    const next = current.includes(value) ? current.filter((item) => item !== value) : [...current, value];
-    return write(key, next);
+  function normalizeLeagueList(value) {
+    const list = Array.isArray(value) ? value : [];
+    return uniq(list.filter((league) => LEAGUES.includes(league)));
   }
 
-  function ensureFollowed(league, teamId) {
-    const current = read('followedTeamsByLeague', DEFAULTS.followedTeamsByLeague);
-    const leagueTeams = Array.isArray(current[league]) ? current[league] : [];
-    if (!leagueTeams.includes(teamId)) {
-      current[league] = uniq([...leagueTeams, teamId]);
-      write('followedTeamsByLeague', current);
+  function normalizeFollowedTeams(value) {
+    const source = value && typeof value === 'object' ? value : {};
+    return Object.fromEntries(LEAGUES.map((league) => {
+      const teams = Array.isArray(source[league]) ? source[league] : [];
+      return [league, uniq(teams)];
+    }));
+  }
+
+  function normalizeFavoriteTeam(value) {
+    const source = value && typeof value === 'object' ? value : {};
+    return Object.fromEntries(LEAGUES.map((league) => [league, source[league] || null]));
+  }
+
+  function ensureLeagueIsFollowed(league) {
+    const current = normalizeLeagueList(read('followedLeagues', DEFAULTS.followedLeagues));
+    if (!current.includes(league)) {
+      write('followedLeagues', [...current, league]);
     }
   }
 
-  function normalizeFollowedTeamsByLeague(value) {
-    const source = value && typeof value === 'object' ? value : {};
-    return Object.fromEntries(Object.entries(source).map(([league, teams]) => {
-      if (!Array.isArray(teams)) return [league, []];
-      return [league, uniq(teams.filter(Boolean))];
-    }));
+  function ensureTeamIsFollowed(league, teamId) {
+    const current = normalizeFollowedTeams(read('followedTeams', DEFAULTS.followedTeams));
+    if (!current[league].includes(teamId)) {
+      current[league] = uniq([...current[league], teamId]);
+      write('followedTeams', current);
+    }
+  }
+
+  function migrateLegacyKeys() {
+    const legacyFollowedTeams = read('followedTeamsByLeague', null);
+    const legacyFavoriteTeam = read('favoriteTeamByLeague', null);
+
+    if (legacyFollowedTeams && !localStorage.getItem('followedTeams')) {
+      write('followedTeams', normalizeFollowedTeams(legacyFollowedTeams));
+    }
+    if (legacyFavoriteTeam && !localStorage.getItem('favoriteTeam')) {
+      write('favoriteTeam', normalizeFavoriteTeam(legacyFavoriteTeam));
+    }
+
+    if (localStorage.getItem('favoritesLeagues') && !localStorage.getItem('followedLeagues')) {
+      write('followedLeagues', normalizeLeagueList(read('favoritesLeagues', [])));
+    }
+  }
+
+  function persistNormalized(state) {
+    write('followedLeagues', state.followedLeagues);
+    write('followedTeams', state.followedTeams);
+    write('favoriteTeam', state.favoriteTeam);
+    write('language', state.language);
+    write('theme', state.theme);
+    write('dataSource', state.dataSource);
+    write('sidebarScope', state.sidebarScope);
+    write('alertSimulationEnabled', state.alertSimulationEnabled);
   }
 
   window.StorageService = {
     defaults: DEFAULTS,
+    leagues: LEAGUES,
     getState() {
+      migrateLegacyKeys();
+
       const state = {
-        favoritesLeagues: read('favoritesLeagues', DEFAULTS.favoritesLeagues),
-        favoriteTeamByLeague: read('favoriteTeamByLeague', DEFAULTS.favoriteTeamByLeague),
-        followedTeamsByLeague: read('followedTeamsByLeague', DEFAULTS.followedTeamsByLeague),
-        followedLeagues: read('followedLeagues', DEFAULTS.followedLeagues),
-        alertSimulationEnabled: read('alertSimulationEnabled', DEFAULTS.alertSimulationEnabled),
-        theme: read('theme', DEFAULTS.theme),
-        dataSource: read('dataSource', DEFAULTS.dataSource),
-        sidebarScope: read('sidebarScope', DEFAULTS.sidebarScope)
+        followedLeagues: normalizeLeagueList(read('followedLeagues', DEFAULTS.followedLeagues)),
+        followedTeams: normalizeFollowedTeams(read('followedTeams', DEFAULTS.followedTeams)),
+        favoriteTeam: normalizeFavoriteTeam(read('favoriteTeam', DEFAULTS.favoriteTeam)),
+        language: (read('language', DEFAULTS.language) || 'pt').toLowerCase() === 'en' ? 'en' : 'pt',
+        theme: read('theme', DEFAULTS.theme) === 'light' ? 'light' : 'dark',
+        dataSource: read('dataSource', DEFAULTS.dataSource) || DEFAULTS.dataSource,
+        sidebarScope: read('sidebarScope', DEFAULTS.sidebarScope) === 'league' ? 'league' : 'global',
+        alertSimulationEnabled: read('alertSimulationEnabled', DEFAULTS.alertSimulationEnabled) !== false
       };
 
-      state.followedTeamsByLeague = normalizeFollowedTeamsByLeague(state.followedTeamsByLeague);
+      persistNormalized(state);
       return state;
     },
     setTheme(theme) {
       return write('theme', theme === 'light' ? 'light' : 'dark');
     },
-    setDataSource(source) {
-      const safe = source || DEFAULTS.dataSource;
-      return write('dataSource', safe);
+    setLanguage(language) {
+      return write('language', String(language).toLowerCase() === 'en' ? 'en' : 'pt');
     },
-    toggleFavoriteLeague(league) {
-      return toggleList('favoritesLeagues', league);
+    setDataSource(source) {
+      return write('dataSource', source || DEFAULTS.dataSource);
     },
     toggleFollowLeague(league) {
-      return toggleList('followedLeagues', league);
-    },
-    setFavoriteTeam(league, teamId) {
-      const current = read('favoriteTeamByLeague', DEFAULTS.favoriteTeamByLeague);
-      if (teamId) current[league] = teamId;
-      else delete current[league];
-      write('favoriteTeamByLeague', current);
-      if (teamId) ensureFollowed(league, teamId);
-      return current;
-    },
-    toggleFavoriteTeam(league, teamId) {
-      const current = read('favoriteTeamByLeague', DEFAULTS.favoriteTeamByLeague);
-      const isFavorite = current[league] === teamId;
-      if (isFavorite) delete current[league];
-      else current[league] = teamId;
-      write('favoriteTeamByLeague', current);
-      if (!isFavorite) ensureFollowed(league, teamId);
-      return { favoriteTeamByLeague: current, favorite: !isFavorite };
-    },
-    toggleFollowTeam(league, teamId) {
-      const favorites = read('favoriteTeamByLeague', DEFAULTS.favoriteTeamByLeague);
-      if (favorites[league] === teamId) {
-        return { followedTeamsByLeague: read('followedTeamsByLeague', DEFAULTS.followedTeamsByLeague), blocked: true };
+      const current = normalizeLeagueList(read('followedLeagues', DEFAULTS.followedLeagues));
+      const followedTeams = normalizeFollowedTeams(read('followedTeams', DEFAULTS.followedTeams));
+      const favoriteTeam = normalizeFavoriteTeam(read('favoriteTeam', DEFAULTS.favoriteTeam));
+
+      if (current.includes(league)) {
+        const next = current.filter((item) => item !== league);
+        followedTeams[league] = [];
+        favoriteTeam[league] = null;
+        write('followedTeams', followedTeams);
+        write('favoriteTeam', favoriteTeam);
+        return write('followedLeagues', next);
       }
 
-      const current = read('followedTeamsByLeague', DEFAULTS.followedTeamsByLeague);
-      const leagueTeams = Array.isArray(current[league]) ? current[league] : [];
-      current[league] = leagueTeams.includes(teamId)
-        ? leagueTeams.filter((item) => item !== teamId)
-        : uniq([...leagueTeams, teamId]);
-      return { followedTeamsByLeague: write('followedTeamsByLeague', current), blocked: false };
+      return write('followedLeagues', [...current, league]);
+    },
+    toggleFollowTeam(league, teamId) {
+      const followedTeams = normalizeFollowedTeams(read('followedTeams', DEFAULTS.followedTeams));
+      const favoriteTeam = normalizeFavoriteTeam(read('favoriteTeam', DEFAULTS.favoriteTeam));
+
+      if (favoriteTeam[league] === teamId) {
+        return { followedTeams, blocked: true };
+      }
+
+      const teams = followedTeams[league] || [];
+      followedTeams[league] = teams.includes(teamId)
+        ? teams.filter((item) => item !== teamId)
+        : uniq([...teams, teamId]);
+
+      ensureLeagueIsFollowed(league);
+      return { followedTeams: write('followedTeams', followedTeams), blocked: false };
+    },
+    setFavoriteTeam(league, teamId) {
+      const favoriteTeam = normalizeFavoriteTeam(read('favoriteTeam', DEFAULTS.favoriteTeam));
+      if (!teamId) {
+        favoriteTeam[league] = null;
+        return write('favoriteTeam', favoriteTeam);
+      }
+
+      favoriteTeam[league] = teamId;
+      write('favoriteTeam', favoriteTeam);
+      ensureLeagueIsFollowed(league);
+      ensureTeamIsFollowed(league, teamId);
+      return favoriteTeam;
+    },
+    toggleFavoriteTeam(league, teamId) {
+      const favoriteTeam = normalizeFavoriteTeam(read('favoriteTeam', DEFAULTS.favoriteTeam));
+      const isFavorite = favoriteTeam[league] === teamId;
+      favoriteTeam[league] = isFavorite ? null : teamId;
+      write('favoriteTeam', favoriteTeam);
+
+      if (!isFavorite && teamId) {
+        ensureLeagueIsFollowed(league);
+        ensureTeamIsFollowed(league, teamId);
+      }
+
+      return { favoriteTeam, favorite: !isFavorite };
     },
     setSidebarScope(scope) {
-      const safe = scope === 'league' ? 'league' : 'global';
-      return write('sidebarScope', safe);
+      return write('sidebarScope', scope === 'league' ? 'league' : 'global');
     },
     setAlertSimulation(enabled) {
       return write('alertSimulationEnabled', Boolean(enabled));
     },
     resetPreferences() {
-      Object.keys(DEFAULTS).forEach((key) => write(key, DEFAULTS[key]));
+      write('followedLeagues', DEFAULTS.followedLeagues);
+      write('followedTeams', DEFAULTS.followedTeams);
+      write('favoriteTeam', DEFAULTS.favoriteTeam);
+    },
+    clearLocalData() {
+      [
+        'followedLeagues', 'followedTeams', 'favoriteTeam', 'language', 'theme', 'dataSource', 'sidebarScope', 'alertSimulationEnabled',
+        'favoritesLeagues', 'favoriteTeamByLeague', 'followedTeamsByLeague'
+      ].forEach((key) => localStorage.removeItem(key));
     }
   };
 })();
