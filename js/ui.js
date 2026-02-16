@@ -320,8 +320,11 @@
         <h2 class="fav-section-title ${hasFollowedLeagues ? '' : 'is-hidden'}">Suas ligas</h2>
         <p class="fav-section-subtitle ${hasFollowedLeagues ? '' : 'is-hidden'}">Tudo organizado por liga, do seu jeito.</p>
         <div id="leaguesGrid" class="leagues-grid ${hasFollowedLeagues ? '' : 'is-hidden'}">${leaguesGridMarkup}</div>
-        <div id="discoverLeagues" class="discover-leagues ${hasFollowedLeagues ? '' : 'is-hidden'}">
-          <p class="discover-title">Que tal seguir e acompanhar outras ligas?</p>
+        <div id="discoverLeagues" class="discover-callout ${hasFollowedLeagues ? '' : 'is-hidden'}">
+          <div class="discover-text">
+            <p class="discover-title">Que tal seguir e acompanhar outras ligas?</p>
+            <p class="discover-subtitle">Selecione uma liga para adicionar ao seu painel.</p>
+          </div>
           <div id="discoverButtons" class="discover-buttons">${discoverMarkup}</div>
         </div>
       </section>
