@@ -21,21 +21,10 @@
   ];
 
 
-  const TEAMS_BY_LEAGUE = {
-    NFL: ['Kansas City Chiefs', 'Philadelphia Eagles', 'San Francisco 49ers'],
-    NBA: ['Los Angeles Lakers', 'Boston Celtics', 'Golden State Warriors'],
-    NHL: ['New York Rangers', 'Boston Bruins', 'Edmonton Oilers'],
-    MLB: ['Los Angeles Dodgers', 'New York Yankees', 'Houston Astros'],
-    MLS: ['Inter Miami CF', 'Los Angeles FC', 'Seattle Sounders']
-  };
-
   function getLeagueTeamEntries(data, league) {
-    const names = TEAMS_BY_LEAGUE[league] || [];
-    return names.map((name) => {
-      const team = data.teams.find((item) => item.league === league && item.name === name);
-      if (!team) return null;
-      return { id: team.id, name: team.name };
-    }).filter(Boolean);
+    return data.teams
+      .filter((item) => item.league === league)
+      .map((team) => ({ id: team.id, name: team.name }));
   }
 
   function escapeHtml(value) {
@@ -266,7 +255,7 @@
 
 
   function renderFavorites(root, data, state) {
-    const favoriteLeagues = state.followedLeagues;
+    const favoriteLeagues = state.followLeagues || state.followedLeagues;
     const favoriteTeams = Object.entries(state.favoriteTeam).filter(([, teamId]) => Boolean(teamId));
     const followedTeams = Object.entries(state.followedTeams).flatMap(([league, teams]) => (teams || []).map((teamId) => ({ league, teamId })));
 
@@ -283,35 +272,45 @@
   }
 
   function renderPreferences(root, data, state) {
+    const followedLeagues = state.followLeagues || state.followedLeagues;
+
     const leagueToggles = Router.LEAGUES.map((league) => {
-      const followed = state.followedLeagues.includes(league);
+      const followed = followedLeagues.includes(league);
       return `<button class="pill ${followed ? 'active' : ''}" data-follow-league="${league}" aria-pressed="${followed}">${followed ? '✓ ' : ''}Acompanhar ${league}</button>`;
     }).join('');
 
     const followedTeamsByLeague = Router.LEAGUES.map((league) => {
-      const followed = state.followedLeagues.includes(league);
+      const followed = followedLeagues.includes(league);
       if (!followed) {
         return `<article class="card"><div class="card-body"><h3 class="title small">${league}</h3><p class="desc">Siga a ${league} para escolher times.</p></div></article>`;
       }
 
       const selected = state.followedTeams[league] || [];
       const teamPills = getLeagueTeamEntries(data, league)
-        .map((team) => `<button class="pill ${selected.includes(team.id) ? 'active' : ''}" data-follow-team="${league}:${team.id}" ${state.favoriteTeam[league] === team.id ? 'disabled aria-disabled="true" title="Time favorito é sempre seguido"' : ''}>${selected.includes(team.id) ? '✓ ' : ''}${escapeHtml(team.name)}</button>`)
+        .map((team) => {
+          const isFavorite = state.favoriteTeam[league] === team.id;
+          const isFollowed = selected.includes(team.id);
+          return `<button class="pill ${isFollowed ? 'active' : ''} ${isFavorite ? 'favorite-team' : ''}" data-follow-team="${league}:${team.id}" ${isFavorite ? 'disabled aria-disabled="true" title="Time favorito é sempre seguido"' : ''}>${isFollowed ? '✓ ' : ''}${isFavorite ? '★ ' : ''}${escapeHtml(team.name)}</button>`;
+        })
         .join('');
 
       return `<article class="card"><div class="card-body"><h3 class="title small">${league}</h3><div class="pills">${teamPills}</div></div></article>`;
     }).join('');
 
     const favoriteSelectors = Router.LEAGUES.map((league) => {
-      const followed = state.followedLeagues.includes(league);
-      const options = getLeagueTeamEntries(data, league)
+      const followedTeams = (state.followedTeams[league] || []).map((teamId) => {
+        const team = data.teams.find((item) => item.id === teamId && item.league === league);
+        return team ? { id: team.id, name: team.name } : null;
+      }).filter(Boolean);
+      const canSetFavorite = followedTeams.length > 0;
+      const options = followedTeams
         .map((team) => `<option value="${team.id}" ${state.favoriteTeam[league] === team.id ? 'selected' : ''}>${escapeHtml(team.name)}</option>`)
         .join('');
 
-      return `<label class="setting-row">Time favorito ${league}<select data-pref-favorite-team="${league}" ${followed ? '' : 'disabled'}><option value="">${followed ? 'Nenhum' : 'Siga a ' + league + ' primeiro'}</option>${followed ? options : ''}</select></label>`;
+      return `<label class="setting-row">Time favorito ${league}<select id="favorite-${league}" data-pref-favorite-team="${league}" ${canSetFavorite ? '' : 'disabled'}><option value="">${canSetFavorite ? 'Nenhum' : 'Siga pelo menos um time para definir favorito'}</option>${options}</select></label>`;
     }).join('');
 
-    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Preferências</h2><p>Personalize suas ligas e times para priorizar seu conteúdo.</p></div></div></section><section class="section"><div class="section-head"><div><h2>Ligas seguidas</h2></div></div><div class="pills">${leagueToggles}</div></section><section class="section"><div class="section-head"><div><h2>Times seguidos por liga</h2></div></div><div class="grid">${followedTeamsByLeague}</div></section><section class="section"><div class="section-head"><div><h2>Time favorito por liga</h2></div></div><div class="card"><div class="card-body">${favoriteSelectors}</div></div></section>`;
+    root.innerHTML = `<section class="section"><div class="section-head"><div><h1 class="title">Preferências</h1><p>Personalize suas ligas e times para priorizar seu conteúdo</p></div></div></section><section class="section"><div class="section-head"><div><h2>Ligas seguidas</h2></div></div><div class="pills">${leagueToggles}</div></section><section class="section"><div class="section-head"><div><h2>Times seguidos por liga</h2></div></div><div class="grid">${followedTeamsByLeague}</div></section><section class="section"><div class="section-head"><div><h2>Time favorito por liga</h2></div></div><div class="card"><div class="card-body">${favoriteSelectors}</div></div></section>`;
   }
 
   function renderSettings(root, data, state) {
