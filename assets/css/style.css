@@ -216,7 +216,7 @@ tfoot td{border-bottom:none; color: var(--muted)}
   display:flex;
   flex-direction:column;
   gap:12px;
-  align-items:flex-end;
+  align-items:flex-start;
 }
 
 .favorites-stack .setting-row{
@@ -224,8 +224,22 @@ tfoot td{border-bottom:none; color: var(--muted)}
   max-width:430px;
 }
 
+.favorite-row{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:flex-start;
+  gap:16px;
+  margin-bottom:18px;
+}
+
+.favorite-label{
+  width:110px;
+  text-align:left;
+  line-height:1.35;
+}
+
 .setting-row select{
-  margin-left:auto;
   background:var(--surface-1);
   color:var(--text);
   border:1px solid var(--line);
