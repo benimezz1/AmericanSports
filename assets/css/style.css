@@ -580,3 +580,132 @@ body.dark-mode .setting-row select option {
   background-color: var(--panel);
   color: var(--text);
 }
+
+.fav-section-title {
+  margin: 22px 0 6px;
+}
+
+.fav-section-subtitle {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--muted);
+  opacity: 0.86;
+}
+
+.leagues-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.league-card {
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: color-mix(in oklab, var(--surface-1) 90%, transparent);
+  padding: 14px;
+}
+
+.league-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.league-card-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--chip-border);
+  background: var(--surface-2);
+}
+
+.league-card-link,
+.league-card-empty-link {
+  font-size: 12px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.league-card-link:hover,
+.league-card-empty-link:hover {
+  text-decoration: underline;
+}
+
+.league-card-block + .league-card-block {
+  margin-top: 12px;
+}
+
+.league-card-label {
+  margin: 0 0 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--muted);
+}
+
+.league-card-favorite {
+  margin: 0;
+  font-weight: 600;
+}
+
+.league-card-empty {
+  border: 1px dashed var(--notice-border);
+  border-radius: 14px;
+  background: color-mix(in oklab, var(--surface-2) 88%, transparent);
+  padding: 10px;
+}
+
+.league-card-empty-title {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.league-card-empty-text {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--muted);
+  opacity: .85;
+}
+
+.league-card-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.discover-leagues {
+  margin-top: 16px;
+}
+
+.discover-title {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.discover-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 1080px) {
+  .leagues-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .leagues-grid {
+    grid-template-columns: 1fr;
+  }
+}

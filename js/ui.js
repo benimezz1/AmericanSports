@@ -255,16 +255,41 @@
 
 
   function renderFavorites(root, data, state) {
-    const favoriteLeagues = state.followLeagues || state.followedLeagues;
-    const favoriteTeams = Object.entries(state.favoriteTeam).filter(([, teamId]) => Boolean(teamId));
-    const followedTeams = Object.entries(state.followedTeams).flatMap(([league, teams]) => (teams || []).map((teamId) => ({ league, teamId })));
+    const followedLeagues = state.followLeagues || state.followedLeagues;
+    const hasFollowedLeagues = followedLeagues.length > 0;
 
-    const hasDefinedFavorites = Object.values(state.favoriteTeam || {}).some((teamId) => teamId && teamId !== 'none');
+    const leaguesGridMarkup = followedLeagues.map((league) => {
+      const favoriteId = state.favoriteTeam[league];
+      const hasFavorite = Boolean(favoriteId) && favoriteId !== 'none';
+      const followedTeamIds = state.followedTeams[league] || [];
+      const followedTeamChips = followedTeamIds.map((teamId) => `<span class="league-pill">${escapeHtml(getTeamName(data.teams, teamId))}</span>`).join('');
 
-    const favoriteLeagueItems = favoriteLeagues.map((league) => `<li><a href="${league.toLowerCase()}.html">${league}</a></li>`).join('');
-    const favoriteTeamItems = favoriteTeams.map(([league, teamId]) => `<li>${teamLink(league, teamId, getTeamName(data.teams, teamId))}</li>`).join('');
-    const followedTeamItems = followedTeams.map(({ league, teamId }) => `<li>${teamLink(league, teamId, `${getTeamName(data.teams, teamId)} (${league})`)}</li>`).join('');
-    const favoriteCardsMarkup = `${favoriteLeagueItems ? `<article class="card"><div class="card-body"><h3 class="title small">Ligas seguidas</h3><ul>${favoriteLeagueItems}</ul></div></article>` : ''}${favoriteTeamItems ? `<article class="card"><div class="card-body"><h3 class="title small">Times favoritos</h3><ul>${favoriteTeamItems}</ul></div></article>` : ''}${followedTeamItems ? `<article class="card"><div class="card-body"><h3 class="title small">Times seguidos</h3><ul>${followedTeamItems}</ul></div></article>` : ''}`;
+      return `
+        <article class="league-card">
+          <header class="league-card-head">
+            <span class="league-card-badge">${league}</span>
+            <a class="league-card-link" href="preferencias.html">Preferências</a>
+          </header>
+          <div class="league-card-block">
+            <p class="league-card-label">Favorito</p>
+            ${hasFavorite
+      ? `<p class="league-card-favorite">${teamLink(league, favoriteId, getTeamName(data.teams, favoriteId))}</p>`
+      : `<div class="league-card-empty"><p class="league-card-empty-title">Nenhum favorito definido.</p><p class="league-card-empty-text">Explore os times desta liga e comece a acompanhar seus favoritos.</p><a class="league-card-empty-link" href="preferencias.html">Ir para Preferências</a></div>`}
+          </div>
+          <div class="league-card-block">
+            <p class="league-card-label">Times seguidos</p>
+            ${followedTeamIds.length
+      ? `<div class="league-card-pills">${followedTeamChips}</div>`
+      : `<div class="league-card-empty"><p class="league-card-empty-title">Nenhum time acompanhado ainda.</p><p class="league-card-empty-text">Explore os times desta liga e comece a acompanhar.</p><a class="league-card-empty-link" href="preferencias.html">Ir para Preferências</a></div>`}
+          </div>
+        </article>
+      `;
+    }).join('');
+
+    const discoverMarkup = Router.LEAGUES
+      .filter((league) => !followedLeagues.includes(league))
+      .map((league) => `<a class="league-pill" href="${league.toLowerCase()}.html">${league}</a>`)
+      .join('');
 
     root.innerHTML = `
       <section class="section">
@@ -278,7 +303,7 @@
           <p class="info-title">Este é o seu resumo personalizado.</p>
           <p class="info-subtitle">Veja as ligas que você segue, seus times acompanhados e o time definido como favorito.</p>
         </div>
-        <div class="favorites-empty-box ${hasDefinedFavorites ? 'is-hidden' : ''}" id="favoritesEmptyBox">
+        <div class="favorites-empty-box ${hasFollowedLeagues ? 'is-hidden' : ''}" id="favoritesEmptyBox">
           <p class="empty-title">Nenhum favorito ainda.</p>
           <p class="empty-subtitle">Siga seus times preferidos e defina um favorito para personalizar sua experiência.</p>
           <div class="empty-cta">
@@ -292,7 +317,13 @@
             </div>
           </div>
         </div>
-        <div class="grid ${hasDefinedFavorites ? '' : 'is-hidden'}">${favoriteCardsMarkup}</div>
+        <h2 class="fav-section-title ${hasFollowedLeagues ? '' : 'is-hidden'}">Suas ligas</h2>
+        <p class="fav-section-subtitle ${hasFollowedLeagues ? '' : 'is-hidden'}">Tudo organizado por liga, do seu jeito.</p>
+        <div id="leaguesGrid" class="leagues-grid ${hasFollowedLeagues ? '' : 'is-hidden'}">${leaguesGridMarkup}</div>
+        <div id="discoverLeagues" class="discover-leagues ${hasFollowedLeagues ? '' : 'is-hidden'}">
+          <p class="discover-title">Que tal seguir e acompanhar outras ligas?</p>
+          <div id="discoverButtons" class="discover-buttons">${discoverMarkup}</div>
+        </div>
       </section>
     `;
   }
