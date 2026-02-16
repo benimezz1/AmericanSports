@@ -9,7 +9,7 @@
     if (teams.includes(favoriteTeam)) score += 1000;
     if (teams.some((team) => followed.includes(team))) score += 500;
     if (item.trending) score += 100;
-    if (state.followedLeagues.includes(league)) score += 150;
+    if ((state.followLeagues || state.followedLeagues).includes(league)) score += 150;
 
     return score;
   }
