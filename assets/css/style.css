@@ -682,20 +682,41 @@ body.dark-mode .setting-row select option {
   gap: 8px;
 }
 
-.discover-leagues {
-  margin-top: 16px;
+.discover-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 15px;
+  opacity: .95;
 }
 
-.discover-title {
-  margin: 0 0 8px;
+.discover-subtitle {
+  margin: 0;
   font-size: 13px;
-  color: var(--muted);
+  opacity: .7;
+}
+
+.discover-callout {
+  margin-top: 22px;
+  padding: 14px 16px;
+  border-top: 1px solid rgba(255, 255, 255, .08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.discover-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .discover-buttons {
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 @media (max-width: 1080px) {
