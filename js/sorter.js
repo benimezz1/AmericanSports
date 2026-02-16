@@ -2,14 +2,14 @@
   function computeScore(item, state) {
     let score = 0;
     const league = item.league;
-    const favoriteTeam = state.favoriteTeamByLeague[league];
-    const followed = state.followedTeamsByLeague[league] || [];
+    const favoriteTeam = state.favoriteTeam[league];
+    const followed = state.followedTeams[league] || [];
     const teams = item.teams || [item.teamHome, item.teamAway].filter(Boolean);
 
     if (teams.includes(favoriteTeam)) score += 1000;
     if (teams.some((team) => followed.includes(team))) score += 500;
     if (item.trending) score += 100;
-    if (state.favoritesLeagues.includes(league)) score += 150;
+    if (state.followedLeagues.includes(league)) score += 150;
 
     return score;
   }

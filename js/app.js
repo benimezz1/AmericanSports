@@ -36,7 +36,8 @@
     else if (page === 'live.html') UI.renderLive(root);
     else if (page === 'team.html') UI.renderTeam(root, data, state, query);
     else if (page === 'favorites.html') UI.renderFavorites(root, data, state);
-    else if (page === 'settings.html') UI.renderSettings(root, data, state);
+    else if (page === 'settings.html' || page === 'configuracoes.html') UI.renderSettings(root, data, state);
+    else if (page === 'preferencias.html') UI.renderPreferences(root, data, state);
     else if (page === 'news.html') UI.renderNewsList(root, data, state, query);
     else if (page === 'noticia.html') UI.renderNewsArticle(root, data, query);
     else if (page === 'teams.html') UI.renderTeams(root, data, query);
@@ -114,6 +115,10 @@
         StorageService.resetPreferences();
         rerender();
       }
+      if (event.target.id === 'clearLocalData') {
+        StorageService.clearLocalData();
+        location.reload();
+      }
     });
 
     document.getElementById('sidebar')?.addEventListener('click', (event) => {
@@ -124,15 +129,20 @@
     });
 
     root.addEventListener('change', (event) => {
-      if (event.target.matches('[data-fav-league]')) {
-        StorageService.toggleFavoriteLeague(event.target.dataset.favLeague);
-        rerender();
-      }
-      if (event.target.matches('[data-fav-team]')) {
-        const league = event.target.dataset.favTeam;
+      if (event.target.matches('[data-pref-favorite-team]')) {
+        const league = event.target.dataset.prefFavoriteTeam;
         const team = event.target.value;
         StorageService.setFavoriteTeam(league, team);
         rerender();
+      }
+      if (event.target.matches('[data-language]')) {
+        StorageService.setLanguage(event.target.value);
+        rerender();
+      }
+      if (event.target.matches('[data-setting-theme]')) {
+        const next = event.target.checked ? 'dark' : 'light';
+        StorageService.setTheme(next);
+        applyTheme(next);
       }
     });
   }
