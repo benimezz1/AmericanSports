@@ -262,6 +262,8 @@
       const favoriteId = state.favoriteTeam[league];
       const hasFavorite = Boolean(favoriteId) && favoriteId !== 'none';
       const followedTeamIds = state.followedTeams[league] || [];
+      const hasFollowedTeams = followedTeamIds.length > 0;
+      const shouldShowFollowSuggestionOnly = !hasFavorite && !hasFollowedTeams;
       const followedTeamChips = followedTeamIds.map((teamId) => `<span class="league-pill">${escapeHtml(getTeamName(data.teams, teamId))}</span>`).join('');
 
       return `
@@ -273,11 +275,13 @@
             <p class="league-card-label">Favorito</p>
             ${hasFavorite
       ? `<p class="league-card-favorite">${teamLink(league, favoriteId, getTeamName(data.teams, favoriteId))}</p>`
-      : `<div class="league-card-empty"><p class="league-card-empty-title">Nenhum favorito definido.</p><p class="league-card-empty-text">Explore os times desta liga e comece a acompanhar seus favoritos.</p><a class="league-card-empty-link" href="preferencias.html">Ir para Preferências</a></div>`}
+      : shouldShowFollowSuggestionOnly
+        ? `<p class="league-card-empty-text">Siga ao menos um time nesta liga para liberar a escolha de favorito.</p>`
+        : `<div class="league-card-empty"><p class="league-card-empty-title">Nenhum favorito definido.</p><p class="league-card-empty-text">Você já acompanha times desta liga. Agora escolha um deles como favorito.</p><a class="league-card-empty-link" href="preferencias.html">Ir para Preferências</a></div>`}
           </div>
           <div class="league-card-block">
             <p class="league-card-label">Times seguidos</p>
-            ${followedTeamIds.length
+            ${hasFollowedTeams
       ? `<div class="league-card-pills">${followedTeamChips}</div>`
       : `<div class="league-card-empty"><p class="league-card-empty-title">Nenhum time acompanhado ainda.</p><p class="league-card-empty-text">Explore os times desta liga e comece a acompanhar.</p><a class="league-card-empty-link" href="preferencias.html">Ir para Preferências</a></div>`}
           </div>
