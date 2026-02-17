@@ -1,0 +1,272 @@
+[
+  {
+    "name": "Atlanta United FC",
+    "city": "Atlanta, Georgia",
+    "conference": "Eastern",
+    "founded": 2014,
+    "stadium": "Mercedes-Benz Stadium",
+    "abbrev": "ATL",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/6/6e/Atlanta_United_FC_logo.svg"
+  },
+  {
+    "name": "CF Montréal",
+    "city": "Montreal, Quebec",
+    "conference": "Eastern",
+    "founded": 2010,
+    "stadium": "Saputo Stadium",
+    "abbrev": "MTL",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/3/36/CF_Montreal_logo.svg"
+  },
+  {
+    "name": "Charlotte FC",
+    "city": "Charlotte, North Carolina",
+    "conference": "Eastern",
+    "founded": 2019,
+    "stadium": "Bank of America Stadium",
+    "abbrev": "CLT",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/7d/Charlotte_FC_logo.svg"
+  },
+  {
+    "name": "Chicago Fire FC",
+    "city": "Chicago, Illinois",
+    "conference": "Eastern",
+    "founded": 1997,
+    "stadium": "Soldier Field",
+    "abbrev": "CHI",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/9/90/Chicago_Fire_FC_logo.svg"
+  },
+  {
+    "name": "Columbus Crew",
+    "city": "Columbus, Ohio",
+    "conference": "Eastern",
+    "founded": 1994,
+    "stadium": "Lower.com Field",
+    "abbrev": "CLB",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/4/4a/Columbus_Crew_logo.svg"
+  },
+  {
+    "name": "D.C. United",
+    "city": "Washington, D.C.",
+    "conference": "Eastern",
+    "founded": 1994,
+    "stadium": "Audi Field",
+    "abbrev": "DC",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/2/29/D.C._United_logo.svg"
+  },
+  {
+    "name": "FC Cincinnati",
+    "city": "Cincinnati, Ohio",
+    "conference": "Eastern",
+    "founded": 2015,
+    "stadium": "TQL Stadium",
+    "abbrev": "CIN",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/3/3a/FC_Cincinnati_logo.svg"
+  },
+  {
+    "name": "Inter Miami CF",
+    "city": "Fort Lauderdale, Florida",
+    "conference": "Eastern",
+    "founded": 2018,
+    "stadium": "Chase Stadium",
+    "abbrev": "MIA",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/5/5c/Inter_Miami_CF_logo.svg"
+  },
+  {
+    "name": "Nashville SC",
+    "city": "Nashville, Tennessee",
+    "conference": "Eastern",
+    "founded": 2016,
+    "stadium": "Geodis Park",
+    "abbrev": "NSH",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/7c/Nashville_SC_logo.svg"
+  },
+  {
+    "name": "New England Revolution",
+    "city": "Foxborough, Massachusetts",
+    "conference": "Eastern",
+    "founded": 1994,
+    "stadium": "Gillette Stadium",
+    "abbrev": "NE",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/3/3f/New_England_Revolution_logo.svg"
+  },
+  {
+    "name": "New York City FC",
+    "city": "New York, New York",
+    "conference": "Eastern",
+    "founded": 2013,
+    "stadium": "Yankee Stadium",
+    "abbrev": "NYC",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/2/26/New_York_City_FC_logo.svg"
+  },
+  {
+    "name": "New York Red Bulls",
+    "city": "Harrison, New Jersey",
+    "conference": "Eastern",
+    "founded": 1994,
+    "stadium": "Red Bull Arena",
+    "abbrev": "NYRB",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/4/47/New_York_Red_Bulls_logo.svg"
+  },
+  {
+    "name": "Orlando City SC",
+    "city": "Orlando, Florida",
+    "conference": "Eastern",
+    "founded": 2013,
+    "stadium": "Inter&Co Stadium",
+    "abbrev": "ORL",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/0/01/Orlando_City_SC_logo.svg"
+  },
+  {
+    "name": "Philadelphia Union",
+    "city": "Chester, Pennsylvania",
+    "conference": "Eastern",
+    "founded": 2008,
+    "stadium": "Subaru Park",
+    "abbrev": "PHI",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/1/1f/Philadelphia_Union_logo.svg"
+  },
+  {
+    "name": "Toronto FC",
+    "city": "Toronto, Ontario",
+    "conference": "Eastern",
+    "founded": 2005,
+    "stadium": "BMO Field",
+    "abbrev": "TOR",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/2/2e/Toronto_FC_logo.svg"
+  },
+  {
+    "name": "Austin FC",
+    "city": "Austin, Texas",
+    "conference": "Western",
+    "founded": 2018,
+    "stadium": "Q2 Stadium",
+    "abbrev": "ATX",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/4/4c/Austin_FC_logo.svg"
+  },
+  {
+    "name": "Colorado Rapids",
+    "city": "Commerce City, Colorado",
+    "conference": "Western",
+    "founded": 1995,
+    "stadium": "Dick's Sporting Goods Park",
+    "abbrev": "COL",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/72/Colorado_Rapids_logo.svg"
+  },
+  {
+    "name": "FC Dallas",
+    "city": "Frisco, Texas",
+    "conference": "Western",
+    "founded": 1995,
+    "stadium": "Toyota Stadium",
+    "abbrev": "DAL",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/8/85/FC_Dallas_logo.svg"
+  },
+  {
+    "name": "Houston Dynamo FC",
+    "city": "Houston, Texas",
+    "conference": "Western",
+    "founded": 2005,
+    "stadium": "Shell Energy Stadium",
+    "abbrev": "HOU",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/5/53/Houston_Dynamo_FC_logo.svg"
+  },
+  {
+    "name": "LA Galaxy",
+    "city": "Carson, California",
+    "conference": "Western",
+    "founded": 1994,
+    "stadium": "Dignity Health Sports Park",
+    "abbrev": "LAG",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/1/14/LA_Galaxy_logo.svg"
+  },
+  {
+    "name": "Los Angeles FC",
+    "city": "Los Angeles, California",
+    "conference": "Western",
+    "founded": 2014,
+    "stadium": "BMO Stadium",
+    "abbrev": "LAFC",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/8/86/Los_Angeles_FC_logo.svg"
+  },
+  {
+    "name": "Minnesota United FC",
+    "city": "Saint Paul, Minnesota",
+    "conference": "Western",
+    "founded": 2015,
+    "stadium": "Allianz Field",
+    "abbrev": "MIN",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/5/5b/Minnesota_United_FC_logo.svg"
+  },
+  {
+    "name": "Portland Timbers",
+    "city": "Portland, Oregon",
+    "conference": "Western",
+    "founded": 2009,
+    "stadium": "Providence Park",
+    "abbrev": "POR",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/3/35/Portland_Timbers_logo.svg"
+  },
+  {
+    "name": "Real Salt Lake",
+    "city": "Sandy, Utah",
+    "conference": "Western",
+    "founded": 2004,
+    "stadium": "America First Field",
+    "abbrev": "RSL",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/5/53/Real_Salt_Lake_logo.svg"
+  },
+  {
+    "name": "San Diego FC",
+    "city": "San Diego, California",
+    "conference": "Western",
+    "founded": 2023,
+    "stadium": "Snapdragon Stadium",
+    "abbrev": "SD",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/8/8b/San_Diego_FC_logo.svg"
+  },
+  {
+    "name": "San Jose Earthquakes",
+    "city": "San Jose, California",
+    "conference": "Western",
+    "founded": 1994,
+    "stadium": "PayPal Park",
+    "abbrev": "SJ",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/5/50/San_Jose_Earthquakes_logo.svg"
+  },
+  {
+    "name": "Seattle Sounders FC",
+    "city": "Seattle, Washington",
+    "conference": "Western",
+    "founded": 2007,
+    "stadium": "Lumen Field",
+    "abbrev": "SEA",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/5/58/Seattle_Sounders_FC_logo.svg"
+  },
+  {
+    "name": "Sporting Kansas City",
+    "city": "Kansas City, Kansas",
+    "conference": "Western",
+    "founded": 1995,
+    "stadium": "Children's Mercy Park",
+    "abbrev": "SKC",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/1/14/Sporting_Kansas_City_logo.svg"
+  },
+  {
+    "name": "St. Louis CITY SC",
+    "city": "St. Louis, Missouri",
+    "conference": "Western",
+    "founded": 2019,
+    "stadium": "CITYPARK",
+    "abbrev": "STL",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/4/4a/St._Louis_City_SC_logo.svg"
+  },
+  {
+    "name": "Vancouver Whitecaps FC",
+    "city": "Vancouver, British Columbia",
+    "conference": "Western",
+    "founded": 2009,
+    "stadium": "BC Place",
+    "abbrev": "VAN",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/3/3f/Vancouver_Whitecaps_FC_logo.svg"
+  }
+]
