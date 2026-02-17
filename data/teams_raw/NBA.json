@@ -1,0 +1,242 @@
+[
+  {
+    "name": "Boston Celtics",
+    "city": "Boston",
+    "conference": "East",
+    "founded": 1946,
+    "stadium": "TD Garden",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-boston-celtics-logo.png"
+  },
+  {
+    "name": "Brooklyn Nets",
+    "city": "Brooklyn",
+    "conference": "East",
+    "founded": 1967,
+    "stadium": "Barclays Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-brooklyn-nets-logo.png"
+  },
+  {
+    "name": "New York Knicks",
+    "city": "New York",
+    "conference": "East",
+    "founded": 1946,
+    "stadium": "Madison Square Garden",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-new-york-knicks-logo.png"
+  },
+  {
+    "name": "Philadelphia 76ers",
+    "city": "Philadelphia",
+    "conference": "East",
+    "founded": 1946,
+    "stadium": "Wells Fargo Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-philadelphia-76ers-logo.png"
+  },
+  {
+    "name": "Toronto Raptors",
+    "city": "Toronto",
+    "conference": "East",
+    "founded": 1995,
+    "stadium": "Scotiabank Arena",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-toronto-raptors-logo.png"
+  },
+  {
+    "name": "Chicago Bulls",
+    "city": "Chicago",
+    "conference": "East",
+    "founded": 1966,
+    "stadium": "United Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-chicago-bulls-logo.png"
+  },
+  {
+    "name": "Cleveland Cavaliers",
+    "city": "Cleveland",
+    "conference": "East",
+    "founded": 1970,
+    "stadium": "Rocket Mortgage FieldHouse",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-cleveland-cavaliers-logo.png"
+  },
+  {
+    "name": "Detroit Pistons",
+    "city": "Detroit",
+    "conference": "East",
+    "founded": 1941,
+    "stadium": "Little Caesars Arena",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-detroit-pistons-logo.png"
+  },
+  {
+    "name": "Indiana Pacers",
+    "city": "Indianapolis",
+    "conference": "East",
+    "founded": 1967,
+    "stadium": "Gainbridge Fieldhouse",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-indiana-pacers-logo.png"
+  },
+  {
+    "name": "Milwaukee Bucks",
+    "city": "Milwaukee",
+    "conference": "East",
+    "founded": 1968,
+    "stadium": "Fiserv Forum",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-milwaukee-bucks-logo.png"
+  },
+  {
+    "name": "Atlanta Hawks",
+    "city": "Atlanta",
+    "conference": "East",
+    "founded": 1946,
+    "stadium": "State Farm Arena",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-atlanta-hawks-logo.png"
+  },
+  {
+    "name": "Charlotte Hornets",
+    "city": "Charlotte",
+    "conference": "East",
+    "founded": 1988,
+    "stadium": "Spectrum Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-charlotte-hornets-logo.png"
+  },
+  {
+    "name": "Miami Heat",
+    "city": "Miami",
+    "conference": "East",
+    "founded": 1988,
+    "stadium": "Kaseya Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-miami-heat-logo.png"
+  },
+  {
+    "name": "Orlando Magic",
+    "city": "Orlando",
+    "conference": "East",
+    "founded": 1989,
+    "stadium": "Amway Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-orlando-magic-logo.png"
+  },
+  {
+    "name": "Washington Wizards",
+    "city": "Washington",
+    "conference": "East",
+    "founded": 1961,
+    "stadium": "Capital One Arena",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-washington-wizards-logo.png"
+  },
+  {
+    "name": "Denver Nuggets",
+    "city": "Denver",
+    "conference": "West",
+    "founded": 1967,
+    "stadium": "Ball Arena",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-denver-nuggets-logo.png"
+  },
+  {
+    "name": "Minnesota Timberwolves",
+    "city": "Minneapolis",
+    "conference": "West",
+    "founded": 1989,
+    "stadium": "Target Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-minnesota-timberwolves-logo.png"
+  },
+  {
+    "name": "Oklahoma City Thunder",
+    "city": "Oklahoma City",
+    "conference": "West",
+    "founded": 1967,
+    "stadium": "Paycom Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-oklahoma-city-thunder-logo.png"
+  },
+  {
+    "name": "Portland Trail Blazers",
+    "city": "Portland",
+    "conference": "West",
+    "founded": 1970,
+    "stadium": "Moda Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-portland-trail-blazers-logo.png"
+  },
+  {
+    "name": "Utah Jazz",
+    "city": "Salt Lake City",
+    "conference": "West",
+    "founded": 1974,
+    "stadium": "Delta Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-utah-jazz-logo.png"
+  },
+  {
+    "name": "Golden State Warriors",
+    "city": "San Francisco",
+    "conference": "West",
+    "founded": 1946,
+    "stadium": "Chase Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-golden-state-warriors-logo.png"
+  },
+  {
+    "name": "LA Clippers",
+    "city": "Los Angeles",
+    "conference": "West",
+    "founded": 1970,
+    "stadium": "Crypto.com Arena",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-los-angeles-clippers-logo.png"
+  },
+  {
+    "name": "Los Angeles Lakers",
+    "city": "Los Angeles",
+    "conference": "West",
+    "founded": 1947,
+    "stadium": "Crypto.com Arena",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-los-angeles-lakers-logo.png"
+  },
+  {
+    "name": "Phoenix Suns",
+    "city": "Phoenix",
+    "conference": "West",
+    "founded": 1968,
+    "stadium": "Footprint Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-phoenix-suns-logo.png"
+  },
+  {
+    "name": "Sacramento Kings",
+    "city": "Sacramento",
+    "conference": "West",
+    "founded": 1945,
+    "stadium": "Golden 1 Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-sacramento-kings-logo.png"
+  },
+  {
+    "name": "Dallas Mavericks",
+    "city": "Dallas",
+    "conference": "West",
+    "founded": 1980,
+    "stadium": "American Airlines Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-dallas-mavericks-logo.png"
+  },
+  {
+    "name": "Houston Rockets",
+    "city": "Houston",
+    "conference": "West",
+    "founded": 1967,
+    "stadium": "Toyota Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-houston-rockets-logo.png"
+  },
+  {
+    "name": "Memphis Grizzlies",
+    "city": "Memphis",
+    "conference": "West",
+    "founded": 1995,
+    "stadium": "FedExForum",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-memphis-grizzlies-logo.png"
+  },
+  {
+    "name": "New Orleans Pelicans",
+    "city": "New Orleans",
+    "conference": "West",
+    "founded": 2002,
+    "stadium": "Smoothie King Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-new-orleans-pelicans-logo.png"
+  },
+  {
+    "name": "San Antonio Spurs",
+    "city": "San Antonio",
+    "conference": "West",
+    "founded": 1967,
+    "stadium": "Frost Bank Center",
+    "logo": "https://loodibee.com/wp-content/uploads/nba-san-antonio-spurs-logo.png"
+  }
+]

@@ -1,0 +1,302 @@
+[
+  {
+    "name": "Baltimore Orioles",
+    "city": "Baltimore, Maryland",
+    "league": "American",
+    "division": "East",
+    "founded": 1901,
+    "stadium": "Oriole Park at Camden Yards",
+    "abbrev": "BAL",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/75/Baltimore_Orioles_logo.svg"
+  },
+  {
+    "name": "Boston Red Sox",
+    "city": "Boston, Massachusetts",
+    "league": "American",
+    "division": "East",
+    "founded": 1901,
+    "stadium": "Fenway Park",
+    "abbrev": "BOS",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/6/6d/Boston_Red_Sox_logo.svg"
+  },
+  {
+    "name": "New York Yankees",
+    "city": "New York, New York",
+    "league": "American",
+    "division": "East",
+    "founded": 1901,
+    "stadium": "Yankee Stadium",
+    "abbrev": "NYY",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/2/25/New_York_Yankees_logo.svg"
+  },
+  {
+    "name": "Tampa Bay Rays",
+    "city": "St. Petersburg, Florida",
+    "league": "American",
+    "division": "East",
+    "founded": 1998,
+    "stadium": "Tropicana Field",
+    "abbrev": "TB",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/c/c6/Tampa_Bay_Rays_logo.svg"
+  },
+  {
+    "name": "Toronto Blue Jays",
+    "city": "Toronto, Ontario",
+    "league": "American",
+    "division": "East",
+    "founded": 1977,
+    "stadium": "Rogers Centre",
+    "abbrev": "TOR",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/2/23/Toronto_Blue_Jays_logo.svg"
+  },
+  {
+    "name": "Chicago White Sox",
+    "city": "Chicago, Illinois",
+    "league": "American",
+    "division": "Central",
+    "founded": 1901,
+    "stadium": "Rate Field",
+    "abbrev": "CWS",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/c/c1/Chicago_White_Sox_logo.svg"
+  },
+  {
+    "name": "Cleveland Guardians",
+    "city": "Cleveland, Ohio",
+    "league": "American",
+    "division": "Central",
+    "founded": 1901,
+    "stadium": "Progressive Field",
+    "abbrev": "CLE",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/3/3f/Cleveland_Guardians_logo.svg"
+  },
+  {
+    "name": "Detroit Tigers",
+    "city": "Detroit, Michigan",
+    "league": "American",
+    "division": "Central",
+    "founded": 1901,
+    "stadium": "Comerica Park",
+    "abbrev": "DET",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/e/e3/Detroit_Tigers_logo.svg"
+  },
+  {
+    "name": "Kansas City Royals",
+    "city": "Kansas City, Missouri",
+    "league": "American",
+    "division": "Central",
+    "founded": 1969,
+    "stadium": "Kauffman Stadium",
+    "abbrev": "KC",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/1/1c/Kansas_City_Royals_logo.svg"
+  },
+  {
+    "name": "Minnesota Twins",
+    "city": "Minneapolis, Minnesota",
+    "league": "American",
+    "division": "Central",
+    "founded": 1901,
+    "stadium": "Target Field",
+    "abbrev": "MIN",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/b/bf/Minnesota_Twins_logo.svg"
+  },
+  {
+    "name": "Los Angeles Angels",
+    "city": "Anaheim, California",
+    "league": "American",
+    "division": "West",
+    "founded": 1961,
+    "stadium": "Angel Stadium",
+    "abbrev": "LAA",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/70/Los_Angeles_Angels_logo.svg"
+  },
+  {
+    "name": "Houston Astros",
+    "city": "Houston, Texas",
+    "league": "American",
+    "division": "West",
+    "founded": 1962,
+    "stadium": "Daikin Park",
+    "abbrev": "HOU",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/6/6b/Houston_Astros_logo.svg"
+  },
+  {
+    "name": "Seattle Mariners",
+    "city": "Seattle, Washington",
+    "league": "American",
+    "division": "West",
+    "founded": 1977,
+    "stadium": "T-Mobile Park",
+    "abbrev": "SEA",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/6/6d/Seattle_Mariners_logo.svg"
+  },
+  {
+    "name": "Texas Rangers",
+    "city": "Arlington, Texas",
+    "league": "American",
+    "division": "West",
+    "founded": 1961,
+    "stadium": "Globe Life Field",
+    "abbrev": "TEX",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/4/41/Texas_Rangers_logo.svg"
+  },
+  {
+    "name": "Athletics",
+    "city": "Sacramento, California",
+    "league": "American",
+    "division": "West",
+    "founded": 1901,
+    "stadium": "Sutter Health Park",
+    "abbrev": "ATH",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/4/4b/Oakland_Athletics_logo.svg"
+  },
+  {
+    "name": "Atlanta Braves",
+    "city": "Atlanta, Georgia",
+    "league": "National",
+    "division": "East",
+    "founded": 1871,
+    "stadium": "Truist Park",
+    "abbrev": "ATL",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/f/f2/Atlanta_Braves_logo.svg"
+  },
+  {
+    "name": "Miami Marlins",
+    "city": "Miami, Florida",
+    "league": "National",
+    "division": "East",
+    "founded": 1993,
+    "stadium": "loanDepot park",
+    "abbrev": "MIA",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/f/fd/Miami_Marlins_logo.svg"
+  },
+  {
+    "name": "New York Mets",
+    "city": "New York, New York",
+    "league": "National",
+    "division": "East",
+    "founded": 1962,
+    "stadium": "Citi Field",
+    "abbrev": "NYM",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/7b/New_York_Mets_logo.svg"
+  },
+  {
+    "name": "Philadelphia Phillies",
+    "city": "Philadelphia, Pennsylvania",
+    "league": "National",
+    "division": "East",
+    "founded": 1883,
+    "stadium": "Citizens Bank Park",
+    "abbrev": "PHI",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/f/f0/Philadelphia_Phillies_logo.svg"
+  },
+  {
+    "name": "Washington Nationals",
+    "city": "Washington, D.C.",
+    "league": "National",
+    "division": "East",
+    "founded": 1969,
+    "stadium": "Nationals Park",
+    "abbrev": "WSH",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/a/a3/Washington_Nationals_logo.svg"
+  },
+  {
+    "name": "Chicago Cubs",
+    "city": "Chicago, Illinois",
+    "league": "National",
+    "division": "Central",
+    "founded": 1876,
+    "stadium": "Wrigley Field",
+    "abbrev": "CHC",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/8/80/Chicago_Cubs_logo.svg"
+  },
+  {
+    "name": "Cincinnati Reds",
+    "city": "Cincinnati, Ohio",
+    "league": "National",
+    "division": "Central",
+    "founded": 1882,
+    "stadium": "Great American Ball Park",
+    "abbrev": "CIN",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/0/01/Cincinnati_Reds_logo.svg"
+  },
+  {
+    "name": "Milwaukee Brewers",
+    "city": "Milwaukee, Wisconsin",
+    "league": "National",
+    "division": "Central",
+    "founded": 1969,
+    "stadium": "American Family Field",
+    "abbrev": "MIL",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/b/b8/Milwaukee_Brewers_logo.svg"
+  },
+  {
+    "name": "Pittsburgh Pirates",
+    "city": "Pittsburgh, Pennsylvania",
+    "league": "National",
+    "division": "Central",
+    "founded": 1882,
+    "stadium": "PNC Park",
+    "abbrev": "PIT",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/3/3e/Pittsburgh_Pirates_logo.svg"
+  },
+  {
+    "name": "St. Louis Cardinals",
+    "city": "St. Louis, Missouri",
+    "league": "National",
+    "division": "Central",
+    "founded": 1892,
+    "stadium": "Busch Stadium",
+    "abbrev": "STL",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/9/9d/St._Louis_Cardinals_logo.svg"
+  },
+  {
+    "name": "Arizona Diamondbacks",
+    "city": "Phoenix, Arizona",
+    "league": "National",
+    "division": "West",
+    "founded": 1998,
+    "stadium": "Chase Field",
+    "abbrev": "ARI",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/3/3f/Arizona_Diamondbacks_logo.svg"
+  },
+  {
+    "name": "Colorado Rockies",
+    "city": "Denver, Colorado",
+    "league": "National",
+    "division": "West",
+    "founded": 1993,
+    "stadium": "Coors Field",
+    "abbrev": "COL",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/3/31/Colorado_Rockies_logo.svg"
+  },
+  {
+    "name": "Los Angeles Dodgers",
+    "city": "Los Angeles, California",
+    "league": "National",
+    "division": "West",
+    "founded": 1883,
+    "stadium": "Dodger Stadium",
+    "abbrev": "LAD",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/0/0e/Los_Angeles_Dodgers_logo.svg"
+  },
+  {
+    "name": "San Diego Padres",
+    "city": "San Diego, California",
+    "league": "National",
+    "division": "West",
+    "founded": 1968,
+    "stadium": "Petco Park",
+    "abbrev": "SD",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/e/e2/San_Diego_Padres_logo.svg"
+  },
+  {
+    "name": "San Francisco Giants",
+    "city": "San Francisco, California",
+    "league": "National",
+    "division": "West",
+    "founded": 1883,
+    "stadium": "Oracle Park",
+    "abbrev": "SF",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/5/58/San_Francisco_Giants_logo.svg"
+  }
+]

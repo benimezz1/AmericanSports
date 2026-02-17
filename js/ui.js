@@ -114,6 +114,15 @@
     return `<a href="team.html?league=${league}&team=${teamId}">${escapeHtml(label)}</a>`;
   }
 
+  function teamSubtitle(team) {
+    if (team.abbreviation) return `Sigla: ${team.abbreviation}`;
+
+    const city = team.city || '';
+    const conference = team.conference || '';
+    if (city && conference) return `${city} • ${conference}`;
+    return city || conference || team.league;
+  }
+
   function renderHome(root, data, state) {
     const leaguesOrdered = Sorter.sortByUserPriority(
       Router.LEAGUES.map((league) => ({ league, teams: data.teams.filter((team) => team.league === league).map((team) => team.id), trending: true })),
@@ -150,7 +159,7 @@
         const followed = (state.followedTeams[league] || []).includes(team.id);
         const followDisabled = favorite ? 'disabled aria-disabled="true" title="Times favoritos são sempre seguidos"' : '';
         const statusLabel = favorite ? '<span class="team-status-favorite">⭐ Favorito</span>' : (followed ? '<span class="team-status-following">✓ Acompanhando</span>' : '');
-        return card(team.name, `Sigla: ${team.abbreviation}`, `<div class="meta">${teamLink(league, team.id, 'Abrir time')}</div><div class="team-status-row">${statusLabel}</div><div class="pills"><button class="pill ${favorite ? 'active' : ''}" data-favorite-team="${league}:${team.id}" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button><button class="pill ${followed ? 'active' : ''}" data-follow-team="${league}:${team.id}" ${followDisabled}>${favorite ? '✓ Seguindo' : (followed ? '✓ Acompanhando' : 'Acompanhar')}</button></div>`);
+        return card(team.name, teamSubtitle(team), `<div class="meta">${teamLink(league, team.id, 'Abrir time')}</div><div class="team-status-row">${statusLabel}</div><div class="pills"><button class="pill ${favorite ? 'active' : ''}" data-favorite-team="${league}:${team.id}" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button><button class="pill ${followed ? 'active' : ''}" data-follow-team="${league}:${team.id}" ${followDisabled}>${favorite ? '✓ Seguindo' : (followed ? '✓ Acompanhando' : 'Acompanhar')}</button></div>`);
       }).join('');
 
     root.innerHTML = `
@@ -185,7 +194,7 @@
   function renderTeams(root, data, query) {
     const filter = (query.league || '').toUpperCase();
     const teams = data.teams.filter((team) => !filter || team.league === filter);
-    const cards = teams.map((team) => card(team.name, `${team.league} • ${team.abbreviation}`, `<div class="meta">${teamLink(team.league, team.id, 'Abrir time')}</div>`)).join('');
+    const cards = teams.map((team) => card(team.name, teamSubtitle(team), `<div class="meta">${teamLink(team.league, team.id, 'Abrir time')}</div>`)).join('');
     root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Times</h2><p>${filter ? `Liga ${filter}` : 'Todas as ligas'}</p></div></div><div class="grid">${cards}</div></section>`;
   }
 
@@ -216,8 +225,20 @@
 
     const followDisabled = favorite ? 'disabled aria-disabled="true" title="Times favoritos são sempre seguidos"' : '';
 
+    const detailRows = [
+      { label: 'Cidade', value: team.city || 'Não informado' },
+      { label: 'Conferência', value: team.division ? `${team.conference || 'Não informado'} • ${team.division}` : (team.conference || 'Não informado') },
+      { label: 'Fundação', value: team.founded || 'Não informado' },
+      { label: 'Estádio/Arena', value: team.stadium || 'Não informado' }
+    ].map((item) => `<div class="team-detail-item"><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(String(item.value))}</strong></div>`).join('');
+
+    const logoSection = team.logo
+      ? `<div class="team-logo-wrap"><img src="${escapeHtml(team.logo)}" alt="Logo ${escapeHtml(team.name)}" loading="lazy"></div>`
+      : '';
+
     root.innerHTML = `
       <section class="section"><div class="section-head"><div><h2>${team.name}</h2><p>${league}</p></div></div><div class="pills"><button class="pill ${favorite ? 'active' : ''}" id="favoriteTeamBtn" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button><button class="pill ${followed ? 'active' : ''}" id="followTeamBtn" aria-pressed="${followed}" ${followDisabled}>${favorite ? '✓ Seguindo' : (followed ? '✓ Acompanhando' : 'Acompanhar')}</button></div>${watchGuideMarkup(league, data.watchGuide, true)}</section>
+      <section class="section"><div class="section-head"><div><h2>Detalhes do time</h2></div></div><article class="card"><div class="card-body"><div class="team-details-grid">${detailRows}</div>${logoSection}</div></article></section>
       <section class="section"><div class="section-head"><div><h2>Próximos Jogos</h2></div></div><div class="grid">${nextGames.map((game) => card(`${getTeamName(data.teams, game.teamAway)} @ ${getTeamName(data.teams, game.teamHome)}`, new Date(game.datetime).toLocaleString('pt-BR'))).join('')}</div></section>
       <section class="section"><div class="section-head"><div><h2>Notícias do Time</h2></div></div><div class="grid">${teamNews.map((item) => card(item.title, item.summary, `<div class="meta"><a href="${newsLink(data.news.indexOf(item))}">Ler notícia</a></div>`)).join('')}</div></section>
     `;

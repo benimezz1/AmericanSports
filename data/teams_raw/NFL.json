@@ -1,0 +1,290 @@
+[
+  {
+    "name": "Arizona Cardinals",
+    "city": "Glendale, Arizona",
+    "conference": "NFC",
+    "division": "West",
+    "founded": 1898,
+    "stadium": "State Farm Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/72/Arizona_Cardinals_logo.svg"
+  },
+  {
+    "name": "Atlanta Falcons",
+    "city": "Atlanta, Georgia",
+    "conference": "NFC",
+    "division": "South",
+    "founded": 1965,
+    "stadium": "Mercedes-Benz Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/c/c5/Atlanta_Falcons_logo.svg"
+  },
+  {
+    "name": "Baltimore Ravens",
+    "city": "Baltimore, Maryland",
+    "conference": "AFC",
+    "division": "North",
+    "founded": 1996,
+    "stadium": "M&T Bank Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/1/16/Baltimore_Ravens_logo.svg"
+  },
+  {
+    "name": "Buffalo Bills",
+    "city": "Orchard Park, New York",
+    "conference": "AFC",
+    "division": "East",
+    "founded": 1959,
+    "stadium": "Highmark Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/77/Buffalo_Bills_logo.svg"
+  },
+  {
+    "name": "Carolina Panthers",
+    "city": "Charlotte, North Carolina",
+    "conference": "NFC",
+    "division": "South",
+    "founded": 1993,
+    "stadium": "Bank of America Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/1/1c/Carolina_Panthers_logo.svg"
+  },
+  {
+    "name": "Chicago Bears",
+    "city": "Chicago, Illinois",
+    "conference": "NFC",
+    "division": "North",
+    "founded": 1919,
+    "stadium": "Soldier Field",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/5/5c/Chicago_Bears_logo.svg"
+  },
+  {
+    "name": "Cincinnati Bengals",
+    "city": "Cincinnati, Ohio",
+    "conference": "AFC",
+    "division": "North",
+    "founded": 1968,
+    "stadium": "Paycor Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/8/81/Cincinnati_Bengals_logo.svg"
+  },
+  {
+    "name": "Cleveland Browns",
+    "city": "Cleveland, Ohio",
+    "conference": "AFC",
+    "division": "North",
+    "founded": 1946,
+    "stadium": "Cleveland Browns Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/d/d9/Cleveland_Browns_logo.svg"
+  },
+  {
+    "name": "Dallas Cowboys",
+    "city": "Arlington, Texas",
+    "conference": "NFC",
+    "division": "East",
+    "founded": 1960,
+    "stadium": "AT&T Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/1/15/Dallas_Cowboys.svg"
+  },
+  {
+    "name": "Denver Broncos",
+    "city": "Denver, Colorado",
+    "conference": "AFC",
+    "division": "West",
+    "founded": 1959,
+    "stadium": "Empower Field at Mile High",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/4/44/Denver_Broncos_logo.svg"
+  },
+  {
+    "name": "Detroit Lions",
+    "city": "Detroit, Michigan",
+    "conference": "NFC",
+    "division": "North",
+    "founded": 1930,
+    "stadium": "Ford Field",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/71/Detroit_Lions_logo.svg"
+  },
+  {
+    "name": "Green Bay Packers",
+    "city": "Green Bay, Wisconsin",
+    "conference": "NFC",
+    "division": "North",
+    "founded": 1919,
+    "stadium": "Lambeau Field",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/5/50/Green_Bay_Packers_logo.svg"
+  },
+  {
+    "name": "Houston Texans",
+    "city": "Houston, Texas",
+    "conference": "AFC",
+    "division": "South",
+    "founded": 2002,
+    "stadium": "NRG Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/2/28/Houston_Texans_logo.svg"
+  },
+  {
+    "name": "Indianapolis Colts",
+    "city": "Indianapolis, Indiana",
+    "conference": "AFC",
+    "division": "South",
+    "founded": 1953,
+    "stadium": "Lucas Oil Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/0/00/Indianapolis_Colts_logo.svg"
+  },
+  {
+    "name": "Jacksonville Jaguars",
+    "city": "Jacksonville, Florida",
+    "conference": "AFC",
+    "division": "South",
+    "founded": 1993,
+    "stadium": "EverBank Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/74/Jacksonville_Jaguars_logo.svg"
+  },
+  {
+    "name": "Kansas City Chiefs",
+    "city": "Kansas City, Missouri",
+    "conference": "AFC",
+    "division": "West",
+    "founded": 1959,
+    "stadium": "GEHA Field at Arrowhead Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/e/e1/Kansas_City_Chiefs_logo.svg"
+  },
+  {
+    "name": "Las Vegas Raiders",
+    "city": "Las Vegas, Nevada",
+    "conference": "AFC",
+    "division": "West",
+    "founded": 1960,
+    "stadium": "Allegiant Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/4/48/Las_Vegas_Raiders_logo.svg"
+  },
+  {
+    "name": "Los Angeles Chargers",
+    "city": "Inglewood, California",
+    "conference": "AFC",
+    "division": "West",
+    "founded": 1960,
+    "stadium": "SoFi Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/72/Los_Angeles_Chargers_logo.svg"
+  },
+  {
+    "name": "Los Angeles Rams",
+    "city": "Inglewood, California",
+    "conference": "NFC",
+    "division": "West",
+    "founded": 1936,
+    "stadium": "SoFi Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/8/8a/Los_Angeles_Rams_logo.svg"
+  },
+  {
+    "name": "Miami Dolphins",
+    "city": "Miami Gardens, Florida",
+    "conference": "AFC",
+    "division": "East",
+    "founded": 1966,
+    "stadium": "Hard Rock Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/3/37/Miami_Dolphins_logo.svg"
+  },
+  {
+    "name": "Minnesota Vikings",
+    "city": "Minneapolis, Minnesota",
+    "conference": "NFC",
+    "division": "North",
+    "founded": 1961,
+    "stadium": "U.S. Bank Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/4/48/Minnesota_Vikings_logo.svg"
+  },
+  {
+    "name": "New England Patriots",
+    "city": "Foxborough, Massachusetts",
+    "conference": "AFC",
+    "division": "East",
+    "founded": 1959,
+    "stadium": "Gillette Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/b/b9/New_England_Patriots_logo.svg"
+  },
+  {
+    "name": "New Orleans Saints",
+    "city": "New Orleans, Louisiana",
+    "conference": "NFC",
+    "division": "South",
+    "founded": 1967,
+    "stadium": "Caesars Superdome",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/5/50/New_Orleans_Saints_logo.svg"
+  },
+  {
+    "name": "New York Giants",
+    "city": "East Rutherford, New Jersey",
+    "conference": "NFC",
+    "division": "East",
+    "founded": 1925,
+    "stadium": "MetLife Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/6/60/New_York_Giants_logo.svg"
+  },
+  {
+    "name": "New York Jets",
+    "city": "East Rutherford, New Jersey",
+    "conference": "AFC",
+    "division": "East",
+    "founded": 1959,
+    "stadium": "MetLife Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/6/69/New_York_Jets_logo.svg"
+  },
+  {
+    "name": "Philadelphia Eagles",
+    "city": "Philadelphia, Pennsylvania",
+    "conference": "NFC",
+    "division": "East",
+    "founded": 1933,
+    "stadium": "Lincoln Financial Field",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/8/8e/Philadelphia_Eagles_logo.svg"
+  },
+  {
+    "name": "Pittsburgh Steelers",
+    "city": "Pittsburgh, Pennsylvania",
+    "conference": "AFC",
+    "division": "North",
+    "founded": 1933,
+    "stadium": "Acrisure Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/d/de/Pittsburgh_Steelers_logo.svg"
+  },
+  {
+    "name": "San Francisco 49ers",
+    "city": "Santa Clara, California",
+    "conference": "NFC",
+    "division": "West",
+    "founded": 1946,
+    "stadium": "Levi's Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/3/3b/San_Francisco_49ers_logo.svg"
+  },
+  {
+    "name": "Seattle Seahawks",
+    "city": "Seattle, Washington",
+    "conference": "NFC",
+    "division": "West",
+    "founded": 1976,
+    "stadium": "Lumen Field",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/8/8e/Seattle_Seahawks_logo.svg"
+  },
+  {
+    "name": "Tampa Bay Buccaneers",
+    "city": "Tampa, Florida",
+    "conference": "NFC",
+    "division": "South",
+    "founded": 1976,
+    "stadium": "Raymond James Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/a/a2/Tampa_Bay_Buccaneers_logo.svg"
+  },
+  {
+    "name": "Tennessee Titans",
+    "city": "Nashville, Tennessee",
+    "conference": "AFC",
+    "division": "South",
+    "founded": 1960,
+    "stadium": "Nissan Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/c/c1/Tennessee_Titans_logo.svg"
+  },
+  {
+    "name": "Washington Commanders",
+    "city": "Landover, Maryland",
+    "conference": "NFC",
+    "division": "East",
+    "founded": 1932,
+    "stadium": "Northwest Stadium",
+    "logo": "https://upload.wikimedia.org/wikipedia/en/7/73/Washington_Commanders_logo.svg"
+  }
+]
