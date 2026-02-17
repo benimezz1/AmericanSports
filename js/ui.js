@@ -218,30 +218,118 @@
       return;
     }
 
-    const nextGames = data.games.filter((game) => game.league === league && (game.teamHome === team.id || game.teamAway === team.id));
-    const teamNews = data.news.filter((item) => item.league === league && item.teams.includes(team.id));
     const favorite = state.favoriteTeam[league] === team.id;
     const followed = (state.followedTeams[league] || []).includes(team.id);
 
     const followDisabled = favorite ? 'disabled aria-disabled="true" title="Times favoritos são sempre seguidos"' : '';
+    const subtitleParts = [team.city || 'Não informado', team.conference || 'Não informado'];
+    if (team.division) subtitleParts.push(team.division);
+    const subtitle = subtitleParts.join(' • ');
+    const teamInitials = team.name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0])
+      .join('')
+      .toUpperCase();
+    const leaguePage = `${league.toLowerCase()}.html`;
 
-    const detailRows = [
-      { label: 'Cidade', value: team.city || 'Não informado' },
-      { label: 'Conferência', value: team.division ? `${team.conference || 'Não informado'} • ${team.division}` : (team.conference || 'Não informado') },
-      { label: 'Fundação', value: team.founded || 'Não informado' },
-      { label: 'Estádio/Arena', value: team.stadium || 'Não informado' }
-    ].map((item) => `<div class="team-detail-item"><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(String(item.value))}</strong></div>`).join('');
+    const detailCards = [
+      { label: 'Cidade', value: team.city || 'Não informado', id: 'detailCity' },
+      { label: 'Conferência', value: team.conference || 'Não informado', id: 'detailConference' },
+      { label: 'Fundação', value: team.founded || 'Não informado', id: 'detailFounded' },
+      { label: 'Estádio/Arena', value: team.stadium || 'Não informado', id: 'detailStadium' }
+    ];
 
-    const logoSection = team.logo
-      ? `<div class="team-logo-wrap"><img src="${escapeHtml(team.logo)}" alt="Logo ${escapeHtml(team.name)}" loading="lazy"></div>`
-      : '';
+    if (team.division) {
+      detailCards.push({ label: 'Divisão', value: team.division, id: 'detailDivision' });
+    }
+
+    const detailRows = detailCards
+      .map((item) => `<div class="detail-card"><div class="detail-label">${escapeHtml(item.label)}</div><div class="detail-value" id="${item.id}">${escapeHtml(String(item.value))}</div></div>`)
+      .join('');
 
     root.innerHTML = `
-      <section class="section"><div class="section-head"><div><h2>${team.name}</h2><p>${league}</p></div></div><div class="pills"><button class="pill ${favorite ? 'active' : ''}" id="favoriteTeamBtn" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button><button class="pill ${followed ? 'active' : ''}" id="followTeamBtn" aria-pressed="${followed}" ${followDisabled}>${favorite ? '✓ Seguindo' : (followed ? '✓ Acompanhando' : 'Acompanhar')}</button></div>${watchGuideMarkup(league, data.watchGuide, true)}</section>
-      <section class="section"><div class="section-head"><div><h2>Detalhes do time</h2></div></div><article class="card"><div class="card-body"><div class="team-details-grid">${detailRows}</div>${logoSection}</div></article></section>
-      <section class="section"><div class="section-head"><div><h2>Próximos Jogos</h2></div></div><div class="grid">${nextGames.map((game) => card(`${getTeamName(data.teams, game.teamAway)} @ ${getTeamName(data.teams, game.teamHome)}`, new Date(game.datetime).toLocaleString('pt-BR'))).join('')}</div></section>
-      <section class="section"><div class="section-head"><div><h2>Notícias do Time</h2></div></div><div class="grid">${teamNews.map((item) => card(item.title, item.summary, `<div class="meta"><a href="${newsLink(data.news.indexOf(item))}">Ler notícia</a></div>`)).join('')}</div></section>
+      <section class="team-hero">
+        <div class="team-hero-left">
+          <div class="team-league-badge" id="teamLeagueBadge">${escapeHtml(league)}</div>
+          <h1 class="team-title" id="teamName">${escapeHtml(team.name)}</h1>
+          <p class="team-subtitle" id="teamSubtitle">${escapeHtml(subtitle)}</p>
+
+          <div class="team-cta">
+            <button id="btnFavorite" class="btn-primary" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button>
+            <button id="btnFollow" class="btn-secondary" aria-pressed="${followed}" ${followDisabled}>${favorite ? '✓ Seguindo' : (followed ? '✓ Acompanhando' : 'Acompanhar')}</button>
+          </div>
+
+          <nav class="team-tabs">
+            <a class="tab-pill" href="#detalhes">Detalhes</a>
+            <a class="tab-pill" href="#jogos">Próximos jogos</a>
+            <a class="tab-pill" href="#noticias">Notícias</a>
+          </nav>
+        </div>
+
+        <div class="team-hero-right">
+          <div class="team-logo-wrap" id="teamLogoWrap">
+            <img id="teamLogoHero" alt="Logo do time" loading="lazy" />
+            <div class="team-logo-placeholder" id="teamLogoPlaceholder">${escapeHtml(teamInitials)}</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="detalhes" class="team-section">
+        <h2 class="section-title">Detalhes do time</h2>
+        <div class="details-grid">${detailRows}</div>
+      </section>
+
+      <section id="jogos" class="team-section">
+        <h2 class="section-title">Próximos jogos</h2>
+        <div class="empty-state">
+          <div class="empty-title">Agenda em breve.</div>
+          <div class="empty-subtitle">Estamos preparando os próximos jogos deste time.</div>
+          <a class="empty-cta" id="backToLeagueGames" href="${leaguePage}">Ver página da liga</a>
+        </div>
+      </section>
+
+      <section id="noticias" class="team-section">
+        <h2 class="section-title">Notícias do time</h2>
+        <div class="empty-state">
+          <div class="empty-title">Notícias em breve.</div>
+          <div class="empty-subtitle">Em breve, você verá destaques e notícias deste time aqui.</div>
+          <a class="empty-cta" id="backToLeagueNews" href="${leaguePage}">Explorar notícias da liga</a>
+        </div>
+      </section>
     `;
+
+    const teamLeagueBadge = root.querySelector('#teamLeagueBadge');
+    const teamName = root.querySelector('#teamName');
+    const teamSubtitle = root.querySelector('#teamSubtitle');
+    const detailCity = root.querySelector('#detailCity');
+    const detailConference = root.querySelector('#detailConference');
+    const detailFounded = root.querySelector('#detailFounded');
+    const detailStadium = root.querySelector('#detailStadium');
+    const teamLogoHero = root.querySelector('#teamLogoHero');
+    const teamLogoPlaceholder = root.querySelector('#teamLogoPlaceholder');
+
+    if (teamLeagueBadge) teamLeagueBadge.textContent = league;
+    if (teamName) teamName.textContent = team.name;
+    if (teamSubtitle) teamSubtitle.textContent = subtitle;
+    if (detailCity) detailCity.textContent = team.city || 'Não informado';
+    if (detailConference) detailConference.textContent = team.conference || 'Não informado';
+    if (detailFounded) detailFounded.textContent = team.founded || 'Não informado';
+    if (detailStadium) detailStadium.textContent = team.stadium || 'Não informado';
+
+    if (teamLogoHero && teamLogoPlaceholder) {
+      if (team.logo) {
+        teamLogoHero.src = team.logo;
+        teamLogoHero.alt = `Logo ${team.name}`;
+        teamLogoHero.style.display = 'block';
+        teamLogoPlaceholder.style.display = 'none';
+      } else {
+        teamLogoHero.removeAttribute('src');
+        teamLogoHero.style.display = 'none';
+        teamLogoPlaceholder.style.display = 'grid';
+      }
+    }
   }
 
   function renderNewsList(root, data, state, query) {
