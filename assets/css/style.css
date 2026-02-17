@@ -776,3 +776,153 @@ body.dark-mode .setting-row select option {
     grid-template-columns: 1fr;
   }
 }
+
+.team-hero{
+  margin-top:22px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background: linear-gradient(160deg, var(--surface-1), var(--surface-2));
+  box-shadow: var(--shadow);
+  padding:20px;
+  display:grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap:18px;
+}
+
+.team-hero-left{display:flex; flex-direction:column; gap:12px}
+
+.team-league-badge{
+  align-self:flex-start;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid color-mix(in srgb, var(--accent) 38%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--text);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.3px;
+}
+
+.team-title{margin:0; font-size:clamp(28px, 4vw, 42px); line-height:1.08}
+.team-subtitle{margin:0; color:var(--muted); font-size:14px}
+
+.team-cta{display:flex; flex-wrap:wrap; gap:10px}
+.btn-primary,.btn-secondary{
+  border-radius:12px;
+  border:1px solid transparent;
+  padding:10px 14px;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  transition: .16s ease;
+}
+
+.btn-primary{
+  color:#fff;
+  border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 86%, #fff), color-mix(in srgb, var(--accent2) 40%, var(--accent)));
+}
+
+.btn-secondary{
+  color:var(--text);
+  border-color: var(--chip-border);
+  background: var(--surface-1);
+}
+
+.btn-primary:hover,.btn-secondary:hover{transform:translateY(-1px); box-shadow:0 8px 18px rgba(12,18,36,.12)}
+.btn-primary:disabled,.btn-secondary:disabled{opacity:.65; cursor:not-allowed; transform:none; box-shadow:none}
+
+.team-tabs{display:flex; gap:8px; flex-wrap:wrap}
+.tab-pill{
+  padding:8px 11px;
+  border-radius:999px;
+  font-size:12px;
+  color:var(--muted);
+  border:1px solid var(--chip-border);
+  background: var(--surface-1);
+}
+.tab-pill:hover{color:var(--text); border-color: color-mix(in srgb, var(--accent) 35%, transparent); background: color-mix(in srgb, var(--accent) 8%, transparent)}
+
+.team-hero-right{display:flex; justify-content:center; align-items:center}
+.team-hero .team-logo-wrap{
+  margin-top:0;
+  width:min(320px, 100%);
+  min-height:220px;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background: linear-gradient(180deg, var(--surface-1), var(--surface-2));
+  padding:18px;
+  display:grid;
+  place-items:center;
+  box-shadow: 0 12px 26px rgba(10,16,32,.08);
+}
+.team-hero .team-logo-wrap img{max-height:180px; max-width:100%; object-fit:contain}
+.team-logo-placeholder{
+  width:96px;
+  height:96px;
+  border-radius:20px;
+  border:1px dashed var(--notice-border);
+  display:grid;
+  place-items:center;
+  font-size:30px;
+  font-weight:800;
+  color:var(--muted);
+  background: var(--surface-2);
+}
+
+.team-section{margin-top:22px}
+.section-title{margin:0 0 12px; font-size:18px; letter-spacing:.2px}
+
+.details-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+.detail-card{
+  border:1px solid var(--line);
+  border-radius:12px;
+  background: var(--surface-2);
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.detail-label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.35px}
+.detail-value{font-size:14px; color:var(--text); font-weight:600}
+
+.empty-state{
+  border:1px dashed var(--notice-border);
+  border-radius:14px;
+  background: color-mix(in srgb, var(--surface-2) 88%, transparent);
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.empty-title{font-size:16px; font-weight:700; color:var(--text)}
+.empty-subtitle{font-size:13px; color:var(--muted)}
+.empty-cta{
+  margin-top:6px;
+  align-self:flex-start;
+  font-size:13px;
+  color:var(--accent);
+  border:1px solid color-mix(in srgb, var(--accent) 34%, transparent);
+  border-radius:10px;
+  padding:8px 12px;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+.empty-cta:hover{background: color-mix(in srgb, var(--accent) 12%, transparent)}
+
+@media (max-width: 920px){
+  .team-hero{grid-template-columns:1fr}
+  .team-hero .team-logo-wrap{width:min(260px, 100%)}
+}
+
+@media (max-width: 820px){
+  .details-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media (max-width: 560px){
+  .team-hero{padding:16px}
+  .details-grid{grid-template-columns:1fr}
+}

@@ -83,8 +83,8 @@
     });
 
     root.addEventListener('click', (event) => {
-      const favTeamBtn = event.target.closest('#favoriteTeamBtn');
-      const followTeamBtn = event.target.closest('#followTeamBtn');
+      const favTeamBtn = event.target.closest('#favoriteTeamBtn, #btnFavorite');
+      const followTeamBtn = event.target.closest('#followTeamBtn, #btnFollow');
       const favoritePill = event.target.closest('[data-favorite-team]');
       const followPill = event.target.closest('[data-follow-team]');
       const followLeaguePill = event.target.closest('[data-follow-league]');
