@@ -1,14 +1,14 @@
 (function () {
   const LEAGUES = ['NFL', 'NBA', 'NHL', 'MLB', 'MLS'];
-  const LEAGUES_KEY = 'followLeagues';
-  const LEGACY_LEAGUES_KEY = 'followedLeagues';
+  const LEAGUES_KEY = (window.PlayNorthCore && window.PlayNorthCore.STORAGE_KEYS.followedLeagues) || 'followedLeagues';
+  const LEGACY_LEAGUES_KEY = (window.PlayNorthCore && window.PlayNorthCore.STORAGE_KEYS.legacyFollowLeagues) || 'followLeagues';
 
   function createLeagueRecord(initialValue) {
     return Object.fromEntries(LEAGUES.map((league) => [league, initialValue]));
   }
 
   const DEFAULTS = {
-    followLeagues: [],
+    followedLeagues: [],
     followedTeams: createLeagueRecord([]),
     favoriteTeam: createLeagueRecord(null),
     language: 'pt',
@@ -57,7 +57,7 @@
   function readLeagueList() {
     const current = read(LEAGUES_KEY, null);
     if (current !== null) return normalizeLeagueList(current);
-    return normalizeLeagueList(read(LEGACY_LEAGUES_KEY, DEFAULTS.followLeagues));
+    return normalizeLeagueList(read(LEGACY_LEAGUES_KEY, DEFAULTS.followedLeagues));
   }
 
   function writeLeagueList(leagues) {
@@ -103,7 +103,7 @@
   }
 
   function persistNormalized(state) {
-    writeLeagueList(state.followLeagues);
+    writeLeagueList(state.followedLeagues);
     write('followedTeams', state.followedTeams);
     write('favoriteTeam', state.favoriteTeam);
     write('language', state.language);
@@ -120,7 +120,7 @@
       migrateLegacyKeys();
 
       const state = {
-        followLeagues: readLeagueList(),
+        followedLeagues: readLeagueList(),
         followedTeams: normalizeFollowedTeams(read('followedTeams', DEFAULTS.followedTeams)),
         favoriteTeam: normalizeFavoriteTeam(read('favoriteTeam', DEFAULTS.favoriteTeam)),
         language: (read('language', DEFAULTS.language) || 'pt').toLowerCase() === 'en' ? 'en' : 'pt',
@@ -130,7 +130,7 @@
         alertSimulationEnabled: read('alertSimulationEnabled', DEFAULTS.alertSimulationEnabled) !== false
       };
 
-      state.followedLeagues = [...state.followLeagues];
+      state.followLeagues = [...state.followedLeagues];
       persistNormalized(state);
       return state;
     },
@@ -210,9 +210,7 @@
       return write('alertSimulationEnabled', Boolean(enabled));
     },
     resetPreferences() {
-      writeLeagueList(DEFAULTS.followLeagues);
-      write('followedTeams', DEFAULTS.followedTeams);
-      write('favoriteTeam', DEFAULTS.favoriteTeam);
+      this.clearLocalData();
     },
     clearLocalData() {
       [

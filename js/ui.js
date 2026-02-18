@@ -115,12 +115,7 @@
   }
 
   function teamSubtitle(team) {
-    if (team.abbreviation) return `Sigla: ${team.abbreviation}`;
-
-    const city = team.city || '';
-    const conference = team.conference || '';
-    if (city && conference) return `${city} • ${conference}`;
-    return city || conference || team.league;
+    return (window.PlayNorthCore && PlayNorthCore.teamSubtitle(team)) || 'Dados indisponíveis';
   }
 
   function renderHome(root, data, state) {
@@ -364,7 +359,7 @@
 
 
   function renderFavorites(root, data, state) {
-    const followedLeagues = state.followLeagues || state.followedLeagues;
+    const followedLeagues = state.followedLeagues || state.followLeagues || [];
     const hasFollowedLeagues = followedLeagues.length > 0;
 
     const leaguesGridMarkup = followedLeagues.map((league) => {
@@ -408,7 +403,7 @@
         <div class="section-head">
           <div>
             <h2>Favoritos</h2>
-            <p>Conteúdo que você marcou para acompanhar.</p>
+            <p>Este é o seu painel premium para acompanhar o que importa.</p>
           </div>
         </div>
         <div class="favorites-info-box">
@@ -444,7 +439,7 @@
   }
 
   function renderPreferences(root, data, state) {
-    const followedLeagues = state.followLeagues || state.followedLeagues;
+    const followedLeagues = state.followedLeagues || state.followLeagues || [];
 
     const leagueToggles = Router.LEAGUES.map((league) => {
       const followed = followedLeagues.includes(league);
@@ -485,7 +480,7 @@
       return `<label class="setting-row favorite-row"><span class="favorite-label">Time favorito<br>${league}</span><select class="favorite-select" id="favorite-${league}" data-pref-favorite-team="${league}" ${canSetFavorite ? '' : 'disabled'}>${canSetFavorite ? options : emptyStateOption}</select></label>`;
     }).join('');
 
-    root.innerHTML = `<section class="section"><div class="section-head"><div><h1 class="title">Preferências</h1><p>Personalize suas ligas e times para priorizar seu conteúdo</p></div></div></section><section class="section"><div class="section-head"><div><h2>Ligas seguidas</h2></div></div><div class="pills">${leagueToggles}</div></section><section class="section"><div class="section-head"><div><h2>Times seguidos por liga</h2></div></div><div class="grid">${followedTeamsByLeague}</div></section><section class="section"><div class="section-head"><div><h2>Time favorito por liga</h2></div></div><div class="card"><div class="card-body"><p class="favorites-helper-text">Para favoritar um time aqui, você deve segui-lo antes.</p><div class="favorites-stack">${favoriteSelectors}</div></div></div></section>`;
+    root.innerHTML = `<section class="section"><div class="section-head"><div><h1 class="title">Preferências</h1><p>Este é o seu resumo personalizado para moldar ligas e times do seu jeito</p></div></div></section><section class="section"><div class="section-head"><div><h2>Ligas seguidas</h2></div></div><div class="pills">${leagueToggles}</div></section><section class="section"><div class="section-head"><div><h2>Times seguidos por liga</h2></div></div><div class="grid">${followedTeamsByLeague}</div></section><section class="section"><div class="section-head"><div><h2>Time favorito por liga</h2></div></div><div class="card"><div class="card-body"><p class="favorites-helper-text">Para favoritar um time aqui, você deve segui-lo antes.</p><div class="favorites-stack">${favoriteSelectors}</div></div></div></section>`;
   }
 
   function renderSettings(root, data, state) {
