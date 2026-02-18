@@ -1,11 +1,4 @@
 (function () {
-  function applyTheme(theme) {
-    const resolved = theme === 'light' ? 'light' : 'dark';
-    document.body.classList.toggle('dark-mode', resolved === 'dark');
-    const themeBtn = document.getElementById('themeBtn');
-    if (themeBtn) themeBtn.textContent = resolved === 'light' ? '☀' : '☾';
-  }
-
   function bindMenu() {
     const menuBtn = document.getElementById('menuBtn');
     const overlay = document.getElementById('sidebarOverlay');
@@ -74,12 +67,12 @@
 
     rerender();
     bindMenu();
-    applyTheme(state.theme);
+    PlayNorthCore.applyTheme(state.theme);
 
     document.getElementById('themeBtn')?.addEventListener('click', () => {
       const next = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
       StorageService.setTheme(next);
-      applyTheme(next);
+      PlayNorthCore.applyTheme(next);
     });
 
     root.addEventListener('click', (event) => {
@@ -142,7 +135,7 @@
       if (event.target.matches('[data-setting-theme]')) {
         const next = event.target.checked ? 'dark' : 'light';
         StorageService.setTheme(next);
-        applyTheme(next);
+        PlayNorthCore.applyTheme(next);
       }
     });
   }
