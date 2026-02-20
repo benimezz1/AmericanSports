@@ -38,6 +38,32 @@
     else root.innerHTML = '<div class="notice">Página não encontrada.</div>';
   }
 
+
+  function bindTeamTabs(root) {
+    if (root.dataset.teamTabsBound === 'true') return;
+    root.dataset.teamTabsBound = 'true';
+    const copy = {
+      news: ['Painel do time', 'Visão de dashboard com contexto e momentum.'],
+      stats: ['Estatísticas', 'Indicadores premium da equipe (preview).'],
+      compare: ['Comparação', 'Bloco editorial comparativo (preview).'],
+      history: ['Histórico', 'Linha do tempo e marcos recentes (preview).']
+    };
+
+    root.addEventListener('click', (event) => {
+      const tab = event.target.closest('[data-team-tab]');
+      if (!tab) return;
+      const key = tab.dataset.teamTab;
+      const tabs = Array.from(root.querySelectorAll('[data-team-tab]'));
+      const panels = Array.from(root.querySelectorAll('[data-team-panel]'));
+      const title = root.querySelector('[data-team-tab-title]');
+      const subtitle = root.querySelector('[data-team-tab-subtitle]');
+      tabs.forEach((btn) => btn.classList.toggle('is-active', btn === tab));
+      panels.forEach((panel) => panel.classList.toggle('is-hidden', panel.dataset.teamPanel !== key));
+      if (title) title.textContent = copy[key]?.[0] || 'Painel do time';
+      if (subtitle) subtitle.textContent = copy[key]?.[1] || '';
+    });
+  }
+
   function loadData() {
     return {
       teams: window.TEAMS_DATA || [],
@@ -67,6 +93,7 @@
 
     rerender();
     bindMenu();
+    bindTeamTabs(root);
     PlayNorthCore.applyTheme(state.theme);
 
     document.getElementById('themeBtn')?.addEventListener('click', () => {
