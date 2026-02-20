@@ -35,8 +35,44 @@
     return LEAGUE_VISUALS[league] || 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1400&q=80';
   }
 
+  function hashNumber(value) {
+    return String(value).split('').reduce((acc, char, index) => acc + (char.charCodeAt(0) * (index + 7)), 0);
+  }
 
-  
+  function formatFollowers(value) {
+    if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
+    if (value >= 1000) return `${Math.round(value / 1000)}K`;
+    return String(value);
+  }
+
+  function buildPopularityRanking(data) {
+    const ranked = data.teams.map((team) => {
+      const seed = hashNumber(`${team.league}:${team.id}`);
+      const followers = 650000 + (seed % 3200000);
+      const hype = 52 + (seed % 44);
+      const variation = (seed % 9) - 4;
+      const score = followers + (hype * 17000) + (variation * 22000);
+      return { ...team, followers, hype, variation, score };
+    }).sort((a, b) => b.score - a.score).map((team, index) => ({ ...team, position: index + 1 }));
+
+    const byLeague = Router.LEAGUES.reduce((acc, league) => {
+      acc[league] = ranked.filter((team) => team.league === league).slice(0, 5);
+      return acc;
+    }, {});
+
+    return { top10: ranked.slice(0, 10), byLeague, all: ranked };
+  }
+
+  function renderHypeMeter(value, compact = false) {
+    const safeValue = Math.max(1, Math.min(100, Number(value) || 0));
+    return `
+      <div class="hype-meter ${compact ? 'compact' : ''}" data-hype-meter="${safeValue}">
+        <div class="hype-track"><div class="hype-fill" style="--hype:${safeValue}"></div></div>
+        <span class="hype-value">${safeValue}%</span>
+      </div>
+    `;
+  }
+
 
   function getLeagueTeamEntries(data, league) {
     return data.teams
@@ -146,10 +182,11 @@
     }));
 
     const radarItems = Sorter.sortByUserPriority(data.news.map((item, index) => ({ ...item, __index: index })), state).slice(0, 4);
-    const feedItems = Sorter.sortByUserPriority(data.news.map((item, index) => ({ ...item, __index: index })), state).slice(0, 8);
+    const feedItems = Sorter.sortByUserPriority(data.news.map((item, index) => ({ ...item, __index: index })), state).slice(0, 9);
+    const ranking = buildPopularityRanking(data);
 
     const heroSlides = heroItems.map((item, index) => `
-      <a class="hero-feature ${index === 0 ? 'is-active' : ''}" data-hero-feature data-index="${index}" href="${item.href}" style="background-image:linear-gradient(150deg, rgba(5,8,19,.35), rgba(5,8,19,.92)), url('${item.image}')">
+      <a class="hero-feature ${index === 0 ? 'is-active' : ''}" data-hero-feature data-index="${index}" href="${item.href}" style="background-image:linear-gradient(180deg, rgba(3,7,19,.2), rgba(3,7,19,.98)), url('${item.image}')">
         <div class="hero-feature-content">
           <span class="hero-badge">${escapeHtml(item.league)}</span>
           <h1>${escapeHtml(item.title)}</h1>
@@ -166,19 +203,33 @@
       </a>
     `).join('');
 
+    const heroIndicators = heroItems.map((_, index) => `<button type="button" class="hero-indicator ${index === 0 ? 'is-active' : ''}" aria-label="Destaque ${index + 1}" data-hero-indicator="${index}"></button>`).join('');
     const radarMain = radarItems[0];
     const radarSide = radarItems.slice(1);
 
     const feedMarkup = feedItems.map((item, index) => {
+      if (index % 4 === 0) {
+        return `<a class="feed-item feed-featured" href="${newsLink(item.__index)}"><div class="feed-media" style="background-image:linear-gradient(160deg, rgba(6,11,26,.2), rgba(6,11,26,.72)), url('${imageForLeague(item.league)}')"></div><div><span class="feed-league">${escapeHtml(item.league)}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p>${renderHypeMeter(58 + (index * 4), true)}</div></a>`;
+      }
       if (index % 2 === 0) {
         return `<a class="feed-item feed-editorial" href="${newsLink(item.__index)}"><div class="feed-media" style="background-image:linear-gradient(160deg, rgba(6,11,26,.2), rgba(6,11,26,.72)), url('${imageForLeague(item.league)}')"></div><div><span class="feed-league">${escapeHtml(item.league)}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p></div></a>`;
       }
       return `<a class="feed-item feed-compact" href="${newsLink(item.__index)}"><div class="feed-thumb" style="background-image:linear-gradient(150deg, rgba(7,12,29,.15), rgba(7,12,29,.75)), url('${imageForLeague(item.league)}')"></div><div><span class="feed-league">${escapeHtml(item.league)}</span><h4>${escapeHtml(item.title)}</h4></div></a>`;
+    }).join('<div class="feed-divider"></div>');
+
+    const rankingRows = ranking.top10.map((team) => {
+      const trend = team.variation > 0 ? `↑ ${team.variation}` : (team.variation < 0 ? `↓ ${Math.abs(team.variation)}` : '• 0');
+      return `<li class="ranking-row"><span class="ranking-position">${String(team.position).padStart(2, '0')}</span><div class="ranking-team"><span class="ranking-logo">${team.logo ? `<img src="${team.logo}" alt="${escapeHtml(team.name)}" loading="lazy" />` : escapeHtml(team.name.slice(0, 2).toUpperCase())}</span><div><strong>${escapeHtml(team.name)}</strong><small>${escapeHtml(team.league)}</small></div></div><div class="ranking-meta"><strong>${formatFollowers(team.followers)}</strong><span class="ranking-trend ${team.variation > 0 ? 'up' : team.variation < 0 ? 'down' : ''}">${trend}</span></div></li>`;
+    }).join('');
+
+    const leaguePanels = Router.LEAGUES.map((league) => {
+      const leaders = ranking.byLeague[league] || [];
+      return `<article class="league-ranking-card"><h4>${league}</h4><ul>${leaders.map((team) => `<li><span>#${team.position}</span><strong>${escapeHtml(team.name)}</strong><em>${formatFollowers(team.followers)}</em></li>`).join('')}</ul></article>`;
     }).join('');
 
     root.innerHTML = `
       <section class="home-hero" data-home-hero>
-        <div class="hero-stage">${heroSlides}</div>
+        <div class="hero-stage" data-hero-stage>${heroSlides}<div class="hero-indicators">${heroIndicators}</div></div>
         <div class="hero-mini-column">${heroMini}</div>
       </section>
 
@@ -195,14 +246,27 @@
       </section>
 
       <section class="section premium-block">
+        <div class="section-head"><div><h2>Ranking de Popularidade</h2><p>Top 10 geral + leitura rápida por liga.</p></div></div>
+        <div class="ranking-dashboard">
+          <article class="ranking-main"><ol>${rankingRows}</ol></article>
+          <div class="ranking-side">
+            ${leaguePanels}
+            <article class="hype-panel"><h4>Termômetro de hype</h4><p>Oscilação em tempo real dos líderes.</p>${renderHypeMeter(ranking.top10[0]?.hype || 74)}${renderHypeMeter(ranking.top10[1]?.hype || 68)}${renderHypeMeter(ranking.top10[2]?.hype || 64)}</article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section premium-block">
         <div class="section-head"><div><h2>Feed PlayNorth</h2><p>Fluxo editorial com ritmo visual premium.</p></div></div>
         <div class="feed-stack">${feedMarkup}</div>
       </section>
     `;
 
     const heroRoot = root.querySelector('[data-home-hero]');
+    const heroStage = root.querySelector('[data-hero-stage]');
     const features = Array.from(root.querySelectorAll('[data-hero-feature]'));
     const minis = Array.from(root.querySelectorAll('[data-hero-mini]'));
+    const indicators = Array.from(root.querySelectorAll('[data-hero-indicator]'));
     if (homeHeroTimer) clearInterval(homeHeroTimer);
     if (!heroRoot || !features.length) return;
 
@@ -210,8 +274,9 @@
     const syncHero = (next) => {
       active = (next + features.length) % features.length;
       features.forEach((el, idx) => el.classList.toggle('is-active', idx === active));
+      indicators.forEach((el, idx) => el.classList.toggle('is-active', idx === active));
       const miniOrder = [...Array(features.length).keys()].filter((idx) => idx !== active);
-      minis.forEach((el, idx) => {
+      minis.forEach((el) => {
         el.classList.remove('is-visible');
         el.style.order = features.length;
         const originalIndex = Number(el.dataset.index);
@@ -225,12 +290,30 @@
 
     heroRoot.addEventListener('click', (event) => {
       const mini = event.target.closest('[data-hero-mini]');
-      if (!mini) return;
-      syncHero(Number(mini.dataset.index));
+      if (mini) {
+        syncHero(Number(mini.dataset.index));
+        return;
+      }
+      const indicator = event.target.closest('[data-hero-indicator]');
+      if (indicator) syncHero(Number(indicator.dataset.heroIndicator));
     });
 
+    if (heroStage) {
+      heroStage.addEventListener('mousemove', (event) => {
+        const rect = heroStage.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) - 0.5;
+        const y = ((event.clientY - rect.top) / rect.height) - 0.5;
+        heroStage.style.setProperty('--parallax-x', (x * 10).toFixed(2));
+        heroStage.style.setProperty('--parallax-y', (y * 10).toFixed(2));
+      });
+      heroStage.addEventListener('mouseleave', () => {
+        heroStage.style.setProperty('--parallax-x', '0');
+        heroStage.style.setProperty('--parallax-y', '0');
+      });
+    }
+
     syncHero(0);
-    homeHeroTimer = setInterval(() => syncHero(active + 1), 6500);
+    homeHeroTimer = setInterval(() => syncHero(active + 1), 6200);
   }
 
   function renderLeaguePage(root, league, data, state) {
@@ -303,6 +386,9 @@
       return;
     }
 
+    const ranking = buildPopularityRanking(data);
+    const teamSignal = ranking.all.find((item) => item.id === team.id && item.league === team.league) || { position: 0, followers: 0, hype: 70, variation: 0 };
+
     const favorite = state.favoriteTeam[league] === team.id;
     const followed = (state.followedTeams[league] || []).includes(team.id);
     const followDisabled = favorite ? 'disabled aria-disabled="true" title="Times favoritos são sempre seguidos"' : '';
@@ -332,10 +418,11 @@
             </div>
           </div>
           <div class="team-top-metrics">
-            <div><span>Seguidores</span><strong>2.4M</strong></div>
-            <div><span>Ranking</span><strong>#04</strong></div>
-            <div><span>Hype</span><strong>89%</strong></div>
+            <div><span>Seguidores</span><strong>${formatFollowers(teamSignal.followers)}</strong></div>
+            <div><span>Ranking</span><strong>#${String(teamSignal.position).padStart(2, '0')}</strong></div>
+            <div><span>Variação</span><strong class="${teamSignal.variation >= 0 ? 'trend-up' : 'trend-down'}">${teamSignal.variation >= 0 ? '↑' : '↓'} ${Math.abs(teamSignal.variation)}</strong></div>
           </div>
+          ${renderHypeMeter(teamSignal.hype)}
           <div class="team-cta">
             <button id="btnFavorite" class="btn-primary" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button>
             <button id="btnFollow" class="btn-secondary" aria-pressed="${followed}" ${followDisabled}>${favorite ? '✓ Seguindo' : (followed ? '✓ Acompanhando' : 'Acompanhar')}</button>
@@ -351,12 +438,14 @@
       </section>
 
       <section class="section premium-block">
-        <div class="section-head"><div><h2>Painel do time</h2><p>Estrutura preparada para conteúdo completo na próxima fase.</p></div></div>
-        <div class="details-grid">
-          <div class="detail-card"><div class="detail-label">Cidade</div><div class="detail-value">${escapeHtml(team.city || 'Não informado')}</div></div>
-          <div class="detail-card"><div class="detail-label">Conferência</div><div class="detail-value">${escapeHtml(team.conference || 'Não informado')}</div></div>
-          <div class="detail-card"><div class="detail-label">Fundação</div><div class="detail-value">${escapeHtml(team.founded || 'Não informado')}</div></div>
-          <div class="detail-card"><div class="detail-label">Estádio/Arena</div><div class="detail-value">${escapeHtml(team.stadium || 'Não informado')}</div></div>
+        <div class="section-head"><div><h2>Painel do time</h2><p>Visão de dashboard com contexto e momentum.</p></div></div>
+        <div class="team-fluid-panel">
+          <div class="team-fluid-row"><span>Cidade</span><strong>${escapeHtml(team.city || 'Não informado')}</strong></div>
+          <div class="team-fluid-row"><span>Conferência</span><strong>${escapeHtml(team.conference || 'Não informado')}</strong></div>
+          <div class="team-fluid-row"><span>Fundação</span><strong>${escapeHtml(team.founded || 'Não informado')}</strong></div>
+          <div class="team-fluid-row"><span>Estádio/Arena</span><strong>${escapeHtml(team.stadium || 'Não informado')}</strong></div>
+          <div class="team-fluid-row"><span>Hype atual</span><strong>${teamSignal.hype}%</strong></div>
+          <div class="team-fluid-row"><span>Popularidade</span><strong>Top ${Math.max(1, Math.ceil(teamSignal.position / 10) * 10)}</strong></div>
         </div>
       </section>
     `;
@@ -376,7 +465,6 @@
       }
     }
   }
-
 
   function renderNewsList(root, data, state, query) {
     const filter = (query.league || '').toUpperCase();

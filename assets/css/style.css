@@ -1025,3 +1025,64 @@ body{background:radial-gradient(circle at 15% -5%, #13233e 0%, var(--bg) 38%), v
   .team-id-block{align-items:flex-start; flex-direction:column}
   .team-top-metrics{grid-template-columns:1fr}
 }
+
+/* ===== Fase 2 - Assinatura PlayNorth ===== */
+.home-hero{gap:20px}
+.hero-stage{min-height:520px; --parallax-x:0; --parallax-y:0}
+.hero-feature{transition:opacity .65s ease, transform .65s ease; transform:scale(.97) translate3d(calc(var(--parallax-x) * .45px), calc(var(--parallax-y) * .45px),0)}
+.hero-feature h1{font-size:clamp(2rem,4.2vw,3.7rem); max-width:17ch; text-wrap:balance}
+.hero-feature p{font-size:16px; max-width:60ch}
+.hero-feature::after{content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(4,8,20,.03) 14%, rgba(4,8,20,.78) 66%, rgba(4,8,20,.96) 100%); pointer-events:none}
+.hero-feature-content{position:relative; z-index:2}
+.hero-indicators{position:absolute; left:22px; right:22px; bottom:16px; display:flex; gap:8px; z-index:3}
+.hero-indicator{height:4px; flex:1; border:0; border-radius:999px; background:rgba(234,242,255,.24); cursor:pointer}
+.hero-indicator.is-active{background:linear-gradient(90deg, var(--accent), #87bcff)}
+
+.ranking-dashboard{display:grid; grid-template-columns:1.05fr .95fr; gap:14px}
+.ranking-main{border:1px solid var(--line); border-radius:18px; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); padding:10px}
+.ranking-main ol{margin:0; padding:0; list-style:none; display:grid; gap:8px}
+.ranking-row{display:grid; grid-template-columns:46px 1fr auto; align-items:center; gap:10px; padding:10px; border-radius:14px; border:1px solid transparent; background:rgba(8,13,27,.36)}
+.ranking-row:hover{border-color:color-mix(in srgb, var(--accent) 45%, transparent); transform:translateX(2px)}
+.ranking-position{font-weight:800; font-size:1.1rem; color:#e9f2ff}
+.ranking-team{display:flex; align-items:center; gap:10px}
+.ranking-logo{width:34px; height:34px; border-radius:10px; border:1px solid var(--chip-border); background:rgba(255,255,255,.06); display:grid; place-items:center; overflow:hidden; font-size:11px; font-weight:700}
+.ranking-logo img{width:100%; height:100%; object-fit:contain; background:#fff}
+.ranking-team small{display:block; color:var(--muted); font-size:11px}
+.ranking-meta{display:flex; align-items:flex-end; flex-direction:column; gap:4px}
+.ranking-trend{font-size:11px; color:var(--muted)}
+.ranking-trend.up{color:#50e6a3}
+.ranking-trend.down{color:#ff7d8d}
+.ranking-side{display:grid; gap:10px}
+.league-ranking-card,.hype-panel{border:1px solid var(--line); border-radius:16px; padding:12px; background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02))}
+.league-ranking-card h4,.hype-panel h4{margin:0 0 8px}
+.league-ranking-card ul{margin:0; padding:0; list-style:none; display:grid; gap:7px}
+.league-ranking-card li{display:grid; grid-template-columns:auto 1fr auto; gap:8px; font-size:12px}
+.league-ranking-card em{font-style:normal; color:var(--muted)}
+
+.hype-meter{display:grid; grid-template-columns:1fr auto; align-items:center; gap:8px; margin-top:8px}
+.hype-track{height:5px; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+.hype-fill{height:100%; width:calc(var(--hype) * 1%); border-radius:999px; background:linear-gradient(90deg, #2f8cff, #7fe084, #ff9557); animation:hypeRise 1s ease}
+.hype-value{font-size:12px; color:#e7f2ff}
+.hype-meter.compact .hype-track{height:4px}
+@keyframes hypeRise{from{width:0}to{width:calc(var(--hype) * 1%)}}
+
+.feed-stack{gap:18px}
+.feed-item{position:relative}
+.feed-featured{grid-template-columns:1.2fr 1fr; gap:18px; padding:16px; border-width:1px}
+.feed-divider{height:1px; background:linear-gradient(90deg, transparent, rgba(157,174,204,.46), transparent); margin:-3px 0 3px}
+
+.team-top-metrics strong.trend-up{color:#59ecad}
+.team-top-metrics strong.trend-down{color:#ff8191}
+.team-fluid-panel{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 20px; padding:16px 0; border-top:1px solid rgba(195,212,243,.16); border-bottom:1px solid rgba(195,212,243,.16)}
+.team-fluid-row{display:flex; justify-content:space-between; gap:10px; padding:10px 0; border-bottom:1px dashed rgba(195,212,243,.16)}
+.team-fluid-row span{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em}
+.team-fluid-row strong{font-size:14px; color:#f4f8ff; text-align:right}
+
+@media (max-width:980px){
+  .ranking-dashboard,.feed-featured,.team-fluid-panel{grid-template-columns:1fr}
+}
+
+@media (max-width:640px){
+  .hero-stage{min-height:440px}
+  .hero-feature h1{font-size:clamp(1.5rem,8vw,2.2rem)}
+}
