@@ -45,53 +45,6 @@
     return String(value);
   }
 
-  const REGION_POINTS = {
-    'washington': [7, 32],
-    'oregon': [8, 36],
-    'california': [9, 50],
-    'nevada': [14, 48],
-    'arizona': [16, 57],
-    'colorado': [24, 45],
-    'utah': [18, 46],
-    'new mexico': [21, 55],
-    'texas': [30, 62],
-    'oklahoma': [31, 56],
-    'missouri': [38, 50],
-    'minnesota': [38, 37],
-    'illinois': [45, 47],
-    'wisconsin': [45, 42],
-    'michigan': [49, 41],
-    'ohio': [54, 45],
-    'tennessee': [52, 54],
-    'georgia': [60, 61],
-    'florida': [65, 73],
-    'north carolina': [65, 56],
-    'south carolina': [63, 60],
-    'virginia': [63, 53],
-    'district of columbia': [67, 49],
-    'd.c.': [67, 49],
-    'maryland': [67, 49],
-    'pennsylvania': [63, 46],
-    'new jersey': [66, 47],
-    'new york': [67, 43],
-    'massachusetts': [73, 42],
-    'quebec': [70, 33],
-    'ontario': [58, 37],
-    'alberta': [25, 30],
-    'british columbia': [14, 27],
-    'manitoba': [37, 33]
-  };
-
-  function getMapPoint(team, index) {
-    const parts = String(team.city || '').split(',').map((part) => part.trim().toLowerCase());
-    const region = parts[1] || parts[0] || '';
-    const base = REGION_POINTS[region] || [15 + (hashNumber(team.id) % 60), 25 + (hashNumber(team.name) % 45)];
-    const jitterSeed = hashNumber(`${team.id}-${index}`);
-    const x = Math.max(6, Math.min(94, base[0] + ((jitterSeed % 5) - 2) * 0.8));
-    const y = Math.max(8, Math.min(88, base[1] + (((jitterSeed >> 2) % 5) - 2) * 0.8));
-    return { x: Number(x.toFixed(2)), y: Number(y.toFixed(2)) };
-  }
-
   function buildPopularityRanking(data) {
     const ranked = data.teams.map((team) => {
       const seed = hashNumber(`${team.league}:${team.id}`);
@@ -262,7 +215,7 @@
       return `<article class="hot-team-card" style="background-image:linear-gradient(160deg, rgba(5,10,24,.15), rgba(5,10,24,.9)), url('${imageForLeague(team.league)}')"><span class="hot-team-rank">#${index + 1}</span><span class="hot-team-league">${escapeHtml(team.league)}</span><h3>${escapeHtml(team.name)}</h3><div class="hot-team-hype">${team.hype}%</div><div class="hot-team-meta"><span class="hot-team-trend ${trendClass}">${trend}</span><small>${formatFollowers(team.followers)} seguidores</small></div></article>`;
     }).join('');
 
-    const feedMarkup = feedItems.map((item, index) => {
+    const feedBlocks = feedItems.map((item, index) => {
       const blockClass = index % 3 === 0 ? 'contrast-a' : index % 3 === 1 ? 'contrast-b' : 'contrast-c';
       if (index % 5 === 2) {
         const pulse = (62 + (index * 3)) % 98;
@@ -275,7 +228,9 @@
         return `<a class="feed-item feed-editorial ${blockClass}" href="${newsLink(item.__index)}"><div class="feed-media" style="background-image:linear-gradient(160deg, rgba(6,11,26,.2), rgba(6,11,26,.72)), url('${imageForLeague(item.league)}')"></div><div><span class="feed-league">${escapeHtml(item.league)}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p></div></a>`;
       }
       return `<a class="feed-item feed-compact ${blockClass}" href="${newsLink(item.__index)}"><div class="feed-thumb" style="background-image:linear-gradient(150deg, rgba(7,12,29,.15), rgba(7,12,29,.75)), url('${imageForLeague(item.league)}')"></div><div><span class="feed-league">${escapeHtml(item.league)}</span><h4>${escapeHtml(item.title)}</h4></div></a>`;
-    }).join('<div class="feed-divider"></div><div class="feed-strategic-break" aria-hidden="true"></div>');
+    });
+    feedBlocks.splice(4, 0, '<article class="ad-slot-card"><span>Publicidade</span><strong>Espaço reservado para patrocínio editorial</strong></article>');
+    const feedMarkup = feedBlocks.join('<div class="feed-divider"></div>');
 
     const rankingRows = ranking.top10.map((team) => {
       const trend = team.variation > 0 ? `↑ ${team.variation}` : (team.variation < 0 ? `↓ ${Math.abs(team.variation)}` : '• 0');
@@ -284,8 +239,6 @@
       return `<li class="ranking-row ${topClass}"><span class="ranking-position">${String(team.position).padStart(2, '0')}</span><div class="ranking-team"><span class="ranking-logo">${team.logo ? `<img src="${team.logo}" alt="${escapeHtml(team.name)}" loading="lazy" />` : escapeHtml(team.name.slice(0, 2).toUpperCase())}</span><div><strong>${escapeHtml(team.name)}</strong><small>${escapeHtml(team.league)}</small></div></div><div class="ranking-meta"><strong>${formatFollowers(team.followers)}</strong><span class="ranking-trend ${trendClass}"><b>${trend.split(' ')[0]}</b>${trend.split(' ').slice(1).join(' ') || '0'}</span></div></li>`;
     }).join('');
 
-    const mapTeams = ranking.all.slice(0, 26).map((team, index) => ({ ...team, point: getMapPoint(team, index) }));
-    const mapMarkers = mapTeams.map((team) => `<button class="north-map-marker" type="button" style="--x:${team.point.x}%;--y:${team.point.y}%" aria-label="${escapeHtml(team.name)}"><span class="north-map-ping"></span><span class="north-map-tooltip"><strong>${escapeHtml(team.name)}</strong><em>${escapeHtml(team.league)}</em><small>Popularidade ${formatFollowers(team.followers)}</small><small>Hype ${team.hype}%</small></span></button>`).join('');
 
     const leaguePanels = Router.LEAGUES.map((league) => {
       const leaders = ranking.byLeague[league] || [];
@@ -310,6 +263,10 @@
         </div>
       </section>
 
+      <section class="section premium-block ad-slot-wrap">
+        <article class="ad-slot-card"><span>Publicidade</span><strong>Espaço reservado para parceiros institucionais</strong></article>
+      </section>
+
       <section class="section premium-block">
         <div class="section-head"><div><h2>Ranking de Popularidade</h2><p>Top 10 geral + leitura rápida por liga.</p></div></div>
         <div class="ranking-dashboard">
@@ -319,18 +276,6 @@
             <article class="hype-panel"><h4>Termômetro de hype</h4><p>Oscilação em tempo real dos líderes.</p>${renderHypeMeter(ranking.top10[0]?.hype || 74)}${renderHypeMeter(ranking.top10[1]?.hype || 68)}${renderHypeMeter(ranking.top10[2]?.hype || 64)}</article>
           </div>
         </div>
-      </section>
-
-      <section class="section premium-block map-premium-shell" data-reveal-map>
-        <div class="section-head"><div><h2>Mapa Interativo • EUA + Canadá</h2><p>Base geográfica dos times com leitura dinâmica de popularidade e hype.</p></div></div>
-        <article class="north-map-shell">
-          <div class="north-map-canvas" role="img" aria-label="Mapa estilizado de EUA e Canadá com times">
-            <svg class="north-map-outline" viewBox="0 0 100 62" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M2 15 L8 10 L20 8 L29 3 L40 4 L49 6 L58 8 L65 7 L72 9 L78 14 L83 18 L90 24 L95 26 L96 31 L92 35 L89 37 L87 43 L84 50 L77 56 L67 59 L56 57 L45 58 L38 56 L31 58 L23 56 L17 52 L10 46 L6 40 L3 33 Z" />
-            </svg>
-            ${mapMarkers}
-          </div>
-        </article>
       </section>
 
       <section class="section premium-block hot-teams-shell">
@@ -351,21 +296,6 @@
     const indicators = Array.from(root.querySelectorAll('[data-hero-indicator]'));
     if (homeHeroTimer) clearInterval(homeHeroTimer);
     if (!heroRoot || !features.length) return;
-
-    const mapSection = root.querySelector('[data-reveal-map]');
-    if (mapSection && 'IntersectionObserver' in window) {
-      const revealObserver = new IntersectionObserver((entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            obs.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.28 });
-      revealObserver.observe(mapSection);
-    } else if (mapSection) {
-      mapSection.classList.add('is-visible');
-    }
 
     let active = 0;
     const syncHero = (next) => {
@@ -428,8 +358,8 @@
       }).join('');
 
     root.innerHTML = `
-      <section class="section"><div class="section-head"><div><h2>${league}</h2><p>Página modular da liga.</p></div></div><div class="card"><div class="card-body">${watchGuideMarkup(league, data.watchGuide)}</div></div></section>
-      <section class="section"><div class="section-head"><div><h2>Times em destaque</h2></div></div><div class="grid">${teamCards}</div></section>
+      <section class="league-hero"><div><span class="league-hero-kicker">Liga em foco</span><h1>${league}</h1><p>Cobertura premium com narrativa rápida, jogos e equipes em destaque.</p></div><div class="league-hero-meta">${watchGuideMarkup(league, data.watchGuide)}</div></section>
+      <section class="section"><div class="section-head"><div><h2>Times em destaque</h2><p>Radar competitivo da semana.</p></div></div><div class="grid">${teamCards}</div></section>
       <section class="section"><div class="section-head"><div><h2>Notícias ${league}</h2></div></div><div class="grid">${news}</div></section>
     `;
   }
@@ -439,21 +369,22 @@
     const cards = Sorter.sortByUserPriority(filtered, state).map((game) => {
       const home = getTeamName(data.teams, game.teamHome);
       const away = getTeamName(data.teams, game.teamAway);
-      return card(`${game.league} • ${away} @ ${home}`, `${new Date(game.datetime).toLocaleString('pt-BR')} • ${game.status}`, `<div class="meta">${teamLink(game.league, game.teamAway, away)} • ${teamLink(game.league, game.teamHome, home)}</div>${watchGuideMarkup(game.league, data.watchGuide, true)}`);
+      const statusClass = game.status === 'final' ? 'status-final' : 'status-upcoming';
+      return `<article class="game-card"><div class="kicker"><span class="chip">${game.league}</span><span class="game-status ${statusClass}">${escapeHtml(game.status)}</span></div><h3 class="title small">${escapeHtml(away)} @ ${escapeHtml(home)}</h3><p class="desc">${new Date(game.datetime).toLocaleString('pt-BR')}</p><div class="meta">${teamLink(game.league, game.teamAway, away)} • ${teamLink(game.league, game.teamHome, home)}</div>${watchGuideMarkup(game.league, data.watchGuide, true)}</article>`;
     }).join('');
-    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Jogos da Semana</h2></div></div><div class="grid">${cards}</div></section>`;
+    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Jogos da Semana</h2><p>Agenda consolidada com status e transmissão.</p></div></div><div class="grid">${cards}</div></section>`;
   }
 
   function renderStandings(root, data) {
     const blocks = Router.LEAGUES.map((league) => {
-      const rows = (data.standings[league] || []).map((team, index) => `<tr><td>${index + 1}</td><td>${escapeHtml(team.team)}</td><td>${team.w}-${team.l}</td><td>${team.streak || '-'}</td></tr>`).join('');
+      const rows = (data.standings[league] || []).map((team, index) => `<tr><td>${index + 1}</td><td>${escapeHtml(team.team)}</td><td>${team.w}-${team.l}</td><td><span class="trend-chip">${team.streak || '-'}</span></td></tr>`).join('');
       return `<article class="card" id="${league}"><div class="card-body"><h3 class="title small">${league}</h3><div class="tablewrap"><table><thead><tr><th>#</th><th>Time</th><th>Campanha</th><th>Trend</th></tr></thead><tbody>${rows}</tbody></table></div></div></article>`;
     }).join('');
     root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Ranking / Standings</h2></div></div><div class="grid">${blocks}</div></section>`;
   }
 
   function renderLive(root) {
-    root.innerHTML = '<section class="section"><div class="section-head"><div><h2>Ao Vivo</h2></div></div><div class="notice">No momento, ainda não conseguimos acessar os placares ao vivo.<br>Estamos trabalhando para trazer essa funcionalidade em breve.</div></section>';
+    root.innerHTML = '<section class="section"><div class="section-head"><div><h2>Ao Vivo</h2><p>Cobertura em desenvolvimento.</p></div></div><div class="placeholder-grid"><article class="placeholder-card"><h3>Placar instantâneo</h3><p>Em breve: painel de jogos em tempo real.</p></article><article class="placeholder-card"><h3>Timeline da rodada</h3><p>Em breve: eventos-chave por partida.</p></article></div></section>';
   }
 
   function renderTeams(root, data, query) {
@@ -532,12 +463,6 @@
               ${renderHypeMeter(teamSignal.hype, true)}
             </div>
           </div>
-          <div class="team-command-synth">
-            <div class="team-command-synth-item"><span>Seguidores</span><strong>${formatFollowers(teamSignal.followers)}</strong></div>
-            <div class="team-command-synth-item"><span>Ranking</span><strong>#${String(teamSignal.position).padStart(2, '0')}</strong></div>
-            <div class="team-command-synth-item"><span>Variação</span><strong class="${teamSignal.variation >= 0 ? 'trend-up' : 'trend-down'}">${teamSignal.variation >= 0 ? '+' : '-'}${Math.abs(teamSignal.variation)}</strong></div>
-            <div class="team-command-synth-item is-hype"><span>Hype dominante</span>${renderHypeMeter(teamSignal.hype, true)}</div>
-          </div>
           <div class="team-cta">
             <button id="btnFavorite" class="btn-primary" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button>
             <button id="btnFollow" class="btn-secondary" aria-pressed="${followed}" ${followDisabled}>${favorite ? '✓ Seguindo' : (followed ? '✓ Acompanhando' : 'Acompanhar')}</button>
@@ -546,15 +471,15 @@
       </section>
 
       <section class="team-tabs-shell">
-        <button class="team-tab is-active" type="button">Notícias</button>
-        <button class="team-tab" type="button">Estatísticas</button>
-        <button class="team-tab" type="button">Comparação</button>
-        <button class="team-tab" type="button">Histórico</button>
+        <button class="team-tab is-active" type="button" data-team-tab="news">Notícias</button>
+        <button class="team-tab" type="button" data-team-tab="stats">Estatísticas</button>
+        <button class="team-tab" type="button" data-team-tab="compare">Comparação</button>
+        <button class="team-tab" type="button" data-team-tab="history">Histórico</button>
       </section>
 
-      <section class="section premium-block">
-        <div class="section-head"><div><h2>Painel do time</h2><p>Visão de dashboard com contexto e momentum.</p></div></div>
-        <div class="team-fluid-panel">
+      <section class="section premium-block" id="teamTabPanel" data-active-tab="news">
+        <div class="section-head"><div><h2 data-team-tab-title>Painel do time</h2><p data-team-tab-subtitle>Visão de dashboard com contexto e momentum.</p></div></div>
+        <div class="team-fluid-panel" data-team-panel="news">
           <div class="team-fluid-row"><span>Cidade</span><strong>${escapeHtml(team.city || 'Não informado')}</strong></div>
           <div class="team-fluid-row"><span>Conferência</span><strong>${escapeHtml(team.conference || 'Não informado')}</strong></div>
           <div class="team-fluid-row"><span>Fundação</span><strong>${escapeHtml(team.founded || 'Não informado')}</strong></div>
@@ -562,6 +487,9 @@
           <div class="team-fluid-row"><span>Hype atual</span><strong>${teamSignal.hype}%</strong></div>
           <div class="team-fluid-row"><span>Popularidade</span><strong>Top ${Math.max(1, Math.ceil(teamSignal.position / 10) * 10)}</strong></div>
         </div>
+        <div class="placeholder-card is-hidden" data-team-panel="stats"><h3>Estatísticas avançadas</h3><p>Em breve: splits por temporada, eficiência e mapas de desempenho.</p></div>
+        <div class="placeholder-card is-hidden" data-team-panel="compare"><h3>Comparação direta</h3><p>Em breve: comparativo premium com rivais da conferência.</p></div>
+        <div class="placeholder-card is-hidden" data-team-panel="history"><h3>Histórico competitivo</h3><p>Em breve: linha do tempo com marcos e campanhas recentes.</p></div>
       </section>
     `;
 
@@ -591,7 +519,7 @@
       .map((item) => card(item.title, item.summary, `<div class="meta"><span>${item.league}</span><span>${new Date(item.date).toLocaleDateString('pt-BR')}</span><a href="${newsLink(item.__index)}">Ler notícia</a></div>`))
       .join('');
 
-    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Notícias</h2><p>${filter ? `Cobertura ${filter}` : 'Todas as ligas'}</p></div></div><div class="grid">${cards}</div></section>`;
+    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Notícias</h2><p>${filter ? `Cobertura ${filter}` : 'Todas as ligas'}</p></div></div><div class="placeholder-card"><h3>Central editorial premium</h3><p>Nova experiência de notícias em evolução contínua.</p></div><div class="grid">${cards}</div></section>`;
   }
 
   function renderNewsArticle(root, data, query) {
@@ -734,12 +662,12 @@
       return `<label class="setting-row favorite-row"><span class="favorite-label">Time favorito<br>${league}</span><select class="favorite-select" id="favorite-${league}" data-pref-favorite-team="${league}" ${canSetFavorite ? '' : 'disabled'}>${canSetFavorite ? options : emptyStateOption}</select></label>`;
     }).join('');
 
-    root.innerHTML = `<section class="section"><div class="section-head"><div><h1 class="title">Preferências</h1><p>Este é o seu resumo personalizado para moldar ligas e times do seu jeito</p></div></div></section><section class="section"><div class="section-head"><div><h2>Ligas seguidas</h2></div></div><div class="pills">${leagueToggles}</div></section><section class="section"><div class="section-head"><div><h2>Times seguidos por liga</h2></div></div><div class="grid">${followedTeamsByLeague}</div></section><section class="section"><div class="section-head"><div><h2>Time favorito por liga</h2></div></div><div class="card"><div class="card-body"><p class="favorites-helper-text">Para favoritar um time aqui, você deve segui-lo antes.</p><div class="favorites-stack">${favoriteSelectors}</div></div></div></section>`;
+    root.innerHTML = `<section class="section"><div class="section-head"><div><h1 class="title">Preferências</h1><p>Personalize ligas, times e priorização com visual premium.</p></div></div></section><section class="section"><div class="section-head"><div><h2>Ligas seguidas</h2></div></div><div class="pills">${leagueToggles}</div></section><section class="section"><div class="section-head"><div><h2>Times seguidos por liga</h2></div></div><div class="grid">${followedTeamsByLeague}</div></section><section class="section"><div class="section-head"><div><h2>Time favorito por liga</h2></div></div><div class="card"><div class="card-body"><p class="favorites-helper-text">Para favoritar um time aqui, você deve segui-lo antes.</p><div class="favorites-stack">${favoriteSelectors}</div></div></div></section>`;
   }
 
   function renderSettings(root, data, state) {
     const themeChecked = state.theme === 'dark' ? 'checked' : '';
-    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Configurações</h2></div></div></section><section class="section"><div class="section-head"><div><h2>Aparência</h2></div></div><div class="card"><div class="card-body"><label class="setting-row"><span>Tema escuro</span><input type="checkbox" data-setting-theme="dark" ${themeChecked}></label></div></div></section><section class="section"><div class="section-head"><div><h2>Idioma</h2></div></div><div class="card"><div class="card-body"><label class="setting-row">Idioma<select data-language><option value="pt" ${state.language === 'pt' ? 'selected' : ''}>PT</option><option value="en" ${state.language === 'en' ? 'selected' : ''}>EN</option></select></label></div></div></section><section class="section"><div class="section-head"><div><h2>Notificações</h2></div></div><div class="notice">Em breve: alertas de jogos e breaking news.</div></section><section class="section"><div class="section-head"><div><h2>Dados</h2></div></div><div class="card"><div class="card-body"><button class="pill" id="clearLocalData">Limpar dados locais</button></div></div></section>`;
+    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Configurações</h2><p>Painel de ajustes da experiência.</p></div></div></section><section class="section"><div class="section-head"><div><h2>Aparência</h2></div></div><div class="card settings-card"><div class="card-body"><label class="setting-row switch-row"><span>Tema escuro (padrão)</span><input type="checkbox" data-setting-theme="dark" ${themeChecked}></label></div></div></section><section class="section"><div class="section-head"><div><h2>Idioma</h2></div></div><div class="card"><div class="card-body"><label class="setting-row">Idioma<select data-language><option value="pt" ${state.language === 'pt' ? 'selected' : ''}>PT</option><option value="en" ${state.language === 'en' ? 'selected' : ''}>EN</option></select></label></div></div></section><section class="section"><div class="section-head"><div><h2>Notificações</h2></div></div><div class="notice">Em breve: alertas de jogos e breaking news.</div></section><section class="section"><div class="section-head"><div><h2>Dados</h2></div></div><div class="card"><div class="card-body"><button class="pill" id="clearLocalData">Limpar dados locais</button></div></div></section>`;
   }
 
   window.UI = { renderHub, renderSidebar, renderHome, renderLeaguePage, renderGames, renderStandings, renderLive, renderTeam, renderTeams, renderStats, renderNewsList, renderNewsArticle, renderFavorites, renderPreferences, renderSettings };

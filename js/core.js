@@ -32,15 +32,18 @@
 
   function applyTheme(theme) {
     const resolved = normalizeTheme(theme);
-    document.body.classList.toggle('dark-mode', resolved === 'dark');
+    const root = document.documentElement;
+    if (root) root.setAttribute('data-theme', resolved);
+    if (document.body) document.body.classList.toggle('dark-mode', resolved === 'dark');
     const themeBtn = document.getElementById('themeBtn');
     if (themeBtn) themeBtn.textContent = resolved === 'light' ? '☀' : '☾';
     return resolved;
   }
 
   function bootstrapThemeClass() {
-    if (typeof document === 'undefined' || !document.body) return;
-    document.body.classList.toggle('dark-mode', loadTheme() === 'dark');
+    if (typeof document === 'undefined') return;
+    const root = document.documentElement;
+    if (root) root.setAttribute('data-theme', loadTheme());
   }
 
   function loadPreferences() {
