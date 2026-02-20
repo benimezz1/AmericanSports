@@ -21,6 +21,23 @@
   ];
 
 
+  const LEAGUE_VISUALS = {
+    NFL: 'https://images.unsplash.com/photo-1511886929837-354d827aae26?auto=format&fit=crop&w=1400&q=80',
+    NBA: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1400&q=80',
+    NHL: 'https://images.unsplash.com/photo-1515703407324-5f753afd8be8?auto=format&fit=crop&w=1400&q=80',
+    MLB: 'https://images.unsplash.com/photo-1508344928928-7165b67de128?auto=format&fit=crop&w=1400&q=80',
+    MLS: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1400&q=80'
+  };
+
+  let homeHeroTimer = null;
+
+  function imageForLeague(league) {
+    return LEAGUE_VISUALS[league] || 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1400&q=80';
+  }
+
+
+  
+
   function getLeagueTeamEntries(data, league) {
     return data.teams
       .filter((item) => item.league === league)
@@ -119,28 +136,101 @@
   }
 
   function renderHome(root, data, state) {
-    const leaguesOrdered = Sorter.sortByUserPriority(
-      Router.LEAGUES.map((league) => ({ league, teams: data.teams.filter((team) => team.league === league).map((team) => team.id), trending: true })),
-      state
-    ).map((item) => item.league);
+    const topNews = Sorter.sortByUserPriority(data.news.map((item, index) => ({ ...item, __index: index })), state).slice(0, 4);
+    const heroItems = topNews.map((item) => ({
+      league: item.league,
+      title: item.title,
+      summary: item.summary,
+      href: newsLink(item.__index),
+      image: imageForLeague(item.league)
+    }));
 
-    const leagueCards = leaguesOrdered.map((league) => {
-      const teams = data.teams.filter((team) => team.league === league).slice(0, 2);
-      return card(league, teams.map((team) => team.name).join(' • '), `<div class="meta"><a href="${league.toLowerCase()}.html">Abrir hub</a></div>${watchGuideMarkup(league, data.watchGuide, true)}`);
+    const radarItems = Sorter.sortByUserPriority(data.news.map((item, index) => ({ ...item, __index: index })), state).slice(0, 4);
+    const feedItems = Sorter.sortByUserPriority(data.news.map((item, index) => ({ ...item, __index: index })), state).slice(0, 8);
+
+    const heroSlides = heroItems.map((item, index) => `
+      <a class="hero-feature ${index === 0 ? 'is-active' : ''}" data-hero-feature data-index="${index}" href="${item.href}" style="background-image:linear-gradient(150deg, rgba(5,8,19,.35), rgba(5,8,19,.92)), url('${item.image}')">
+        <div class="hero-feature-content">
+          <span class="hero-badge">${escapeHtml(item.league)}</span>
+          <h1>${escapeHtml(item.title)}</h1>
+          <p>${escapeHtml(item.summary)}</p>
+          <span class="hero-cta">Ver matéria</span>
+        </div>
+      </a>
+    `).join('');
+
+    const heroMini = heroItems.map((item, index) => `
+      <a class="hero-mini ${index > 0 ? 'is-visible' : ''}" data-hero-mini data-index="${index}" href="${item.href}" style="background-image:linear-gradient(180deg, rgba(5,8,19,.1), rgba(5,8,19,.9)), url('${item.image}')">
+        <span class="hero-mini-league">${escapeHtml(item.league)}</span>
+        <h3>${escapeHtml(item.title)}</h3>
+      </a>
+    `).join('');
+
+    const radarMain = radarItems[0];
+    const radarSide = radarItems.slice(1);
+
+    const feedMarkup = feedItems.map((item, index) => {
+      if (index % 2 === 0) {
+        return `<a class="feed-item feed-editorial" href="${newsLink(item.__index)}"><div class="feed-media" style="background-image:linear-gradient(160deg, rgba(6,11,26,.2), rgba(6,11,26,.72)), url('${imageForLeague(item.league)}')"></div><div><span class="feed-league">${escapeHtml(item.league)}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p></div></a>`;
+      }
+      return `<a class="feed-item feed-compact" href="${newsLink(item.__index)}"><div class="feed-thumb" style="background-image:linear-gradient(150deg, rgba(7,12,29,.15), rgba(7,12,29,.75)), url('${imageForLeague(item.league)}')"></div><div><span class="feed-league">${escapeHtml(item.league)}</span><h4>${escapeHtml(item.title)}</h4></div></a>`;
     }).join('');
 
-    const upcoming = Sorter.sortByUserPriority(data.games.filter((game) => game.status === 'upcoming'), state)
-      .slice(0, 6)
-      .map((game) => {
-        const home = getTeamName(data.teams, game.teamHome);
-        const away = getTeamName(data.teams, game.teamAway);
-        return card(`${away} @ ${home}`, new Date(game.datetime).toLocaleString('pt-BR'), `<div class="meta">${teamLink(game.league, game.teamAway, away)} • ${teamLink(game.league, game.teamHome, home)}</div>${watchGuideMarkup(game.league, data.watchGuide, true)}`);
-      }).join('');
-
     root.innerHTML = `
-      <section class="section"><div class="section-head"><div><h2>Home</h2><p>Hub com prioridade inteligente de conteúdo.</p></div></div><div class="grid">${leagueCards}</div></section>
-      <section class="section"><div class="section-head"><div><h2>Próximos Jogos</h2></div><a href="games.html">Ver todos</a></div><div class="grid">${upcoming}</div></section>
+      <section class="home-hero" data-home-hero>
+        <div class="hero-stage">${heroSlides}</div>
+        <div class="hero-mini-column">${heroMini}</div>
+      </section>
+
+      <section class="section premium-block">
+        <div class="section-head"><div><h2>Radar do Dia</h2><p>Destaques com leitura rápida e impacto visual.</p></div></div>
+        <div class="radar-layout">
+          <a class="radar-main" href="${newsLink(radarMain.__index)}" style="background-image:linear-gradient(165deg, rgba(8,13,30,.15), rgba(8,13,30,.9)), url('${imageForLeague(radarMain.league)}')">
+            <span>${escapeHtml(radarMain.league)}</span>
+            <h3>${escapeHtml(radarMain.title)}</h3>
+            <p>${escapeHtml(radarMain.summary)}</p>
+          </a>
+          <div class="radar-side">${radarSide.map((item) => `<a class="radar-card" href="${newsLink(item.__index)}" style="background-image:linear-gradient(165deg, rgba(8,13,30,.25), rgba(8,13,30,.88)), url('${imageForLeague(item.league)}')"><span>${escapeHtml(item.league)}</span><h4>${escapeHtml(item.title)}</h4></a>`).join('')}</div>
+        </div>
+      </section>
+
+      <section class="section premium-block">
+        <div class="section-head"><div><h2>Feed PlayNorth</h2><p>Fluxo editorial com ritmo visual premium.</p></div></div>
+        <div class="feed-stack">${feedMarkup}</div>
+      </section>
     `;
+
+    const heroRoot = root.querySelector('[data-home-hero]');
+    const features = Array.from(root.querySelectorAll('[data-hero-feature]'));
+    const minis = Array.from(root.querySelectorAll('[data-hero-mini]'));
+    if (homeHeroTimer) clearInterval(homeHeroTimer);
+    if (!heroRoot || !features.length) return;
+
+    let active = 0;
+    const syncHero = (next) => {
+      active = (next + features.length) % features.length;
+      features.forEach((el, idx) => el.classList.toggle('is-active', idx === active));
+      const miniOrder = [...Array(features.length).keys()].filter((idx) => idx !== active);
+      minis.forEach((el, idx) => {
+        el.classList.remove('is-visible');
+        el.style.order = features.length;
+        const originalIndex = Number(el.dataset.index);
+        const position = miniOrder.indexOf(originalIndex);
+        if (position >= 0 && position < 3) {
+          el.classList.add('is-visible');
+          el.style.order = String(position + 1);
+        }
+      });
+    };
+
+    heroRoot.addEventListener('click', (event) => {
+      const mini = event.target.closest('[data-hero-mini]');
+      if (!mini) return;
+      syncHero(Number(mini.dataset.index));
+    });
+
+    syncHero(0);
+    homeHeroTimer = setInterval(() => syncHero(active + 1), 6500);
   }
 
   function renderLeaguePage(root, league, data, state) {
@@ -215,7 +305,6 @@
 
     const favorite = state.favoriteTeam[league] === team.id;
     const followed = (state.followedTeams[league] || []).includes(team.id);
-
     const followDisabled = favorite ? 'disabled aria-disabled="true" title="Times favoritos são sempre seguidos"' : '';
     const subtitleParts = [team.city || 'Não informado', team.conference || 'Não informado'];
     if (team.division) subtitleParts.push(team.division);
@@ -227,92 +316,53 @@
       .map((part) => part[0])
       .join('')
       .toUpperCase();
-    const leaguePage = `${league.toLowerCase()}.html`;
-
-    const detailCards = [
-      { label: 'Cidade', value: team.city || 'Não informado', id: 'detailCity' },
-      { label: 'Conferência', value: team.conference || 'Não informado', id: 'detailConference' },
-      { label: 'Fundação', value: team.founded || 'Não informado', id: 'detailFounded' },
-      { label: 'Estádio/Arena', value: team.stadium || 'Não informado', id: 'detailStadium' }
-    ];
-
-    if (team.division) {
-      detailCards.push({ label: 'Divisão', value: team.division, id: 'detailDivision' });
-    }
-
-    const detailRows = detailCards
-      .map((item) => `<div class="detail-card"><div class="detail-label">${escapeHtml(item.label)}</div><div class="detail-value" id="${item.id}">${escapeHtml(String(item.value))}</div></div>`)
-      .join('');
 
     root.innerHTML = `
-      <section class="team-hero">
-        <div class="team-hero-left">
-          <div class="team-league-badge" id="teamLeagueBadge">${escapeHtml(league)}</div>
-          <h1 class="team-title" id="teamName">${escapeHtml(team.name)}</h1>
-          <p class="team-subtitle" id="teamSubtitle">${escapeHtml(subtitle)}</p>
-
+      <section class="team-premium-hero" style="background-image:linear-gradient(160deg, rgba(4,8,20,.35), rgba(4,8,20,.92)), url('${imageForLeague(league)}')">
+        <div class="team-premium-overlay">
+          <div class="team-id-block">
+            <div class="team-logo-wrap" id="teamLogoWrap">
+              <img id="teamLogoHero" alt="Logo do time" loading="lazy" />
+              <div class="team-logo-placeholder" id="teamLogoPlaceholder">${escapeHtml(teamInitials)}</div>
+            </div>
+            <div>
+              <span class="team-league-badge" id="teamLeagueBadge">${escapeHtml(league)}</span>
+              <h1 class="team-title" id="teamName">${escapeHtml(team.name)}</h1>
+              <p class="team-subtitle" id="teamSubtitle">${escapeHtml(subtitle)}</p>
+            </div>
+          </div>
+          <div class="team-top-metrics">
+            <div><span>Seguidores</span><strong>2.4M</strong></div>
+            <div><span>Ranking</span><strong>#04</strong></div>
+            <div><span>Hype</span><strong>89%</strong></div>
+          </div>
           <div class="team-cta">
             <button id="btnFavorite" class="btn-primary" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button>
             <button id="btnFollow" class="btn-secondary" aria-pressed="${followed}" ${followDisabled}>${favorite ? '✓ Seguindo' : (followed ? '✓ Acompanhando' : 'Acompanhar')}</button>
           </div>
-
-          <nav class="team-tabs">
-            <a class="tab-pill" href="#detalhes">Detalhes</a>
-            <a class="tab-pill" href="#jogos">Próximos jogos</a>
-            <a class="tab-pill" href="#noticias">Notícias</a>
-          </nav>
-        </div>
-
-        <div class="team-hero-right">
-          <div class="team-logo-wrap" id="teamLogoWrap">
-            <img id="teamLogoHero" alt="Logo do time" loading="lazy" />
-            <div class="team-logo-placeholder" id="teamLogoPlaceholder">${escapeHtml(teamInitials)}</div>
-          </div>
         </div>
       </section>
 
-      <section id="detalhes" class="team-section">
-        <h2 class="section-title">Detalhes do time</h2>
-        <div class="details-grid">${detailRows}</div>
+      <section class="team-tabs-shell">
+        <button class="team-tab is-active" type="button">Notícias</button>
+        <button class="team-tab" type="button">Estatísticas</button>
+        <button class="team-tab" type="button">Comparação</button>
+        <button class="team-tab" type="button">Histórico</button>
       </section>
 
-      <section id="jogos" class="team-section">
-        <h2 class="section-title">Próximos jogos</h2>
-        <div class="empty-state">
-          <div class="empty-title">Agenda em breve.</div>
-          <div class="empty-subtitle">Estamos preparando os próximos jogos deste time.</div>
-          <a class="empty-cta" id="backToLeagueGames" href="${leaguePage}">Ver página da liga</a>
-        </div>
-      </section>
-
-      <section id="noticias" class="team-section">
-        <h2 class="section-title">Notícias do time</h2>
-        <div class="empty-state">
-          <div class="empty-title">Notícias em breve.</div>
-          <div class="empty-subtitle">Em breve, você verá destaques e notícias deste time aqui.</div>
-          <a class="empty-cta" id="backToLeagueNews" href="${leaguePage}">Explorar notícias da liga</a>
+      <section class="section premium-block">
+        <div class="section-head"><div><h2>Painel do time</h2><p>Estrutura preparada para conteúdo completo na próxima fase.</p></div></div>
+        <div class="details-grid">
+          <div class="detail-card"><div class="detail-label">Cidade</div><div class="detail-value">${escapeHtml(team.city || 'Não informado')}</div></div>
+          <div class="detail-card"><div class="detail-label">Conferência</div><div class="detail-value">${escapeHtml(team.conference || 'Não informado')}</div></div>
+          <div class="detail-card"><div class="detail-label">Fundação</div><div class="detail-value">${escapeHtml(team.founded || 'Não informado')}</div></div>
+          <div class="detail-card"><div class="detail-label">Estádio/Arena</div><div class="detail-value">${escapeHtml(team.stadium || 'Não informado')}</div></div>
         </div>
       </section>
     `;
 
-    const teamLeagueBadge = root.querySelector('#teamLeagueBadge');
-    const teamName = root.querySelector('#teamName');
-    const teamSubtitle = root.querySelector('#teamSubtitle');
-    const detailCity = root.querySelector('#detailCity');
-    const detailConference = root.querySelector('#detailConference');
-    const detailFounded = root.querySelector('#detailFounded');
-    const detailStadium = root.querySelector('#detailStadium');
     const teamLogoHero = root.querySelector('#teamLogoHero');
     const teamLogoPlaceholder = root.querySelector('#teamLogoPlaceholder');
-
-    if (teamLeagueBadge) teamLeagueBadge.textContent = league;
-    if (teamName) teamName.textContent = team.name;
-    if (teamSubtitle) teamSubtitle.textContent = subtitle;
-    if (detailCity) detailCity.textContent = team.city || 'Não informado';
-    if (detailConference) detailConference.textContent = team.conference || 'Não informado';
-    if (detailFounded) detailFounded.textContent = team.founded || 'Não informado';
-    if (detailStadium) detailStadium.textContent = team.stadium || 'Não informado';
-
     if (teamLogoHero && teamLogoPlaceholder) {
       if (team.logo) {
         teamLogoHero.src = team.logo;
@@ -326,6 +376,7 @@
       }
     }
   }
+
 
   function renderNewsList(root, data, state, query) {
     const filter = (query.league || '').toUpperCase();
