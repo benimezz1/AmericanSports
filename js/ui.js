@@ -254,19 +254,28 @@
     const radarMain = radarItems[0];
     const radarSide = radarItems.slice(1);
 
+    const hotTeams = ranking.top10.slice(0, 3);
+
+    const hotTeamsMarkup = hotTeams.map((team, index) => {
+      const trend = team.variation > 0 ? `+${team.variation}` : (team.variation < 0 ? `-${Math.abs(team.variation)}` : '0');
+      const trendClass = team.variation > 0 ? 'up' : team.variation < 0 ? 'down' : 'flat';
+      return `<article class="hot-team-card" style="background-image:linear-gradient(160deg, rgba(5,10,24,.15), rgba(5,10,24,.9)), url('${imageForLeague(team.league)}')"><span class="hot-team-rank">#${index + 1}</span><span class="hot-team-league">${escapeHtml(team.league)}</span><h3>${escapeHtml(team.name)}</h3><div class="hot-team-hype">${team.hype}%</div><div class="hot-team-meta"><span class="hot-team-trend ${trendClass}">${trend}</span><small>${formatFollowers(team.followers)} seguidores</small></div></article>`;
+    }).join('');
+
     const feedMarkup = feedItems.map((item, index) => {
+      const blockClass = index % 3 === 0 ? 'contrast-a' : index % 3 === 1 ? 'contrast-b' : 'contrast-c';
       if (index % 5 === 2) {
         const pulse = (62 + (index * 3)) % 98;
-        return `<article class="feed-highlight"><span class="feed-highlight-kicker">Momento da Liga</span><h3>${escapeHtml(item.league)} em alta</h3><p>${escapeHtml(item.summary)}</p><div class="feed-highlight-meta"><span>${escapeHtml(item.title)}</span>${renderHypeMeter(pulse, true)}</div></article>`;
+        return `<article class="feed-highlight ${blockClass}"><span class="feed-highlight-kicker">Momento da Liga</span><h3>${escapeHtml(item.league)} em alta</h3><p>${escapeHtml(item.summary)}</p><div class="feed-highlight-meta"><span>${escapeHtml(item.title)}</span>${renderHypeMeter(pulse, true)}</div></article>`;
       }
       if (index % 4 === 0) {
-        return `<a class="feed-item feed-featured" href="${newsLink(item.__index)}"><div class="feed-media" style="background-image:linear-gradient(160deg, rgba(6,11,26,.2), rgba(6,11,26,.72)), url('${imageForLeague(item.league)}')"></div><div><span class="feed-league">${escapeHtml(item.league)}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p>${renderHypeMeter(58 + (index * 4), true)}</div></a>`;
+        return `<a class="feed-item feed-featured ${blockClass}" href="${newsLink(item.__index)}"><div class="feed-media" style="background-image:linear-gradient(160deg, rgba(6,11,26,.2), rgba(6,11,26,.72)), url('${imageForLeague(item.league)}')"></div><div><span class="feed-league">${escapeHtml(item.league)}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p>${renderHypeMeter(58 + (index * 4), true)}</div></a>`;
       }
       if (index % 2 === 0) {
-        return `<a class="feed-item feed-editorial" href="${newsLink(item.__index)}"><div class="feed-media" style="background-image:linear-gradient(160deg, rgba(6,11,26,.2), rgba(6,11,26,.72)), url('${imageForLeague(item.league)}')"></div><div><span class="feed-league">${escapeHtml(item.league)}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p></div></a>`;
+        return `<a class="feed-item feed-editorial ${blockClass}" href="${newsLink(item.__index)}"><div class="feed-media" style="background-image:linear-gradient(160deg, rgba(6,11,26,.2), rgba(6,11,26,.72)), url('${imageForLeague(item.league)}')"></div><div><span class="feed-league">${escapeHtml(item.league)}</span><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.summary)}</p></div></a>`;
       }
-      return `<a class="feed-item feed-compact" href="${newsLink(item.__index)}"><div class="feed-thumb" style="background-image:linear-gradient(150deg, rgba(7,12,29,.15), rgba(7,12,29,.75)), url('${imageForLeague(item.league)}')"></div><div><span class="feed-league">${escapeHtml(item.league)}</span><h4>${escapeHtml(item.title)}</h4></div></a>`;
-    }).join('<div class="feed-divider"></div>');
+      return `<a class="feed-item feed-compact ${blockClass}" href="${newsLink(item.__index)}"><div class="feed-thumb" style="background-image:linear-gradient(150deg, rgba(7,12,29,.15), rgba(7,12,29,.75)), url('${imageForLeague(item.league)}')"></div><div><span class="feed-league">${escapeHtml(item.league)}</span><h4>${escapeHtml(item.title)}</h4></div></a>`;
+    }).join('<div class="feed-divider"></div><div class="feed-strategic-break" aria-hidden="true"></div>');
 
     const rankingRows = ranking.top10.map((team) => {
       const trend = team.variation > 0 ? `↑ ${team.variation}` : (team.variation < 0 ? `↓ ${Math.abs(team.variation)}` : '• 0');
@@ -312,7 +321,7 @@
         </div>
       </section>
 
-      <section class="section premium-block">
+      <section class="section premium-block map-premium-shell" data-reveal-map>
         <div class="section-head"><div><h2>Mapa Interativo • EUA + Canadá</h2><p>Base geográfica dos times com leitura dinâmica de popularidade e hype.</p></div></div>
         <article class="north-map-shell">
           <div class="north-map-canvas" role="img" aria-label="Mapa estilizado de EUA e Canadá com times">
@@ -322,6 +331,11 @@
             ${mapMarkers}
           </div>
         </article>
+      </section>
+
+      <section class="section premium-block hot-teams-shell">
+        <div class="section-head"><div><h2>Times em Alta da Semana</h2><p>Pressão de momento antes do fluxo editorial.</p></div></div>
+        <div class="hot-teams-grid">${hotTeamsMarkup}</div>
       </section>
 
       <section class="section premium-block">
@@ -337,6 +351,21 @@
     const indicators = Array.from(root.querySelectorAll('[data-hero-indicator]'));
     if (homeHeroTimer) clearInterval(homeHeroTimer);
     if (!heroRoot || !features.length) return;
+
+    const mapSection = root.querySelector('[data-reveal-map]');
+    if (mapSection && 'IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.28 });
+      revealObserver.observe(mapSection);
+    } else if (mapSection) {
+      mapSection.classList.add('is-visible');
+    }
 
     let active = 0;
     const syncHero = (next) => {
@@ -502,6 +531,12 @@
               <span>Hype</span>
               ${renderHypeMeter(teamSignal.hype, true)}
             </div>
+          </div>
+          <div class="team-command-synth">
+            <div class="team-command-synth-item"><span>Seguidores</span><strong>${formatFollowers(teamSignal.followers)}</strong></div>
+            <div class="team-command-synth-item"><span>Ranking</span><strong>#${String(teamSignal.position).padStart(2, '0')}</strong></div>
+            <div class="team-command-synth-item"><span>Variação</span><strong class="${teamSignal.variation >= 0 ? 'trend-up' : 'trend-down'}">${teamSignal.variation >= 0 ? '+' : '-'}${Math.abs(teamSignal.variation)}</strong></div>
+            <div class="team-command-synth-item is-hype"><span>Hype dominante</span>${renderHypeMeter(teamSignal.hype, true)}</div>
           </div>
           <div class="team-cta">
             <button id="btnFavorite" class="btn-primary" aria-pressed="${favorite}">${favorite ? '⭐ Favorito' : '⭐ Favoritar'}</button>
