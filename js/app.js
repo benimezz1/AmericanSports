@@ -39,37 +39,146 @@
   }
 
 
-  function bindTeamTabs(root) {
-    if (root.dataset.teamTabsBound === 'true') return;
-    root.dataset.teamTabsBound = 'true';
-    const copy = {
-      news: ['Painel do time', 'Visão de dashboard com contexto e momentum.'],
-      stats: ['Estatísticas', 'Indicadores premium da equipe (preview).'],
-      compare: ['Comparação', 'Bloco editorial comparativo (preview).'],
-      history: ['Histórico', 'Linha do tempo e marcos recentes (preview).']
+  function initTeamTabs(root, query = {}) {
+    const tabs = Array.from(root.querySelectorAll('.tab-btn[data-tab]'));
+    const panels = Array.from(root.querySelectorAll('.team-panel[data-panel]'));
+    if (!tabs.length || !panels.length) return;
+
+    const valid = new Set(panels.map((panel) => panel.dataset.panel));
+    const league = String(query.league || '').toUpperCase();
+    const teamId = String(query.team || '').toLowerCase();
+    const storageKey = `teamTab:last:${league}:${teamId}`;
+
+    function activate(inputKey, pushHash = true, persist = true) {
+      const key = valid.has(inputKey) ? inputKey : 'noticias';
+      tabs.forEach((btn) => {
+        const active = btn.dataset.tab === key;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-selected', active ? 'true' : 'false');
+        btn.setAttribute('tabindex', active ? '0' : '-1');
+      });
+
+      panels.forEach((panel) => {
+        const active = panel.dataset.panel === key;
+        panel.toggleAttribute('hidden', !active);
+        panel.setAttribute('aria-hidden', active ? 'false' : 'true');
+      });
+
+      if (pushHash) history.replaceState(null, '', `#${key}`);
+      if (persist) {
+        try {
+          localStorage.setItem(storageKey, key);
+        } catch (error) {
+          // noop
+        }
+      }
+    }
+
+    tabs.forEach((btn) => {
+      if (btn.dataset.tabsBound === 'true') return;
+      btn.dataset.tabsBound = 'true';
+      btn.addEventListener('click', () => activate(btn.dataset.tab, true, true));
+      btn.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+        event.preventDefault();
+        const currentIndex = tabs.indexOf(btn);
+        const offset = event.key === 'ArrowRight' ? 1 : -1;
+        const next = tabs[(currentIndex + offset + tabs.length) % tabs.length];
+        next.focus();
+        activate(next.dataset.tab, true, true);
+      });
+    });
+
+    const hash = decodeURIComponent((location.hash || '').replace('#', '').trim());
+    let initial = 'noticias';
+    if (valid.has(hash)) {
+      initial = hash;
+    } else {
+      try {
+        const remembered = localStorage.getItem(storageKey);
+        if (remembered && valid.has(remembered)) initial = remembered;
+      } catch (error) {
+        // noop
+      }
+    }
+    activate(initial, false, false);
+
+    if (root.dataset.teamHashBound !== 'true') {
+      root.dataset.teamHashBound = 'true';
+      window.addEventListener('hashchange', () => {
+        const nextHash = decodeURIComponent((location.hash || '').replace('#', '').trim());
+        if (valid.has(nextHash)) activate(nextHash, false, true);
+      });
+    }
+  }
+
+  async function loadLogosMap() {
+    try {
+      const response = await fetch('data/logos-map.json', { cache: 'no-store' });
+      if (!response.ok) return [];
+      const json = await response.json();
+      return Array.isArray(json) ? json : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function applyLocalLogos(teams, logosMap) {
+    if (!Array.isArray(teams) || !Array.isArray(logosMap) || !logosMap.length) return teams;
+    const mapByInternal = new Map();
+    logosMap.forEach((entry) => {
+      if (entry?.internalId && entry?.logoPath) mapByInternal.set(`${entry.league}:${entry.internalId}`, entry.logoPath);
+    });
+
+    return teams.map((team) => {
+      const key = `${team.league}:${team.id}`;
+      const localLogo = mapByInternal.get(key);
+      if (!localLogo) return team;
+      return { ...team, logo: localLogo };
+    });
+  }
+
+  async function detectTeamHeroDarkLogo(root) {
+    const wrap = root.querySelector('.team-hero-logoWrap');
+    const img = root.querySelector('.team-hero-logoImg');
+    if (!wrap || !img) return;
+
+    const evaluate = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        const size = 64;
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        if (!ctx) return;
+        ctx.clearRect(0, 0, size, size);
+        ctx.drawImage(img, 0, 0, size, size);
+        const { data } = ctx.getImageData(0, 0, size, size);
+        let totalLum = 0;
+        let count = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          const alpha = data[i + 3];
+          if (alpha < 20) continue;
+          const r = data[i] / 255;
+          const g = data[i + 1] / 255;
+          const b = data[i + 2] / 255;
+          const luminance = (0.2126 * r) + (0.7152 * g) + (0.0722 * b);
+          totalLum += luminance;
+          count += 1;
+        }
+        if (!count) return;
+        const avgLum = totalLum / count;
+        wrap.classList.toggle('is-darkLogo', avgLum < 0.22);
+      } catch (error) {
+        wrap.classList.remove('is-darkLogo');
+      }
     };
 
-    root.addEventListener('click', (event) => {
-      const tab = event.target.closest('[data-team-tab]');
-      if (!tab) return;
-      const key = tab.dataset.teamTab;
-      const tabs = Array.from(root.querySelectorAll('[data-team-tab]'));
-      const panels = Array.from(root.querySelectorAll('[data-team-panel]'));
-      const title = root.querySelector('[data-team-tab-title]');
-      const subtitle = root.querySelector('[data-team-tab-subtitle]');
-      tabs.forEach((btn) => {
-        const active = btn === tab;
-        btn.classList.toggle('is-active', active);
-        btn.setAttribute('aria-selected', String(active));
-      });
-      panels.forEach((panel) => {
-        const active = panel.dataset.teamPanel === key;
-        panel.classList.toggle('is-hidden', !active);
-        panel.classList.toggle('is-animating', active);
-      });
-      if (title) title.textContent = copy[key]?.[0] || 'Painel do time';
-      if (subtitle) subtitle.textContent = copy[key]?.[1] || '';
-    });
+    if (img.complete) {
+      evaluate();
+      return;
+    }
+    img.addEventListener('load', evaluate, { once: true });
   }
 
   function syncThemeInputs(theme) {
@@ -77,9 +186,11 @@
     if (settingThemeToggle) settingThemeToggle.checked = theme === 'dark';
   }
 
-  function loadData() {
+  async function loadData() {
+    const teams = window.TEAMS_DATA || [];
+    const logosMap = await loadLogosMap();
     return {
-      teams: window.TEAMS_DATA || [],
+      teams: applyLocalLogos(teams, logosMap),
       games: window.GAMES_DATA || [],
       news: window.NEWS_DATA || [],
       standings: window.STANDINGS_DATA || {},
@@ -87,12 +198,12 @@
     };
   }
 
-  function renderPage() {
+  async function renderPage() {
     const page = Router.getPageName();
     const currentLeague = Router.detectLeagueFromPage();
     const query = Router.getQueryParams();
     let state = StorageService.getState();
-    const data = loadData();
+    const data = await loadData();
 
     document.body.insertAdjacentHTML('afterbegin', UI.renderHub(page));
 
@@ -102,11 +213,12 @@
     const rerender = () => {
       state = StorageService.getState();
       renderContent(root, page, currentLeague, query, data, state);
+      detectTeamHeroDarkLogo(root);
+      initTeamTabs(root, query);
     };
 
     rerender();
     bindMenu();
-    bindTeamTabs(root);
     PlayNorthCore.applyTheme(state.theme);
     syncThemeInputs(state.theme);
 
@@ -183,9 +295,9 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
     try {
-      renderPage();
+      await renderPage();
     } catch (error) {
       console.error(error);
       const root = document.getElementById('page-root');

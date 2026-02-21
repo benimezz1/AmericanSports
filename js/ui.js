@@ -22,7 +22,7 @@
 
 
   const LEAGUE_VISUALS = {
-    NFL: 'https://images.unsplash.com/photo-1511886929837-354d827aae26?auto=format&fit=crop&w=1400&q=80',
+    NFL: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1400&q=80',
     NBA: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1400&q=80',
     NHL: 'https://images.unsplash.com/photo-1515703407324-5f753afd8be8?auto=format&fit=crop&w=1400&q=80',
     MLB: 'https://images.unsplash.com/photo-1508344928928-7165b67de128?auto=format&fit=crop&w=1400&q=80',
@@ -304,6 +304,10 @@
         </div>
       </section>
 
+      <section class="section premium-block ad-slot-wrap ad-slot-wrap-inline">
+        ${adSlot('institutional', 'Slot premium entre Ranking e Times em Alta')}
+      </section>
+
       <section class="section premium-block hot-teams-shell">
         <div class="section-head"><div><h2>Times em Alta da Semana</h2><p>Pressão de momento antes do fluxo editorial.</p></div></div>
         <div class="hot-teams-grid">${hotTeamsMarkup}</div>
@@ -455,15 +459,17 @@
     const subtitle = subtitleParts.join(' • ');
     root.innerHTML = `
       <section class="team-premium-hero media-card" style="background-image:linear-gradient(160deg, var(--media-overlay-soft), var(--media-overlay-strong)), url('${imageForLeague(league)}')">
-        <div class="team-premium-overlay">
-          <div class="team-id-block">
-            <div class="team-logo-wrap" id="teamLogoWrap">
-              ${renderTeamLogo(team, { size: 'xl', logoMono: true })}
-            </div>
-            <div>
-              <span class="team-league-badge" id="teamLeagueBadge">${escapeHtml(league)}</span>
-              <h1 class="team-title" id="teamName">${escapeHtml(team.name)}</h1>
-              <p class="team-subtitle" id="teamSubtitle">${escapeHtml(subtitle)}</p>
+        <div class="team-premium-overlay team-hero-grid">
+          <div class="team-hero-left">
+            <span class="team-league-badge" id="teamLeagueBadge">${escapeHtml(league)}</span>
+            <h1 class="team-title" id="teamName">${escapeHtml(team.name)}</h1>
+            <p class="team-subtitle" id="teamSubtitle">${escapeHtml(subtitle)}</p>
+          </div>
+
+          <div class="team-hero-right">
+            <div class="team-hero-logoWrap" id="teamHeroLogoWrap" data-team-name="${escapeHtml(team.name)}">
+              ${team.logo ? `<img class="team-hero-logoImg" src="${team.logo}" alt="Logo do ${escapeHtml(team.name)}" loading="eager" decoding="async" onerror="this.remove(); this.parentElement.classList.add('is-fallback');">` : ''}
+              <span class="team-hero-logoFallback">${teamInitials(team.name)}</span>
             </div>
           </div>
           <div class="team-command-center">
@@ -491,26 +497,25 @@
         </div>
       </section>
 
-      <section class="team-tabs-shell">
-        <button class="team-tab is-active" type="button" data-team-tab="news" aria-selected="true">Notícias</button>
-        <button class="team-tab" type="button" data-team-tab="stats" aria-selected="false">Estatísticas</button>
-        <button class="team-tab" type="button" data-team-tab="compare" aria-selected="false">Comparação</button>
-        <button class="team-tab" type="button" data-team-tab="history" aria-selected="false">Histórico</button>
-      </section>
+      <div class="team-tabs" role="tablist" aria-label="Seções do time">
+        <button class="tab-btn is-active" type="button" role="tab" aria-selected="true" tabindex="0" data-tab="noticias">Notícias</button>
+        <button class="tab-btn" type="button" role="tab" aria-selected="false" tabindex="-1" data-tab="estatisticas">Estatísticas</button>
+        <button class="tab-btn" type="button" role="tab" aria-selected="false" tabindex="-1" data-tab="comparacao">Comparação</button>
+        <button class="tab-btn" type="button" role="tab" aria-selected="false" tabindex="-1" data-tab="historico">Histórico</button>
+      </div>
 
-      <section class="section premium-block" id="teamTabPanel" data-active-tab="news">
-        <div class="section-head"><div><h2 data-team-tab-title>Painel do time</h2><p data-team-tab-subtitle>Visão de dashboard com contexto e momentum.</p></div></div>
-        <div class="team-fluid-panel" data-team-panel="news">
+      <section class="section premium-block" id="teamTabPanel" data-active-tab="noticias">
+        <section class="team-panel team-fluid-panel" data-panel="noticias" role="tabpanel">
           <div class="team-fluid-row"><span>Cidade</span><strong>${escapeHtml(team.city || 'Não informado')}</strong></div>
           <div class="team-fluid-row"><span>Conferência</span><strong>${escapeHtml(team.conference || 'Não informado')}</strong></div>
           <div class="team-fluid-row"><span>Fundação</span><strong>${escapeHtml(team.founded || 'Não informado')}</strong></div>
           <div class="team-fluid-row"><span>Estádio/Arena</span><strong>${escapeHtml(team.stadium || 'Não informado')}</strong></div>
           <div class="team-fluid-row"><span>Status editorial</span><strong>Cobertura ativa</strong></div>
           <div class="team-fluid-row"><span>Próxima atualização</span><strong>Em até 24h</strong></div>
-        </div>
-        <div class="placeholder-card team-tab-placeholder is-hidden" data-team-panel="stats"><h3>Estatísticas avançadas</h3><p>Métricas premium em construção para próximas rodadas.</p><div class="skeleton-row"></div><div class="skeleton-row short"></div></div>
-        <div class="placeholder-card team-tab-placeholder is-hidden" data-team-panel="compare"><h3>Comparação direta</h3><p>Comparativo com rivais da conferência em breve.</p><div class="skeleton-grid"><span></span><span></span><span></span></div></div>
-        <div class="placeholder-card team-tab-placeholder is-hidden" data-team-panel="history"><h3>Histórico competitivo</h3><p>Linha do tempo premium com campanhas e marcos.</p><div class="skeleton-row"></div><div class="skeleton-row"></div></div>
+        </section>
+        <section class="team-panel placeholder-card team-tab-placeholder" data-panel="estatisticas" role="tabpanel" hidden><h3>Estatísticas avançadas</h3><p>Métricas premium em construção para próximas rodadas.</p><div class="skeleton-row"></div><div class="skeleton-row short"></div></section>
+        <section class="team-panel placeholder-card team-tab-placeholder" data-panel="comparacao" role="tabpanel" hidden><h3>Comparação direta</h3><p>Comparativo com rivais da conferência em breve.</p><div class="skeleton-grid"><span></span><span></span><span></span></div></section>
+        <section class="team-panel placeholder-card team-tab-placeholder" data-panel="historico" role="tabpanel" hidden><h3>Histórico competitivo</h3><p>Linha do tempo premium com campanhas e marcos.</p><div class="skeleton-row"></div><div class="skeleton-row"></div></section>
       </section>
     `;
 

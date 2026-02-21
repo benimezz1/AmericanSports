@@ -1732,3 +1732,132 @@ a{color:inherit}
     flex:unset;
   }
 }
+
+/* ===== Fase 3.3.4: tokens globais + hero alinhado + contraste por componente ===== */
+:root{
+  --page-bg:#eef3ff;
+  --bg2:#dde6fb;
+  --surface:#ffffff;
+  --surface-2:#eef3ff;
+  --text:#132033;
+  --muted:#4e6178;
+  --on-media:#f7fbff;
+  --overlay-media:linear-gradient(180deg, rgba(7,12,27,.22) 0%, rgba(7,12,27,.74) 62%, rgba(7,12,27,.93) 100%);
+  --mini-h:146px;
+  --mini-gap:12px;
+}
+
+html[data-theme='dark'],
+body.dark-mode{
+  --page-bg:#070b14;
+  --bg2:#10182a;
+  --surface:#131b2d;
+  --surface-2:#0f1628;
+  --text:#f2f6ff;
+  --muted:#acbad3;
+  --on-media:#f5f9ff;
+  --overlay-media:linear-gradient(180deg, rgba(7,12,27,.18) 0%, rgba(7,12,27,.76) 58%, rgba(7,12,27,.95) 100%);
+}
+
+body{background:radial-gradient(circle at top, color-mix(in srgb,var(--bg2) 78%, transparent), var(--page-bg)); color:var(--text)}
+.card,.tablewrap,.notice,.league-card,.placeholder-card,.game-card,.ranking-main,.league-ranking-card,.hype-panel{background:var(--surface); color:var(--text)}
+.card .desc,.card .meta,.section-head p,.watch-guide,.team-fluid-row span,.league-card-label{color:var(--muted)}
+
+.hero-feature,.hero-mini,.radar-card,.radar-main,.feed-item.media-card,.league-card.media-card,.team-premium-hero{position:relative; isolation:isolate; overflow:hidden}
+.hero-feature::after,.hero-mini::after,.radar-card::after,.radar-main::after,.feed-item.media-card::after,.league-card.media-card::after,.team-premium-hero::after{
+  content:''; position:absolute; inset:0; background:var(--overlay-media); pointer-events:none; z-index:0;
+}
+.hero-feature > *, .hero-mini > *, .radar-card > *, .radar-main > *, .feed-item.media-card > *, .team-premium-hero > *{position:relative; z-index:1}
+.hero-feature h1,.hero-feature p,.hero-mini h3,.hero-mini p,.radar-card h4,.radar-card span,.radar-main h3,.radar-main p,.feed-item.media-card h3,.feed-item.media-card h4,.feed-item.media-card p,.feed-item.media-card .feed-league,.league-card.media-card h3{color:var(--on-media)}
+
+.home-hero{height:calc((var(--mini-h) * 3) + (var(--mini-gap) * 2)); gap:var(--mini-gap); align-items:stretch}
+.hero-stage{height:100%; min-height:0}
+.hero-feature{height:100%; background-size:cover; background-position:center}
+.hero-mini-column{height:100%; display:flex; flex-direction:column; gap:var(--mini-gap)}
+.hero-mini.is-visible{display:flex; flex:0 0 var(--mini-h); min-height:var(--mini-h); background-size:cover; background-position:center}
+
+.ad-slot-wrap{display:flex; justify-content:center; align-items:center}
+.ad-slot-card{transform:none; width:min(100%,960px); margin-inline:auto}
+
+.team-premium-overlay .team-logo-wrap{padding:14px; background:color-mix(in srgb,var(--surface-2) 84%, rgba(255,255,255,.06)); border:1px solid color-mix(in srgb,var(--line) 70%, transparent)}
+.team-premium-overlay .team-logo-wrap .team-logo{background:color-mix(in srgb,var(--surface) 90%, transparent); padding:10px}
+.team-premium-overlay .team-logo-wrap .team-logo-img{object-fit:contain; filter:drop-shadow(0 2px 10px rgba(4,7,18,.32));}
+
+.team-tab-panel{transition:opacity .24s ease, transform .24s ease}
+.team-tab-panel.is-animating{animation:fadeSlide .24s ease}
+
+@media (max-width:980px){
+  .home-hero{height:auto}
+  .hero-stage{min-height:420px}
+  .hero-mini-column{display:grid; grid-auto-flow:column; grid-auto-columns:minmax(210px,1fr); height:auto; overflow:auto}
+  .hero-mini.is-visible{flex:unset; min-height:130px}
+}
+
+/* ===== Team hero logo fix (fase 3.3 ajuste) ===== */
+.team-hero-grid{
+  display:grid;
+  grid-template-columns:1fr 320px;
+  align-items:center;
+  gap:18px;
+}
+
+.team-hero-left{min-width:0}
+.team-hero-right{justify-self:end; display:flex; justify-content:flex-end; width:100%}
+.team-hero-logoWrap{
+  width:260px;
+  height:260px;
+  border-radius:26px;
+  display:grid;
+  place-items:center;
+  background:radial-gradient(circle at 30% 20%, rgba(255,255,255,.14), rgba(255,255,255,.06));
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 10px 40px rgba(0,0,0,.35);
+  overflow:hidden;
+  position:relative;
+}
+
+.team-hero-logoImg{
+  width:88%;
+  height:88%;
+  object-fit:contain;
+  filter:drop-shadow(0 10px 18px rgba(0,0,0,.35));
+}
+
+.team-hero-logoFallback{
+  display:none;
+  font-size:56px;
+  font-weight:800;
+  letter-spacing:.04em;
+  color:var(--on-media);
+}
+
+.team-hero-logoWrap.is-fallback .team-hero-logoFallback{display:block}
+.team-hero-logoWrap.is-fallback .team-hero-logoImg{display:none}
+
+.team-hero-logoWrap.is-darkLogo .team-hero-logoImg{
+  filter:invert(1) drop-shadow(0 10px 18px rgba(0,0,0,.35));
+}
+
+.team-command-center,
+.team-cta{grid-column:1 / -1}
+
+@media (max-width:980px){
+  .team-hero-grid{grid-template-columns:1fr; gap:14px}
+  .team-hero-right{justify-self:center; justify-content:center}
+  .team-hero-logoWrap{width:220px; height:220px}
+}
+
+/* Tabs team.html - comportamento */
+.team-panel[hidden]{display:none !important}
+.tab-btn{
+  padding:11px 15px;
+  border-radius:999px;
+  border:1px solid var(--chip-border);
+  background:var(--surface-2);
+  color:var(--muted);
+}
+.tab-btn.is-active{
+  border-color:var(--accent);
+  background:color-mix(in srgb, var(--accent) 20%, transparent);
+  color:var(--text);
+}
