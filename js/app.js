@@ -57,11 +57,24 @@
       const panels = Array.from(root.querySelectorAll('[data-team-panel]'));
       const title = root.querySelector('[data-team-tab-title]');
       const subtitle = root.querySelector('[data-team-tab-subtitle]');
-      tabs.forEach((btn) => btn.classList.toggle('is-active', btn === tab));
-      panels.forEach((panel) => panel.classList.toggle('is-hidden', panel.dataset.teamPanel !== key));
+      tabs.forEach((btn) => {
+        const active = btn === tab;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-selected', String(active));
+      });
+      panels.forEach((panel) => {
+        const active = panel.dataset.teamPanel === key;
+        panel.classList.toggle('is-hidden', !active);
+        panel.classList.toggle('is-animating', active);
+      });
       if (title) title.textContent = copy[key]?.[0] || 'Painel do time';
       if (subtitle) subtitle.textContent = copy[key]?.[1] || '';
     });
+  }
+
+  function syncThemeInputs(theme) {
+    const settingThemeToggle = document.querySelector('[data-setting-theme]');
+    if (settingThemeToggle) settingThemeToggle.checked = theme === 'dark';
   }
 
   function loadData() {
@@ -95,11 +108,13 @@
     bindMenu();
     bindTeamTabs(root);
     PlayNorthCore.applyTheme(state.theme);
+    syncThemeInputs(state.theme);
 
     document.getElementById('themeBtn')?.addEventListener('click', () => {
       const next = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
       StorageService.setTheme(next);
       PlayNorthCore.applyTheme(next);
+      syncThemeInputs(next);
     });
 
     root.addEventListener('click', (event) => {
@@ -163,6 +178,7 @@
         const next = event.target.checked ? 'dark' : 'light';
         StorageService.setTheme(next);
         PlayNorthCore.applyTheme(next);
+        syncThemeInputs(next);
       }
     });
   }
