@@ -46,3 +46,45 @@ Portal de esportes americanos (NFL, NBA, NHL, MLB, MLS) em HTML/CSS/JS puro, com
 4. Habilite a opção no select de Settings.
 5. Faça fallback para `static` em caso de erro/rede.
 6. Use o checklist de `docs/TRIAGEM_APIS.md` antes de entrar em produção.
+
+## Pipeline de logos (automático)
+
+O projeto inclui um coletor de logos por liga em `scripts/fetch-logos.mjs`.
+
+### Executar
+
+```bash
+node scripts/fetch-logos.mjs
+```
+
+Opcional: rodar só algumas ligas:
+
+```bash
+node scripts/fetch-logos.mjs NFL,NBA,MLS
+```
+
+### O que o script faz
+
+1. Consulta a ESPN Site API por liga.
+2. Coleta `teamId`, nome, abreviação e melhor URL de logo.
+3. Baixa PNG local em `assets/logos/<liga>/<teamId>.png`.
+4. Atualiza `data/logos-map.json` com:
+   - `league`
+   - `teamId`
+   - `name`
+   - `abbrev`
+   - `logoPath`
+   - `logoUrl`
+   - `internalId` (quando casar com `data/teams-data.js`)
+
+No runtime, o app tenta usar `logoPath` local primeiro. Se não existir, usa o `logo` original de `teams-data.js`. Se também falhar, cai no fallback de iniciais do time.
+
+### Bônus: varredura de logos faltantes via Wikimedia
+
+Para times sem logo definido no JSON atual, use:
+
+```bash
+node scripts/fetch_logos.mjs
+```
+
+O script gera `data/logos_manifest.json` com os links encontrados na Wikimedia Commons e tenta baixar para `assets/logos/<league>/<slug>.(svg|png)` quando possível.
