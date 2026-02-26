@@ -510,11 +510,11 @@
         StorageService.toggleFollowLeague(followLeaguePill.dataset.followLeague);
         rerender();
       }
-      if (event.target.id === 'resetPreferences') {
+      if (event.target.closest('#resetPreferences')) {
         StorageService.resetPreferences();
         rerender();
       }
-      if (event.target.id === 'clearLocalData') {
+      if (event.target.closest('#clearLocalData')) {
         StorageService.clearLocalData();
         location.reload();
       }
