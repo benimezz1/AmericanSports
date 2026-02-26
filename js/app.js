@@ -199,8 +199,10 @@
   }
 
 
-  function initOnboarding(state, rerender, shouldOpen) {
-    if (!window.StorageService || !shouldOpen) return;
+  function initOnboarding(state, rerender, shouldOpen = null) {
+    if (!window.StorageService) return;
+    const canOpen = shouldOpen === null ? !StorageService.hasStoredSettings() : Boolean(shouldOpen);
+    if (!canOpen) return;
 
     const leagues = ['NBA', 'NFL', 'NHL', 'MLB', 'MLS'];
     const suggestedTeams = [
