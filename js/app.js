@@ -199,9 +199,14 @@
   }
 
 
-  function initOnboarding(state, rerender, shouldOpen = null) {
+  let onboardingShouldOpenOnBootstrap = null;
+
+  function initOnboarding(state, rerender) {
     if (!window.StorageService) return;
-    const canOpen = shouldOpen === null ? !StorageService.hasStoredSettings() : Boolean(shouldOpen);
+    const canOpen = onboardingShouldOpenOnBootstrap === null
+      ? !StorageService.hasStoredSettings()
+      : onboardingShouldOpenOnBootstrap;
+    onboardingShouldOpenOnBootstrap = null;
     if (!canOpen) return;
 
     const leagues = ['NBA', 'NFL', 'NHL', 'MLB', 'MLS'];
@@ -454,7 +459,7 @@
     const page = Router.getPageName();
     const currentLeague = Router.detectLeagueFromPage();
     const query = Router.getQueryParams();
-    const shouldShowOnboarding = !StorageService.hasStoredSettings();
+    onboardingShouldOpenOnBootstrap = !StorageService.hasStoredSettings();
     let state = StorageService.getState();
     const data = await loadData();
 
@@ -472,7 +477,7 @@
 
     rerender();
     bindMenu();
-    initOnboarding(state, rerender, shouldShowOnboarding);
+    initOnboarding(state, rerender);
     PlayNorthCore.applyTheme(state.theme);
     syncThemeInputs(state.theme);
 
