@@ -198,6 +198,256 @@
     };
   }
 
+
+  function initOnboarding(state, rerender) {
+    if (!window.StorageService || StorageService.hasStoredSettings()) return;
+
+    const leagues = ['NBA', 'NFL', 'NHL', 'MLB', 'MLS'];
+    const suggestedTeams = [
+      { id: 'lakers', league: 'NBA', name: 'Los Angeles Lakers', initials: 'LA' },
+      { id: 'eagles', league: 'NFL', name: 'Philadelphia Eagles', initials: 'PHI' },
+      { id: '49ers', league: 'NFL', name: 'San Francisco 49ers', initials: 'SF' }
+    ];
+
+    const onboardingState = {
+      step: 1,
+      name: 'Torcedor',
+      leagues: new Set(['NBA', 'NFL']),
+      favorites: new Set(suggestedTeams.map((team) => team.id)),
+      theme: state.theme === 'light' ? 'light' : 'dark',
+      language: state.language === 'en' ? 'en' : 'pt'
+    };
+
+    const modal = document.createElement('div');
+    modal.className = 'welcome-overlay';
+    modal.innerHTML = `
+      <div class="welcome-backdrop" data-onboarding-close></div>
+      <section class="welcome-modal" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" tabindex="-1">
+        <button class="welcome-skip" type="button" data-onboarding-skip>Pular</button>
+        <div class="welcome-progress"><span id="welcomeProgress">Passo 1 de 2</span></div>
+        <div class="welcome-step welcome-step--active" data-step="1">
+          <h2 id="welcomeTitle">Bem-vindo ao PlayNorth</h2>
+          <p>Personalize sua experiência em poucos cliques.</p>
+          <label class="welcome-label" for="welcomeName">Seu nome</label>
+          <input id="welcomeName" class="welcome-input" maxlength="32" placeholder="Como você quer ser chamado?" />
+          <div class="welcome-error" id="welcomeNameError" aria-live="polite"></div>
+          <div class="welcome-actions">
+            <button type="button" class="welcome-btn welcome-btn--primary" data-step-next>Continuar</button>
+          </div>
+        </div>
+        <div class="welcome-step" data-step="2">
+          <h2 id="welcomeTitleStep2">Preferências iniciais</h2>
+          <p>Configure recomendações, aparência e idioma.</p>
+
+          <h3>Escolha suas ligas</h3>
+          <p class="welcome-sub">Vamos priorizar seu feed com base nisso.</p>
+          <div class="welcome-chips" data-league-chips></div>
+
+          <h3>Times sugeridos para seguir</h3>
+          <div class="welcome-team-grid" data-team-grid></div>
+
+          <h3>Aparência e idioma</h3>
+          <div class="welcome-controls">
+            <label>Tema</label>
+            <div class="welcome-toggle-group" data-theme-toggle>
+              <button type="button" data-theme="dark">Dark</button>
+              <button type="button" data-theme="light">Light</button>
+            </div>
+            <label for="welcomeLanguage">Idioma</label>
+            <select id="welcomeLanguage" class="welcome-select">
+              <option value="pt">PT-BR</option>
+              <option value="en">EN</option>
+            </select>
+          </div>
+
+          <div class="welcome-actions">
+            <button type="button" class="welcome-btn" data-step-back>Voltar</button>
+            <button type="button" class="welcome-btn welcome-btn--primary" data-step-finish>Concluir</button>
+          </div>
+        </div>
+      </section>
+    `;
+
+    document.body.appendChild(modal);
+    requestAnimationFrame(() => modal.classList.add('is-visible'));
+
+    const stepEls = Array.from(modal.querySelectorAll('.welcome-step'));
+    const progress = modal.querySelector('#welcomeProgress');
+    const nameInput = modal.querySelector('#welcomeName');
+    const nameError = modal.querySelector('#welcomeNameError');
+    const languageSelect = modal.querySelector('#welcomeLanguage');
+    const chipsWrap = modal.querySelector('[data-league-chips]');
+    const teamGrid = modal.querySelector('[data-team-grid]');
+
+    function sparkle() {
+      const sparkleWrap = document.createElement('div');
+      sparkleWrap.className = 'welcome-sparkle';
+      sparkleWrap.innerHTML = Array.from({ length: 18 }).map(() => '<span></span>').join('');
+      modal.querySelector('.welcome-modal')?.appendChild(sparkleWrap);
+      setTimeout(() => sparkleWrap.remove(), 800);
+    }
+
+    function close() {
+      modal.classList.remove('is-visible');
+      setTimeout(() => modal.remove(), 180);
+      rerender();
+    }
+
+    function persist(skip = false) {
+      if (skip) {
+        StorageService.completeOnboarding({
+          name: 'Torcedor',
+          leagues: [],
+          favorites: [],
+          theme: onboardingState.theme,
+          language: onboardingState.language
+        });
+        close();
+        return;
+      }
+
+      const favoritesPayload = suggestedTeams
+        .filter((team) => onboardingState.favorites.has(team.id))
+        .map((team) => ({ league: team.league, teamId: team.id }));
+
+      StorageService.completeOnboarding({
+        name: onboardingState.name,
+        leagues: Array.from(onboardingState.leagues),
+        favorites: favoritesPayload,
+        theme: onboardingState.theme,
+        language: onboardingState.language
+      });
+      sparkle();
+      setTimeout(close, 260);
+    }
+
+    function renderLeagueChips() {
+      chipsWrap.innerHTML = leagues.map((league) => `
+        <button type="button" class="welcome-chip ${onboardingState.leagues.has(league) ? 'is-active' : ''}" data-league="${league}">${league}</button>
+      `).join('');
+    }
+
+    function renderTeamCards() {
+      teamGrid.innerHTML = suggestedTeams.map((team) => {
+        const isFollowing = onboardingState.favorites.has(team.id);
+        return `
+          <article class="welcome-team-card">
+            <span class="welcome-badge">${team.league}</span>
+            <div class="welcome-team-logo">${team.initials}</div>
+            <strong>${team.name}</strong>
+            <button type="button" class="welcome-btn ${isFollowing ? 'welcome-btn--primary' : ''}" data-team="${team.id}">${isFollowing ? 'Seguindo' : 'Seguir'}</button>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function syncStepFocus() {
+      const selector = onboardingState.step === 1 ? '[data-step-next]' : '[data-step-finish]';
+      modal.querySelector(selector)?.focus();
+    }
+
+    function renderStep() {
+      stepEls.forEach((el) => el.classList.toggle('welcome-step--active', Number(el.dataset.step) === onboardingState.step));
+      progress.textContent = `Passo ${onboardingState.step} de 2`;
+      renderLeagueChips();
+      renderTeamCards();
+      languageSelect.value = onboardingState.language;
+      const themeBtns = Array.from(modal.querySelectorAll('[data-theme]'));
+      themeBtns.forEach((btn) => btn.classList.toggle('is-active', btn.dataset.theme === onboardingState.theme));
+      syncStepFocus();
+    }
+
+    function trapFocus(event) {
+      if (event.key !== 'Tab') return;
+      const focusable = Array.from(modal.querySelectorAll('button, input, select, [href], [tabindex]:not([tabindex="-1"])'))
+        .filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    modal.addEventListener('click', (event) => {
+      const closeBtn = event.target.closest('[data-onboarding-close], [data-onboarding-skip]');
+      if (closeBtn) {
+        persist(true);
+        return;
+      }
+
+      const nextBtn = event.target.closest('[data-step-next]');
+      if (nextBtn) {
+        const typedName = String(nameInput.value || '').trim();
+        if (typedName.length < 2) {
+          nameError.textContent = 'Informe ao menos 2 caracteres.';
+          nameInput.focus();
+          return;
+        }
+        onboardingState.name = typedName;
+        nameError.textContent = '';
+        onboardingState.step = 2;
+        renderStep();
+        return;
+      }
+
+      if (event.target.closest('[data-step-back]')) {
+        onboardingState.step = 1;
+        renderStep();
+        return;
+      }
+
+      if (event.target.closest('[data-step-finish]')) {
+        persist(false);
+        return;
+      }
+
+      const leagueBtn = event.target.closest('[data-league]');
+      if (leagueBtn) {
+        const league = leagueBtn.dataset.league;
+        if (onboardingState.leagues.has(league)) onboardingState.leagues.delete(league);
+        else onboardingState.leagues.add(league);
+        renderLeagueChips();
+        return;
+      }
+
+      const teamBtn = event.target.closest('[data-team]');
+      if (teamBtn) {
+        const teamId = teamBtn.dataset.team;
+        if (onboardingState.favorites.has(teamId)) onboardingState.favorites.delete(teamId);
+        else onboardingState.favorites.add(teamId);
+        renderTeamCards();
+      }
+    });
+
+    modal.querySelector('[data-theme-toggle]')?.addEventListener('click', (event) => {
+      const themeBtn = event.target.closest('[data-theme]');
+      if (!themeBtn) return;
+      onboardingState.theme = themeBtn.dataset.theme === 'light' ? 'light' : 'dark';
+      PlayNorthCore.applyTheme(onboardingState.theme);
+      renderStep();
+    });
+
+    languageSelect.addEventListener('change', () => {
+      onboardingState.language = languageSelect.value === 'en' ? 'en' : 'pt';
+    });
+
+    modal.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        persist(true);
+        return;
+      }
+      trapFocus(event);
+    });
+
+    renderStep();
+  }
+
   async function renderPage() {
     const page = Router.getPageName();
     const currentLeague = Router.detectLeagueFromPage();
@@ -219,6 +469,7 @@
 
     rerender();
     bindMenu();
+    initOnboarding(state, rerender);
     PlayNorthCore.applyTheme(state.theme);
     syncThemeInputs(state.theme);
 

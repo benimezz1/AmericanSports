@@ -18,6 +18,20 @@
     alertSimulationEnabled: true
   };
 
+  const SETTINGS_KEYS = [
+    LEAGUES_KEY,
+    LEGACY_LEAGUES_KEY,
+    'followedTeams',
+    'favoriteTeam',
+    'language',
+    'theme',
+    'dataSource',
+    'sidebarScope',
+    'alertSimulationEnabled',
+    'profileName',
+    'onboardingDoneAt'
+  ];
+
   function uniq(values) {
     return [...new Set(values.filter(Boolean))];
   }
@@ -209,13 +223,50 @@
     setAlertSimulation(enabled) {
       return write('alertSimulationEnabled', Boolean(enabled));
     },
+    hasStoredSettings() {
+      return SETTINGS_KEYS.some((key) => localStorage.getItem(key) !== null);
+    },
+    completeOnboarding(payload = {}) {
+      const name = String(payload.name || '').trim() || 'Torcedor';
+      const onboardingDoneAt = new Date().toISOString();
+      const selectedLeagues = normalizeLeagueList((payload.leagues || []).map((league) => String(league || '').toUpperCase()));
+      const favoriteTeams = Array.isArray(payload.favorites) ? payload.favorites : [];
+      const followedTeams = normalizeFollowedTeams(read('followedTeams', DEFAULTS.followedTeams));
+
+      selectedLeagues.forEach((league) => {
+        if (!followedTeams[league]) followedTeams[league] = [];
+      });
+
+      favoriteTeams.forEach((item) => {
+        const league = String(item?.league || '').toUpperCase();
+        const teamId = String(item?.teamId || '').toLowerCase();
+        if (!LEAGUES.includes(league) || !teamId) return;
+        followedTeams[league] = uniq([...(followedTeams[league] || []), teamId]);
+      });
+
+      write('profileName', name);
+      write('onboardingDoneAt', onboardingDoneAt);
+      writeLeagueList(selectedLeagues);
+      write('followedTeams', followedTeams);
+      this.setTheme(payload.theme);
+      this.setLanguage(payload.language);
+
+      return {
+        name,
+        onboardingDoneAt,
+        leagues: selectedLeagues,
+        favorites: favoriteTeams,
+        theme: payload.theme === 'light' ? 'light' : 'dark',
+        language: String(payload.language || '').toLowerCase() === 'en' ? 'en' : 'pt'
+      };
+    },
     resetPreferences() {
       this.clearLocalData();
     },
     clearLocalData() {
       [
         LEAGUES_KEY, LEGACY_LEAGUES_KEY, 'followedTeams', 'favoriteTeam', 'language', 'theme', 'dataSource', 'sidebarScope', 'alertSimulationEnabled',
-        'favoritesLeagues', 'favoriteTeamByLeague', 'followedTeamsByLeague'
+        'favoritesLeagues', 'favoriteTeamByLeague', 'followedTeamsByLeague', 'profileName', 'onboardingDoneAt'
       ].forEach((key) => localStorage.removeItem(key));
     }
   };
