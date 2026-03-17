@@ -678,8 +678,38 @@
   }
 
   function renderSettings(root, data, state) {
-    const themeChecked = state.theme === 'dark' ? 'checked' : '';
-    root.innerHTML = `<section class="section"><div class="section-head"><div><h2>Configurações</h2><p>Painel de ajustes da experiência.</p></div></div></section><section class="section"><div class="section-head"><div><h2>Aparência</h2></div></div><div class="card settings-card"><div class="card-body"><label class="setting-row switch-row"><span>Tema escuro (padrão)</span><input type="checkbox" data-setting-theme="dark" ${themeChecked}></label></div></div></section><section class="section"><div class="section-head"><div><h2>Idioma</h2></div></div><div class="card"><div class="card-body"><label class="setting-row">Idioma<select data-language><option value="pt" ${state.language === 'pt' ? 'selected' : ''}>PT</option><option value="en" ${state.language === 'en' ? 'selected' : ''}>EN</option></select></label></div></div></section><section class="section"><div class="section-head"><div><h2>Notificações</h2></div></div><div class="notice">Em breve: alertas de jogos e breaking news.</div></section><section class="section"><div class="section-head"><div><h2>Dados</h2></div></div><div class="card"><div class="card-body"><button class="pill" id="clearLocalData">Limpar dados locais</button></div></div></section>`;
+    const sections = ['Seguindo', 'Marcadores', 'Compras', 'Conta', 'Configurações'];
+    const languageOptions = [
+      { value: 'id', label: 'Bahasa Indonesia' },
+      { value: 'de', label: 'Deutsch' },
+      { value: 'en', label: 'English' },
+      { value: 'es', label: 'Español' },
+      { value: 'fr', label: 'Français' },
+      { value: 'it', label: 'Italiano' },
+      { value: 'pt-BR', label: 'Português do Brasil' }
+    ];
+    const displayOptions = [
+      { value: 'auto', label: 'Automático' },
+      { value: 'dark', label: 'Escuro' },
+      { value: 'light', label: 'Claro' }
+    ];
+
+    const selectedLanguage = state.language || 'pt-BR';
+    const selectedMode = state.displayMode || 'auto';
+
+    const subnav = sections.map((item) => `<button type="button" class="settings-subnav-item ${item === 'Configurações' ? 'is-active' : ''}" ${item === 'Configurações' ? 'aria-current="page"' : ''}>${item}</button>`).join('');
+
+    const languageCards = languageOptions.map((option) => {
+      const active = option.value === selectedLanguage;
+      return `<label class="settings-option-card ${active ? 'is-selected' : ''}"><input class="settings-option-input" type="radio" name="language" value="${option.value}" data-language ${active ? 'checked' : ''}><span class="settings-option-label">${option.label}</span><span class="settings-option-indicator" aria-hidden="true"></span></label>`;
+    }).join('');
+
+    const modeCards = displayOptions.map((option) => {
+      const active = option.value === selectedMode;
+      return `<label class="settings-option-card ${active ? 'is-selected' : ''}"><input class="settings-option-input" type="radio" name="displayMode" value="${option.value}" data-display-mode ${active ? 'checked' : ''}><span class="settings-option-label">${option.label}</span><span class="settings-option-indicator" aria-hidden="true"></span></label>`;
+    }).join('');
+
+    root.innerHTML = `<section class="settings-premium" aria-label="Página de configurações"><div class="settings-shell"><nav class="settings-subnav" aria-label="Navegação de conta">${subnav}</nav><section class="settings-block" aria-labelledby="settings-language-title"><h2 id="settings-language-title" class="settings-section-title">Idioma</h2><fieldset class="settings-options-grid" aria-label="Idioma">${languageCards}</fieldset></section><hr class="settings-divider"><section class="settings-block" aria-labelledby="settings-display-title"><h2 id="settings-display-title" class="settings-section-title">Modo de exibição</h2><fieldset class="settings-options-grid settings-options-grid--triple" aria-label="Modo de exibição">${modeCards}</fieldset><p class="settings-help-text">A opção “Automático” ajusta o modo de visualização baseado nas configurações de monitor do seu aparelho</p></section><hr class="settings-divider"><section class="settings-block settings-actions"><button class="pill" id="clearLocalData">Limpar dados locais</button></section></div></section>`;
   }
 
   window.UI = { renderHub, renderSidebar, renderHome, renderLeaguePage, renderGames, renderStandings, renderLive, renderTeam, renderTeams, renderStats, renderNewsList, renderNewsArticle, renderFavorites, renderPreferences, renderSettings };

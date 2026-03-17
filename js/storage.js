@@ -11,8 +11,9 @@
     followedLeagues: [],
     followedTeams: createLeagueRecord([]),
     favoriteTeam: createLeagueRecord(null),
-    language: 'pt',
+    language: 'pt-BR',
     theme: 'dark',
+    displayMode: 'auto',
     dataSource: 'static',
     sidebarScope: 'global',
     alertSimulationEnabled: true
@@ -25,6 +26,7 @@
     'favoriteTeam',
     'language',
     'theme',
+    'displayMode',
     'dataSource',
     'sidebarScope',
     'alertSimulationEnabled',
@@ -122,9 +124,22 @@
     write('favoriteTeam', state.favoriteTeam);
     write('language', state.language);
     write('theme', state.theme);
+    write('displayMode', state.displayMode);
     write('dataSource', state.dataSource);
     write('sidebarScope', state.sidebarScope);
     write('alertSimulationEnabled', state.alertSimulationEnabled);
+  }
+
+  function normalizeLanguage(language) {
+    const allowed = ['id', 'de', 'en', 'es', 'fr', 'it', 'pt-BR'];
+    const value = String(language || '').trim();
+    return allowed.includes(value) ? value : 'pt-BR';
+  }
+
+  function normalizeDisplayMode(mode) {
+    const value = String(mode || '').toLowerCase();
+    if (value === 'dark' || value === 'light') return value;
+    return 'auto';
   }
 
   window.StorageService = {
@@ -137,8 +152,9 @@
         followedLeagues: readLeagueList(),
         followedTeams: normalizeFollowedTeams(read('followedTeams', DEFAULTS.followedTeams)),
         favoriteTeam: normalizeFavoriteTeam(read('favoriteTeam', DEFAULTS.favoriteTeam)),
-        language: (read('language', DEFAULTS.language) || 'pt').toLowerCase() === 'en' ? 'en' : 'pt',
+        language: normalizeLanguage(read('language', DEFAULTS.language)),
         theme: read('theme', DEFAULTS.theme) === 'light' ? 'light' : 'dark',
+        displayMode: normalizeDisplayMode(read('displayMode', DEFAULTS.displayMode)),
         dataSource: read('dataSource', DEFAULTS.dataSource) || DEFAULTS.dataSource,
         sidebarScope: read('sidebarScope', DEFAULTS.sidebarScope) === 'league' ? 'league' : 'global',
         alertSimulationEnabled: read('alertSimulationEnabled', DEFAULTS.alertSimulationEnabled) !== false
@@ -152,7 +168,10 @@
       return write('theme', theme === 'light' ? 'light' : 'dark');
     },
     setLanguage(language) {
-      return write('language', String(language).toLowerCase() === 'en' ? 'en' : 'pt');
+      return write('language', normalizeLanguage(language));
+    },
+    setDisplayMode(mode) {
+      return write('displayMode', normalizeDisplayMode(mode));
     },
     setDataSource(source) {
       return write('dataSource', source || DEFAULTS.dataSource);
@@ -257,7 +276,7 @@
         leagues: selectedLeagues,
         favorites: favoriteTeams,
         theme: payload.theme === 'light' ? 'light' : 'dark',
-        language: String(payload.language || '').toLowerCase() === 'en' ? 'en' : 'pt'
+        language: normalizeLanguage(payload.language)
       };
     },
     resetPreferences() {

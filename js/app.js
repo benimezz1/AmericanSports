@@ -470,8 +470,10 @@
     rerender();
     bindMenu();
     initOnboarding(state, rerender);
-    PlayNorthCore.applyTheme(state.theme);
-    syncThemeInputs(state.theme);
+    const autoTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    const activeTheme = state.displayMode === 'auto' ? autoTheme : state.theme;
+    PlayNorthCore.applyTheme(activeTheme);
+    syncThemeInputs(activeTheme);
 
     document.getElementById('themeBtn')?.addEventListener('click', () => {
       const next = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
@@ -535,6 +537,16 @@
       }
       if (event.target.matches('[data-language]')) {
         StorageService.setLanguage(event.target.value);
+        rerender();
+      }
+      if (event.target.matches('[data-display-mode]')) {
+        const mode = event.target.value;
+        StorageService.setDisplayMode(mode);
+        const autoTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        const next = mode === 'auto' ? autoTheme : mode;
+        StorageService.setTheme(next);
+        PlayNorthCore.applyTheme(next);
+        syncThemeInputs(next);
         rerender();
       }
       if (event.target.matches('[data-setting-theme]')) {
