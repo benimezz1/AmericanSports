@@ -1927,6 +1927,7 @@ body{background:radial-gradient(circle at top, color-mix(in srgb,var(--bg2) 78%,
 .welcome-controls{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center}
 .welcome-toggle-group{display:flex;gap:8px}
 .welcome-toggle-group button{border:1px solid rgba(184,206,245,.3);background:rgba(255,255,255,.06);color:#dce6f9;padding:8px 12px;border-radius:999px;cursor:pointer}
+.welcome-toggle-group button[data-theme='dark']{background:#000000;border-color:#000000;color:#ffffff}
 .welcome-toggle-group button.is-active{background:rgba(36,114,255,.28);border-color:#4d92ff}
 .welcome-sparkle{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .welcome-sparkle span{position:absolute;width:6px;height:6px;background:#fff;border-radius:50%;animation:welcomePop .7s ease forwards}
